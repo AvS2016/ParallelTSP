@@ -2,12 +2,12 @@
 
 * [MQTT Mosquitto Broker](http://mosquitto.org/)
   * höchst stable, kann mit jeder Sprache benutzt werden
-* [Travis CI] Continuous Integration Server
+* [Travis CI](https://travis-ci.org/) Continuous Integration Server
 
 ## C/C++
 
 * [Lua](http://www.lua.org/) embedded scripting
-  * [LuaBridge]https://github.com/vinniefalco/LuaBridge) for easy OO Lua bindings
+  * [LuaBridge](https://github.com/vinniefalco/LuaBridge) for easy OO Lua bindings
 * MQTT
   * [libmosquitto](http://mosquitto.org/)
 * JSON config/data files
