@@ -22,7 +22,7 @@
 
 Manuelles memory management. Viele Bibliotheken und große Community. Arbeit mit gcc oder clang. Gcc unter OSX muss ausprobiert werden. Wird in Maschinencode übersetzt, daher schnelle Ausführung. Komplexe und umständliche Sprache.
 
-## C\#
+## C-sharp
 
 * [Mono](http://www.mono-project.com/) crossplatform .NET runtime
 * MQTT
