@@ -4,6 +4,7 @@
   * höchst stable, kann mit jeder Sprache benutzt werden
 * [Travis CI](https://travis-ci.org/) Continuous Integration Server
 * [MPI](http://www.boost.org/doc/libs/1_60_0/doc/html/mpi.html) Allgemein
+  * Boost.MPI ist nur ein Wrapper um MPI implementationen 
 * [MPI Example](http://people.sc.fsu.edu/~jburkardt/cpp_src/mpi/mpi.html) zur veranschaulichung
 
 ## C/C++
