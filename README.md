@@ -6,9 +6,9 @@ This is a parallelised genetic algorithm to solve the TSP across multiple machin
 
 To compile and install the dependencies of this project run
 
-´´´
+```
 script/get-linux-deps.sh
-´´´
+```
 
 This should download and compile
 
