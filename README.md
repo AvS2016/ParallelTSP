@@ -16,3 +16,13 @@ This should download and compile
 * Boost.MPI 1.60.0
 
 On Ubuntu the script also downloads all dependencies to compile the libraries mentioned above.
+
+Now you can build the project by running
+
+```
+cd <path-to-repo>
+mkdir build
+cd build
+cmake ..
+make
+```
