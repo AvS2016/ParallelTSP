@@ -7,7 +7,7 @@ BOOST_DIR="boost_1_60_0"
 mkdir -p dep
 cd dep
 
-export BOOST_MPI_DIR="$(pwd)/boost-mpi"
+export BOOST_INSTALL_DIR="$(pwd)/boost"
 
 # install boost MPI
 wget "$BOOST_URL" -O "$BOOST_ARCH"
@@ -16,7 +16,7 @@ rm -f "$BOOST_ARCH"
 cd "$BOOST_DIR"
 mkdir -p build
 ./bootstrap.sh
-if [ "$(cat \"project-config.jam\" | grep \"using mpi ;\")" == "" ]; then
+if [ "$(cat project-config.jam | grep 'using mpi')" == "" ]; then
     echo "using mpi : $OPEN_MPI_DIR/bin/mpicc ;" >> "project-config.jam"
 fi
-./b2 --build-dir=build -j8 --prefix="$BOOST_MPI_DIR" install
+./b2 --build-dir=build -j8 --prefix="$BOOST_INSTALL_DIR" install
