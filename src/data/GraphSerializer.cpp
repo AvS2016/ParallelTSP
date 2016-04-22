@@ -30,7 +30,7 @@ namespace tsp
         graph.edges().clear();
         for(unsigned int i = 0; edges.size(); ++i)
         {
-            Edge e(edges[i]["start"].asInt(), edges[i]["end"].asInt());
+            Edge e(edges[i]["start"].asInt(), edges[i]["end"].asInt(), edges[i]["weight"].asFloat());
             graph.edges()[e.id()] = e;
         }
 
@@ -62,6 +62,7 @@ namespace tsp
         {
             edges[i]["start"] = p.second.start();
             edges[i]["end"] = p.second.end();
+            edges[i]["weight"] = p.second.weight();
             ++i;
         }
 

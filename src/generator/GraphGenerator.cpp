@@ -1,5 +1,6 @@
-#include "GraphGenerator.hpp"
 #include <iostream>
+#include <cmath>
+#include "GraphGenerator.hpp"
 
 namespace tsp
 {
@@ -22,22 +23,43 @@ namespace tsp
         edges_ = edges;
     }
 
+    void GraphGenerator::addEdge(Graph &graph, int start, int end)
+    {
+        Node a = graph.nodes()[start];
+        Node b = graph.nodes()[end];
+        float dx = (float) a.x() - (float) b.x();
+        float dy = (float) a.y() - (float) b.y();
+        float weight = sqrtf(dx * dx + dy * dy);
+
+        Edge e(start, end, weight);
+        graph.edges()[e.id()] = e;
+    }
+
     void GraphGenerator::generate(Graph& graph)
     {
+        int edgeCount = 0;
         graph.nodes().resize(nodes_);
         for(int i = 0; i < nodes_; ++i)
         {
             int x = rand() % width_;
             int y = rand() % width_;
             graph.nodes()[i] = Node(i, x, y);
+            if(i > 1)
+            {
+                int end = i;
+                while (end == i)
+                    end = rand() % i;
+                addEdge(graph, i, end);
+                addEdge(graph, end, i);
+                edgeCount += 2;
+            }
         }
 
-        for(int i = 0; i < nodes_; ++i)
+        for(; edgeCount < edges_; ++edgeCount)
         {
             int start = rand() % nodes_;
             int end = rand() % nodes_;
-            Edge e(start, end);
-            graph.edges()[e.id()] = e;
+            addEdge(graph, start, end);
         }
     }
 

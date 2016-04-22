@@ -13,6 +13,8 @@ namespace tsp
         int height_;
         int nodes_;
         int edges_;
+
+        void addEdge(Graph &graph, int start, int end);
     public:
         GraphGenerator();
         ~GraphGenerator();
