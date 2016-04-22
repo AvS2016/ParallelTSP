@@ -1,6 +1,7 @@
 *.project
 *.cproject
 *.properties
+*.settings
 *~
 *.swp
 dep
