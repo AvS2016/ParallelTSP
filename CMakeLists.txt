@@ -3,9 +3,11 @@ cmake_minimum_required(VERSION 2.8)
 project(ParallelTSP)
     
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++11")
-set(PROJ_COMP
+set(PROJ_LIBRARIES
     "json"
     "data"
+)
+set(PROJ_EXEC
     "generator"
 )
 
