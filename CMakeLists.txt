@@ -5,6 +5,7 @@ project(ParallelTSP)
 set(CMAKE_CXX_FLAGS "-Wall -Wextra -std=c++11")
 set(PROJ_COMP
     "json"
+    "data"
     "generator"
 )
 
