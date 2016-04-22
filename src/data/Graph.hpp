@@ -21,7 +21,7 @@ namespace tsp
         ~Graph()
         { }
 
-        std::vector<Node> nodes()
+        std::vector<Node>& nodes()
         {
             return nodes_;
         }

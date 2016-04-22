@@ -17,7 +17,7 @@ get_filename_component(MPI_CXX_COMPILER "./dep/openmpi/bin/mpicxx" ABSOLUTE)
 set(Boost_NO_SYSTEM_PATHS "ON")
 
 find_package(MPI REQUIRED)
-find_package(Boost REQUIRED mpi)
+find_package(Boost REQUIRED mpi program_options)
 
 include_directories(
     ${MPI_CXX_INCLUDE_PATH}
