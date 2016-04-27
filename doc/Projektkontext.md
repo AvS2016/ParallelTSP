@@ -1,0 +1,20 @@
+
+# Idee des Projekts
+
+Die Idee das Projekts ist das finden einer möglichst optimierten Lösung für das [TSP](https://en.wikipedia.org/wiki/Travelling_salesman_problem) mithilfe eines Rechenclusters. Um die Rechner parallel nutzen zu können wird ein genetischer Algorithmus benutzt. Mit diesem wird jeder Rechner zu einer eigenen Population von Lösungen von denen die optimalsten gepaart werden. Nach x Iterationen kann mit hoher Wahrscheinlichkeit eine fast perfekte Lösung gefunden werden.  
+
+#Technologien 
+
+In Abstimmung des Betreuen Professors und innerhalb des Entwicklungsteams wurde sich auf folgenden Techniken geeinigt: 
+
+* C++ mit Boostframework
+* MPI als Protokoll
+* Github als Versionierung
+* Text nur in Form vom Markup Dateien
+* [Codierungsrichtlinien](https://github.com/AvS2016/ParallelTSP/blob/master/doc/CodeStyle.md)
+
+*Der projektbetreuende Professor hält die gewählten Techniken für das Forschungsprojekt im akademischen Umfeld für geeignet und sieht zuversichtlich der Projektpräsentation entgegegen.*
+
+# Entscheidung für Notizdateien/Protokolldatein
+
+Notizdateien (oder auch Protkolldatein) sind mit dem Jahr_Datum_Tag zu versehen (Bsp. YYYY_MM_DD.md). Diese Dateien dienen primär für die spätere Dokumentation des Projekts. Demnach sollte in einem festen Intervall (wöchentlich) ein Protokoll erzeugt werden in dem die Entscheidung, der Entwicklungsfortschritt und Probleme aufgeführt werden.
