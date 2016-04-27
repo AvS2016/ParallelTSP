@@ -1,4 +1,4 @@
-#!/bin/sh -e
+#!/bin/bash -e
 
 MPI_URL="https://www.open-mpi.org/software/ompi/v1.10/downloads/openmpi-1.10.2.tar.gz"
 MPI_ARCH="openmpi-1.10.2.tar.gz"
@@ -16,4 +16,4 @@ rm -f "$MPI_ARCH"
 cd "$MPI_DIR"
 
 ./configure --prefix="$OPEN_MPI_DIR"
-make -j8 install
+make -j2 install
