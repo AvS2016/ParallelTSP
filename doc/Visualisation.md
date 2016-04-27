@@ -28,3 +28,8 @@ Quelle: [imonad.com](http://imonad.com/tsp/traveling-salesman-problem-visualizat
 * kann anschließend auch als *.png oder *.svg gespeichert werden
 * müsste getestet werden, wie performant das Programm bei einer sehr hohen Anzahl von Knoten ist
 * sieht nicht so hübsch aus
+
+### 4. Python Matplotlib
+* sehr mächtig (da Python)
+* ähnliche Ausgaben wie Gnuplot und Matlab
+* stark konfigurierbar
