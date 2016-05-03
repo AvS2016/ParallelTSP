@@ -10,7 +10,7 @@ cd dep
 export BOOST_INSTALL_DIR="$(pwd)/boost"
 
 # install boost MPI
-wget "$BOOST_URL" -O "$BOOST_ARCH"
+dlfile "$BOOST_URL" "$BOOST_ARCH"
 tar xzf "$BOOST_ARCH"
 rm -f "$BOOST_ARCH"
 cd "$BOOST_DIR"

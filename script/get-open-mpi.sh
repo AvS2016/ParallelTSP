@@ -10,7 +10,7 @@ cd dep
 export OPEN_MPI_DIR="$(pwd)/openmpi"
 
 # install open MPI
-wget "$MPI_URL" -O "$MPI_ARCH"
+dlfile "$MPI_URL" "$MPI_ARCH"
 tar xzf "$MPI_ARCH"
 rm -f "$MPI_ARCH"
 cd "$MPI_DIR"
