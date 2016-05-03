@@ -9,8 +9,11 @@ dlfile()
 {
     URL=$1
     FILE=$2
+    set +e
     type wget >/dev/null 2>&1
-    if [ "$?" = "0" ]; then
+    RET=$?
+    set -e
+    if [ "$RET" = "0" ]; then
         wget "$URL" -O "$FILE"
     else
         curl -o "$FILE" -L "$URL"
