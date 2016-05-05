@@ -16,7 +16,6 @@ int parseArguments(int argc, char **argv)
         ("width,W", po::value<int>(), "define width of the map")
         ("height,H", po::value<int>(), "define height of the map")
         ("nodes,n", po::value<int>(), "define number of nodes")
-        ("edges,e", po::value<int>(), "define number of edges")
         ("file,f", po::value<std::string>(), "path to file")
     ;
 
@@ -33,7 +32,6 @@ int parseArguments(int argc, char **argv)
             !vm.count("width") ||
             !vm.count("height") ||
             !vm.count("nodes") ||
-            !vm.count("edges") ||
             !vm.count("file")) {
         std::cout << desc << "\n";
         return 1;
@@ -52,12 +50,10 @@ int generateGraph()
     std::cout << "-- width:  " << vm["width"].as<int>() << "\n";
     std::cout << "-- height: " << vm["height"].as<int>() << "\n";
     std::cout << "-- nodes:  " << vm["nodes"].as<int>() << "\n";
-    std::cout << "-- edges:  " << vm["edges"].as<int>() << "\n";
     std::cout << "Generating graph ..." << "\n";
     gen.setSettings(vm["width"].as<int>(),
         vm["height"].as<int>(),
-        vm["nodes"].as<int>(),
-        vm["edges"].as<int>());
+        vm["nodes"].as<int>());
     gen.generate(graph);
 
     std::cout << "Saving graph ..." << "\n";

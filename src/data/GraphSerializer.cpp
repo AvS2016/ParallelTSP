@@ -21,18 +21,9 @@ namespace tsp
 
         // deserialize nodes
         Json::Value &nodes = root["nodes"];
-        graph.nodes().resize(nodes.size());
+        graph.resize(nodes.size());
         for(unsigned int i = 0; nodes.size(); ++i)
-            graph.nodes()[i] = Node(nodes[i]["id"].asInt(), nodes[i]["x"].asInt(), nodes[i]["y"].asInt());
-
-        // deserialize edges
-        Json::Value &edges = root["edges"];
-        graph.edges().clear();
-        for(unsigned int i = 0; edges.size(); ++i)
-        {
-            Edge e(edges[i]["start"].asInt(), edges[i]["end"].asInt(), edges[i]["weight"].asFloat());
-            graph.edges()[e.id()] = e;
-        }
+            graph[i] = Node(nodes[i]["id"].asInt(), nodes[i]["x"].asInt(), nodes[i]["y"].asInt());
 
         return true;
     }
@@ -44,26 +35,13 @@ namespace tsp
 
         root["nodes"] = Json::Value(Json::arrayValue);
         // serialize nodes
-        root["nodes"].resize(graph.nodes().size());
+        root["nodes"].resize(graph.size());
         Json::Value &nodes = root["nodes"];
         for(unsigned int i = 0; i < nodes.size(); ++i)
         {
-            nodes[i]["id"] = graph.nodes()[i].id();
-            nodes[i]["x"] = graph.nodes()[i].x();
-            nodes[i]["y"] = graph.nodes()[i].y();
-        }
-
-        root["edges"] = Json::Value(Json::arrayValue);
-        // serialize edges
-        root["edges"].resize(graph.edges().size());
-        Json::Value &edges = root["edges"];
-        unsigned int i = 0;
-        for(std::pair<std::string, Edge> p : graph.edges())
-        {
-            edges[i]["start"] = p.second.start();
-            edges[i]["end"] = p.second.end();
-            edges[i]["weight"] = p.second.weight();
-            ++i;
+            nodes[i]["id"] = graph[i].id();
+            nodes[i]["x"] = graph[i].x();
+            nodes[i]["y"] = graph[i].y();
         }
 
         writer.write(os, root);

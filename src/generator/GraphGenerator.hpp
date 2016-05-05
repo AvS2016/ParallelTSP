@@ -2,6 +2,7 @@
 #define GENERATOR_GRAPHGENERATOR_HPP_
 
 #include "data/Graph.hpp"
+#include <map>
 
 namespace tsp
 {
@@ -12,14 +13,13 @@ namespace tsp
         int width_;
         int height_;
         int nodes_;
-        int edges_;
-
-        void addEdge(Graph &graph, int start, int end);
+        std::map<std::string, bool> exists_;
+        std::string generateNodeID(int x, int y);
     public:
         GraphGenerator();
         ~GraphGenerator();
 
-        void setSettings(int width, int height, int nodes, int edges);
+        void setSettings(int width, int height, int nodes);
 
         void generate(Graph &graph);
     };

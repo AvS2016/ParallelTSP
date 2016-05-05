@@ -1,12 +1,12 @@
-#include <iostream>
 #include <cmath>
+#include <sstream>
 #include "GraphGenerator.hpp"
 
 namespace tsp
 {
 
     GraphGenerator::GraphGenerator()
-    : width_(0), height_(0), nodes_(0), edges_(0)
+    : width_(0), height_(0), nodes_(0)
     {
     }
 
@@ -14,52 +14,37 @@ namespace tsp
     {
     }
 
-    void GraphGenerator::setSettings(int width, int height, int nodes,
-            int edges)
+    void GraphGenerator::setSettings(int width, int height, int nodes)
     {
         width_ = width;
         height_ = height;
         nodes_ = nodes;
-        edges_ = edges;
     }
 
-    void GraphGenerator::addEdge(Graph &graph, int start, int end)
+    std::string GraphGenerator::generateNodeID(int x, int y)
     {
-        Node a = graph.nodes()[start];
-        Node b = graph.nodes()[end];
-        float dx = (float) a.x() - (float) b.x();
-        float dy = (float) a.y() - (float) b.y();
-        float weight = sqrtf(dx * dx + dy * dy);
-
-        Edge e(start, end, weight);
-        graph.edges()[e.id()] = e;
+        std::stringstream ss;
+        ss << x << "/" << y;
+        return ss.str();
     }
 
     void GraphGenerator::generate(Graph& graph)
     {
-        int edgeCount = 0;
-        graph.nodes().resize(nodes_);
+        exists_.clear();
+        std::string id;
+        graph.resize(nodes_);
         for(int i = 0; i < nodes_; ++i)
         {
-            int x = rand() % width_;
-            int y = rand() % width_;
-            graph.nodes()[i] = Node(i, x, y);
-            if(i > 1)
+            int x,y;
+            do
             {
-                int end = i;
-                while (end == i)
-                    end = rand() % i;
-                addEdge(graph, i, end);
-                addEdge(graph, end, i);
-                edgeCount += 2;
-            }
-        }
+                x = rand() % width_;
+                y = rand() % width_;
+                id = generateNodeID(x,y);
+            } while (exists_.find(id) != exists_.end());
 
-        for(; edgeCount < edges_; ++edgeCount)
-        {
-            int start = rand() % nodes_;
-            int end = rand() % nodes_;
-            addEdge(graph, start, end);
+            exists_[id] = true;
+            graph[i] = Node(i, x, y);
         }
     }
 
