@@ -7,6 +7,7 @@
 namespace tsp
 {
     typedef std::vector<Node> Graph;
+    typedef std::vector<int> Path;
 }
 
 #endif
