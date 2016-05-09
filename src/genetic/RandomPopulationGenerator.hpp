@@ -11,9 +11,10 @@ namespace tsp
         const Graph& graph_;
         unsigned int startNode_;
     public:
-        RandomPopulationGenerator(const Graph &graph, const unsigned int startNode);
+        RandomPopulationGenerator(const Graph &graph);
         ~RandomPopulationGenerator();
 
+        void setStartNode(const unsigned int startNode);
         void generateIndividual(Individual &individual);
         void generatePopulation(Population &population, const unsigned int size);
 

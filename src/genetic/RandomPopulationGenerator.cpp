@@ -4,13 +4,18 @@
 namespace tsp
 {
 
-    RandomPopulationGenerator::RandomPopulationGenerator(const Graph &graph, const unsigned int startNode)
-    :graph_(graph), startNode_(startNode)
+    RandomPopulationGenerator::RandomPopulationGenerator(const Graph &graph)
+    :graph_(graph), startNode_(0)
     {
     }
 
     RandomPopulationGenerator::~RandomPopulationGenerator()
     {
+    }
+
+    void RandomPopulationGenerator::setStartNode(const unsigned int startNode)
+    {
+        startNode_ = startNode;
     }
 
     void RandomPopulationGenerator::generateIndividual(Individual& individual)
