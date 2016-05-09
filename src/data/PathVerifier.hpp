@@ -2,6 +2,7 @@
 #define DATA_PATHVERIFIER_HPP_
 
 #include "data/Graph.hpp"
+#include "data/Path.hpp"
 
 namespace tsp
 {

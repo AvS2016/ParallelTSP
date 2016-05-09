@@ -1,3 +1,5 @@
+#include <fstream>
+#include <json/json.h>
 #include "PathSerializer.hpp"
 
 namespace tsp
@@ -7,7 +9,7 @@ namespace tsp
         if(!root.isArray())
             return false;
 
-        for(Json::Value &v : root)
+        for(const Json::Value &v : root)
         {
             if (!v.isUInt())
                 return false;
@@ -33,7 +35,7 @@ namespace tsp
         return true;
     }
 
-    bool PathSerializer::serialize(Path& path, std::ostream& os)
+    bool PathSerializer::serialize(const Path& path, std::ostream& os)
     {
         Json::StyledStreamWriter writer;
         Json::Value root(Json::arrayValue);
@@ -53,7 +55,7 @@ namespace tsp
         return deserialize(path, is);
     }
 
-    bool PathSerializer::save(Path& path, const std::string& file)
+    bool PathSerializer::save(const Path& path, const std::string& file)
     {
         std::ofstream os(file);
         return serialize(path, os);

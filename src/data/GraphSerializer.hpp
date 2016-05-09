@@ -16,9 +16,9 @@ namespace tsp
 
     public:
         static bool deserialize(Graph &graph, std::istream &is);
-        static bool serialize(Graph &graph, std::ostream &os);
+        static bool serialize(const Graph &graph, std::ostream &os);
         static bool load(Graph &graph, const std::string &file);
-        static bool save(Graph &graph, const std::string &file);
+        static bool save(const Graph &graph, const std::string &file);
     };
 }
 

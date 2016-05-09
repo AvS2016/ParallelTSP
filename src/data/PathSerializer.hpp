@@ -16,9 +16,9 @@ namespace tsp
 
     public:
         static bool deserialize(Path &path, std::istream &is);
-        static bool serialize(Path &path, std::ostream &os);
+        static bool serialize(const Path &path, std::ostream &os);
         static bool load(Path &path, const std::string &file);
-        static bool save(Path &path, const std::string &file);
+        static bool save(const Path &path, const std::string &file);
     };
 
 }

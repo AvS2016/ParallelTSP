@@ -28,7 +28,7 @@ namespace tsp
         return true;
     }
 
-    bool GraphSerializer::serialize(Graph &graph, std::ostream& os)
+    bool GraphSerializer::serialize(const Graph &graph, std::ostream& os)
     {
         Json::StyledStreamWriter writer;
         Json::Value root;
@@ -55,7 +55,7 @@ namespace tsp
         return deserialize(graph, is);
     }
 
-    bool GraphSerializer::save(Graph &graph, const std::string& file)
+    bool GraphSerializer::save(const Graph &graph, const std::string& file)
     {
         std::ofstream os(file);
         return serialize(graph, os);
