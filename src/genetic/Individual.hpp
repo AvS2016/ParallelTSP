@@ -10,13 +10,14 @@ namespace tsp
     private:
         Path path_;
         double fitness_;
+        double normalizedFitness_;
     public:
         Individual()
-        :path_(), fitness_(0)
+        :path_(), fitness_(0), normalizedFitness_(0)
         { }
 
         Individual(const Path &path)
-        :path_(path), fitness_(0)
+        :path_(path), fitness_(0), normalizedFitness_(0)
         { }
 
         ~Individual()
@@ -30,6 +31,16 @@ namespace tsp
         double getFitness() const
         {
             return fitness_;
+        }
+
+        void setNormalizedFitness(const double fitness)
+        {
+            normalizedFitness_ = fitness;
+        }
+
+        double getNormalizedFitess() const
+        {
+            return normalizedFitness_;
         }
 
         Path& getPath()
