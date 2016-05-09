@@ -16,7 +16,7 @@ namespace tsp
         { }
 
     public:
-        bool verify(const Graph &graph, const Path &path);
+        static bool verify(const Graph &graph, const Path &path);
     };
 
 }

@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iostream>
 #include "GeneticSolver.hpp"
+#include "data/PathVerifier.hpp"
 
 namespace tsp
 {
@@ -131,6 +132,9 @@ namespace tsp
             crossover_.cross(population_.getIndividuals()[p1],
                             population_.getIndividuals()[p2],
                             population_.getIndividuals()[c2]);
+
+            assert(PathVerifier::verify(graph_, population_.getIndividuals()[c1].getPath()));
+            assert(PathVerifier::verify(graph_, population_.getIndividuals()[c2].getPath()));
         }
     }
 
