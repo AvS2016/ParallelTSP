@@ -168,14 +168,25 @@ namespace tsp
     {
         populationGen_.generatePopulation(population_, settings_.populationSize);
         reproductionStates_.resize(population_.getIndividuals().size());
+        updateFitness();
     }
 
     void GeneticSolver::nextGeneration()
     {
-        updateFitness();
         select();
         crossover();
         mutate();
+        updateFitness();
+    }
+
+    Individual &GeneticSolver::getBest()
+    {
+        return *population_.getIndividuals().end();
+    }
+
+    Population &GeneticSolver::getPopulation()
+    {
+        return population_;
     }
 
 }

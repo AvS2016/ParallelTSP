@@ -54,6 +54,9 @@ namespace tsp
         void setSettings(const Settings &settings);
         void init();
         void nextGeneration();
+
+        Individual &getBest();
+        Population &getPopulation();
     };
 
 }

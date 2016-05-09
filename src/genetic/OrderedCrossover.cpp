@@ -4,6 +4,16 @@
 
 namespace tsp
 {
+    OrderedCrossover::OrderedCrossover()
+    {
+
+    }
+
+    OrderedCrossover::~OrderedCrossover()
+    {
+
+    }
+
     void OrderedCrossover::initGeneTracker(const unsigned int size)
     {
         individualGene_.resize(size);

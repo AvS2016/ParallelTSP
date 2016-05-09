@@ -1,7 +1,7 @@
 #ifndef GENETIC_INDIVIDUAL_HPP_
 #define GENETIC_INDIVIDUAL_HPP_
 
-#include "data/Graph.hpp"
+#include "data/Path.hpp"
 
 namespace tsp
 {

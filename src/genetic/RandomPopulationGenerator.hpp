@@ -1,6 +1,7 @@
 #ifndef GENETIC_RANDOMPOPULATIONGENERATOR_HPP_
 #define GENETIC_RANDOMPOPULATIONGENERATOR_HPP_
 
+#include "data/Graph.hpp"
 #include "genetic/Population.hpp"
 
 namespace tsp
