@@ -38,7 +38,6 @@ namespace tsp
         std::vector<ReproductionState> reproductionStates_;
 
 
-        void generateInitialPopulation();
         void updateFitness();
         void select();
         unsigned int findParent();

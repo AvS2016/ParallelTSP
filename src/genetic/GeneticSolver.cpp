@@ -29,11 +29,6 @@ namespace tsp
     {
     }
 
-    void GeneticSolver::generateInitialPopulation()
-    {
-
-    }
-
     void GeneticSolver::updateFitness()
     {
         // calc fitness
@@ -50,10 +45,11 @@ namespace tsp
             ind.setFitness(sum);
             fitnessSum += sum;
         }
-
         // calc normalized fitness
         for(Individual &ind : population_.getIndividuals())
+        {
             ind.setNormalizedFitness(ind.getFitness() / fitnessSum);
+        }
 
         // sort descending to fitness
         std::sort(population_.getIndividuals().begin(), population_.getIndividuals().end(), lessFitness);
@@ -79,9 +75,11 @@ namespace tsp
                 {
                     reproductionStates_[i] = SELECTED;
                     ++selIndividuals;
+                    break;
                 }
             }
         }
+
     }
 
     unsigned int GeneticSolver::findParent()
@@ -114,42 +112,43 @@ namespace tsp
         assert(population_.getIndividuals().size() % 2 == 0);
         assert((population_.getIndividuals().size() / 2) % 2 == 0);
 
-        int p1 = findParent();
-        reproductionStates_[p1] = CROSSED;
-        int p2 = findParent();
-        reproductionStates_[p2] = CROSSED;
+        for (unsigned int i = 0; i < population_.getIndividuals().size() / 2; i += 2)
+        {
+            int p1 = findParent();
+            reproductionStates_[p1] = CROSSED;
+            int p2 = findParent();
+            reproductionStates_[p2] = CROSSED;
 
-        int c1 = findChild();
-        reproductionStates_[c1] = BREEDED;
-        int c2 = findChild();
-        reproductionStates_[c2] = BREEDED;
+            int c1 = findChild();
+            reproductionStates_[c1] = BREEDED;
+            int c2 = findChild();
+            reproductionStates_[c2] = BREEDED;
 
-        crossover_.cross(population_.getIndividuals()[p1],
-                population_.getIndividuals()[p2],
-                population_.getIndividuals()[c1]);
-        crossover_.cross(population_.getIndividuals()[p1],
-                        population_.getIndividuals()[p2],
-                        population_.getIndividuals()[c2]);
+            crossover_.cross(population_.getIndividuals()[p1],
+                    population_.getIndividuals()[p2],
+                    population_.getIndividuals()[c1]);
+            crossover_.cross(population_.getIndividuals()[p1],
+                            population_.getIndividuals()[p2],
+                            population_.getIndividuals()[c2]);
+        }
     }
 
     unsigned int GeneticSolver::findMutant()
     {
         int randRet = std::rand() % reproductionStates_.size();
-
         for (unsigned int i = 0; i < reproductionStates_.size(); ++i)
         {
             unsigned int idx = (randRet + i) % reproductionStates_.size();
             if(reproductionStates_[idx] == BREEDED)
                 return idx;
         }
-
         assert(false);
         return -1;
     }
 
     void GeneticSolver::mutate()
     {
-        unsigned int mutations = static_cast<unsigned int>((population_.getIndividuals().size() / 2 )* settings_.mutationChance);
+        unsigned int mutations = static_cast<unsigned int>((population_.getIndividuals().size() / 2 ) * settings_.mutationChance);
         for (unsigned int i = 0; i < mutations; ++i)
         {
             unsigned int idx = findMutant();
@@ -181,7 +180,7 @@ namespace tsp
 
     Individual &GeneticSolver::getBest()
     {
-        return *population_.getIndividuals().end();
+        return population_.getIndividuals().back();
     }
 
     Population &GeneticSolver::getPopulation()

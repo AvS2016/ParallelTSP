@@ -10,6 +10,7 @@ set(PROJ_LIBRARIES
 )
 set(PROJ_EXEC
     "generator"
+    "simplega"
 )
 
 get_filename_component(BOOST_ROOT "./dep/boost" ABSOLUTE)

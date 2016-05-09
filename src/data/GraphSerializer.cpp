@@ -22,9 +22,8 @@ namespace tsp
         // deserialize nodes
         Json::Value &nodes = root["nodes"];
         graph.resize(nodes.size());
-        for(unsigned int i = 0; nodes.size(); ++i)
+        for(unsigned int i = 0; i < nodes.size(); ++i)
             graph[i] = Node(nodes[i]["id"].asInt(), nodes[i]["x"].asInt(), nodes[i]["y"].asInt());
-
         return true;
     }
 
