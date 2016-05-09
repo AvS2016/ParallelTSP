@@ -1,7 +1,11 @@
 #include <iostream>
-using namespace std;
+#include <boost/mpi/environment.hpp>
+#include <boost/mpi/communicator.hpp>
 
-int main(int argc, char **argv)
+using namespace std;
+namespace mpi = boost::mpi;
+
+int main() //int argc, char **argv
 {
 
 	// Loops are fine
@@ -25,10 +29,20 @@ int main(int argc, char **argv)
 
 	mypointer = &firstvalue;
 	*mypointer = 100;
+	secondvalue = 200;
 	cout << "firstvalue is " << firstvalue << '\n';
 	cout << "secondvalue is " << secondvalue << '\n';
+
+
+	// MPI tests
+	 mpi::environment env;
+	 mpi::communicator world;
+	 std::cout << "I am 	process " << world.rank() << " of " << world.size()
+	            << "." << std::endl;
+
+
 	return 0;
 
 
-    return 0;
+
 }
