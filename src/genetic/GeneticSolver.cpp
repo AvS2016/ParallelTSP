@@ -1,6 +1,7 @@
 #include <random>
 #include <cassert>
 #include <algorithm>
+#include <iostream>
 #include "GeneticSolver.hpp"
 
 namespace tsp
@@ -15,7 +16,7 @@ namespace tsp
 
     static bool lessFitness(const Individual &i1, const Individual &i2)
     {
-        return i1.getNormalizedFitess() > i2.getNormalizedFitess();
+        return i1.getNormalizedFitess() < i2.getNormalizedFitess();
     }
 
 
@@ -42,8 +43,8 @@ namespace tsp
                 Node next = graph_[ind.getPath()[i+1]];
                 sum += nodeDistance(curr, next);
             }
-            ind.setFitness(sum);
-            fitnessSum += sum;
+            ind.setFitness(1 / sum);
+            fitnessSum += ind.getFitness();
         }
         // calc normalized fitness
         for(Individual &ind : population_.getIndividuals())

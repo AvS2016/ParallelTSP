@@ -70,8 +70,9 @@ int main(int argc, char **argv)
         std::cout.flush();
         solver.nextGeneration();
         std::cout << "Done\n";
-        std::cout << "  Best Fitness: " << solver.getBest().getFitness() << "\n";
-        std::cout << "  Mean Fitness: " << tsp::PopulationAnalyzer::getMeanFitness(solver.getPopulation()) << "\n";
+        std::cout << "  Best Fitness: " << 1 / solver.getBest().getFitness() << "\n";
+        std::cout << "  Best Normalized: " << solver.getBest().getNormalizedFitess() << "\n";
+        std::cout << "  Mean Fitness: " << 1 / tsp::PopulationAnalyzer::getMeanFitness(solver.getPopulation()) << "\n";
     }
 
     std::cout << "Saving Path to '" << vm["outfile"].as<std::string>() << "'... ";
