@@ -35,13 +35,12 @@ int main() //int argc, char **argv
 
 
 	// MPI tests
-	/*
 	 mpi::environment env;
 	 mpi::communicator world;
 
 	 std::cout << "I am 	process " << world.rank() << " of " << world.size()
 	            << "." << std::endl;
-*/
+
 
 	return 0;
 
