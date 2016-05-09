@@ -6,7 +6,7 @@ namespace tsp
 {
     static bool validateGraph(const Json::Value &root)
     {
-        return root.isObject() && root["nodes"].isArray() && root["edges"].isArray();
+        return root.isObject() && root["nodes"].isArray();
     }
 
     bool GraphSerializer::deserialize(Graph &graph, std::istream& is)
