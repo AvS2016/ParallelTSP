@@ -38,8 +38,12 @@ int main() //int argc, char **argv
 	 mpi::environment env;
 	 mpi::communicator world;
 
-	 std::cout << "I am 	process " << world.rank() << " of " << world.size()
+	 while (true)
+	 {
+	     std::cout << "I am 	process " << world.rank() << " of " << world.size()
 	            << "." << std::endl;
+	     sleep(1);
+	 }
 
 
 	return 0;
