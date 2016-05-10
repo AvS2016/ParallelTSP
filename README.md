@@ -26,3 +26,9 @@ cd build
 cmake ..
 make
 ```
+
+Execute the following command to run on multiple machines
+(Example for current dir="build")
+```
+../dep/openmpi/bin/mpirun -H <host1>,<host2>,... <path to executable>
+```
