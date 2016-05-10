@@ -5,9 +5,9 @@
 using namespace std;
 namespace mpi = boost::mpi;
 
-int main() //int argc, char **argv
+int main(int argc, char **argv) //int argc, char **argv
 {
-
+/*
 	// Loops are fine
 	for(int i = 0; i<=10; i++){
 
@@ -33,9 +33,9 @@ int main() //int argc, char **argv
 	cout << "firstvalue is " << firstvalue << '\n';
 	cout << "secondvalue is " << secondvalue << '\n';
 
-
+*/
 	// MPI tests
-	 mpi::environment env;
+	 mpi::environment env{argc, argv};
 	 mpi::communicator world;
 
 	 while (true)
