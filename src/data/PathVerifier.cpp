@@ -8,6 +8,9 @@ namespace tsp
         for (unsigned int i = 0; i < visited.size(); ++i)
             visited[i] = 0;
 
+        if(path.front() != path.back())
+            return false;
+
         // count visits per node
         for (int node : path)
         {
@@ -17,8 +20,20 @@ namespace tsp
         }
 
         // check how many times node was visited
+        bool startNode = false;
         for (int count : visited)
         {
+            if (count == 2)
+            {
+                if(startNode)
+                    return false;
+                else
+                {
+                    startNode = true;
+                    continue;
+                }
+            }
+
             if (count != 1)
                 return false;
         }

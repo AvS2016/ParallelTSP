@@ -30,20 +30,18 @@ namespace tsp
         const Graph &graph_;
         Settings settings_;
 
-        Population population_;
+        Population *currPopulation_;
+        Population *nextPopulation_;
+
+        std::vector<int> parents_;
+
         OrderedCrossover crossover_;
         RandomPopulationGenerator populationGen_;
         SwapMutation mutator_;
 
-        std::vector<ReproductionState> reproductionStates_;
-
-
         void updateFitness();
         void select();
-        unsigned int findParent();
-        unsigned int findChild();
         void crossover();
-        unsigned int findMutant();
         void mutate();
 
     public:

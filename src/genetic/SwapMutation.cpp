@@ -1,6 +1,8 @@
 #include <random>
 #include "SwapMutation.hpp"
 
+#define RAND_IDX(s) ((std::rand() % (s - 2)) + 1)
+
 namespace tsp
 {
 
@@ -15,10 +17,10 @@ namespace tsp
     void SwapMutation::mutate(Individual &individual)
     {
         int idx1, idx2;
-        idx1 = std::rand() % individual.getPath().size();
+        idx1 = RAND_IDX(individual.getPath().size());
         do
         {
-            idx2 = std::rand() % individual.getPath().size();
+            idx2 = RAND_IDX(individual.getPath().size());
         } while (idx1 == idx2);
 
         int tmp = individual.getPath()[idx1];

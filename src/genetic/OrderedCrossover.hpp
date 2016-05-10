@@ -11,7 +11,7 @@ namespace tsp
         std::vector<bool> individualGene_;
         std::vector<bool> populationGene_;
 
-        void initGeneTracker(const unsigned int size);
+        void initGeneTracker(const unsigned int size, const int start);
     public:
         OrderedCrossover();
         ~OrderedCrossover();

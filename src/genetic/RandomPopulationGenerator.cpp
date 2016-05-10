@@ -26,12 +26,12 @@ namespace tsp
 
         // prepare individual
         individual.getPath().resize(graph_.size() + 1);
-        unsigned int pathIdx = 0;
 
         individual.getPath()[0] = startNode_;
         visited[startNode_] = true;
 
         // generate path with random nodes
+        unsigned int pathIdx = 1;
         while(pathIdx + 1 < graph_.size())
         {
             int node = std::rand() % graph_.size();
