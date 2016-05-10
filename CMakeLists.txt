@@ -16,6 +16,7 @@ set(PROJ_EXEC
     "dirtytesting"
 )
 
+set(Boost_USE_STATIC_LIBS "ON")
 get_filename_component(BOOST_ROOT "./dep/boost" ABSOLUTE)
 get_filename_component(MPI_C_COMPILER "./dep/openmpi/bin/mpicc" ABSOLUTE)
 get_filename_component(MPI_CXX_COMPILER "./dep/openmpi/bin/mpicxx" ABSOLUTE)
