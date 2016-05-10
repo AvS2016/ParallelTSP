@@ -4,17 +4,16 @@ Nachrichten werden in MPI ausgetauscht, indem den entsprechenden Operationen mit
 Desweiteren haben alle solche Funktionen einen source-Parameter und/oder einen dest-Parameter, welche die Quelle und/oder das Ziel der Nachricht angeben. Daneben gibt es diverse Hilfsfunktionen, die das Senden und Empfangen von bestimmten Variablen einfacher gestalten. Zum Beispiel kann man neue Typen definieren und Prozesse zu Gruppen zusammenfassen
 
 
-Für den Benutzer ist sowohl die Reihenfolge der Prozesse als auch deren Arbeitsgeschwindigkeit nicht vorherbestimmbar.
-Die Header-Dateien sollten sich im include-Verzeichnis der Zielmaschine befinden. Ansonsten müssen die Pfade entweder in der umgebenden Shell gesetzt oder in mpicc (bzw. im entsprechenden Skript) angepaßt werden.
+FÃ¼r den Benutzer ist sowohl die Reihenfolge der Prozesse als auch deren Arbeitsgeschwindigkeit nicht vorherbestimmbar.
+Die Header-Dateien sollten sich im include-Verzeichnis der Zielmaschine befinden. Ansonsten mÃ¼ssen die Pfade entweder in der umgebenden Shell gesetzt oder in mpicc (bzw. im entsprechenden Skript) angepaÃŸt werden.
 
 
-die Prozesse müssen mittels eines MPI Tools gestartet 
-werden JUROPA: mpiexec
+die Prozesse mÃ¼ssen mittels eines MPI Tools gestartet werden JUROPA: mpiexec
 
 MPI muss vor der ersten Verwendung initialisiert werden
 
 - Achtung: vor Initialisierung ist der Status des Programms undefiniert! nach Beenden ebenfalls
-- Variablen und Funktionen im Programm dürfen nicht mit MPI_ oder PMPI_ beginnen.
+- Variablen und Funktionen im Programm dÃ¼rfen nicht mit MPI_ oder PMPI_ beginnen.
 
 
 //##########################################
@@ -34,22 +33,20 @@ main (int argc, char* argv[]) {
 
  MPI_Finalize();
  exit(0);
-
 }
 //###############################################
 
 - MPI_Init() initialisiert MPI
-- mit MPI_Initialized lässt sich überprüfen ob MPI initialisiert wurde.
+- mit MPI_Initialized lÃ¤sst sich Ã¼berprÃ¼fen ob MPI initialisiert wurde.
 - MPI_Comm_rank die Nummer (rank) des Prozesses im Kommunikator. Ein Kommunikator ist in MPI ein Bereich von Prozessen, der bei einer Kommunikationsfunktion als Einheit angesprochen werden kann. MPI_COMM_WORLD ist der Kommunikator, der alle Prozesse beinhaltet.
 - MPI_Comm-Size = Anzahl der Prozesse im Kommunikator (MPI_COMM_WORLD)
-- MPI_Finalize beendet MPI (Muss am ende eines Programms von jedem Prozess aufgerufen werden. MPI_Finalized prüft ob MPI beendet wurde)
+- MPI_Finalize beendet MPI (Muss am ende eines Programms von jedem Prozess aufgerufen werden. MPI_Finalized prÃ¼ft ob MPI beendet wurde)
 
 ACHTUNG: keinen Deadlock erzeugen. (Wenn z.B. mit MPI_Recv solange blockiert wird bis etwas empfangen wurde, aber kein MPI_Send abgefeuert wird)
 
 
-- MPI stellt vier Varianten zur Verfügung, um Daten zu versenden, nämlich blockierend, gepuffert, synchronisiert und im "ready mode"
-- Zu jeder Sende-Operation gehört eine Empfangsoperation.
-
+- MPI stellt vier Varianten zur VerfÃ¼gung, um Daten zu versenden, nÃ¤mlich blockierend, gepuffert, synchronisiert und im "ready mode"
+- Zu jeder Sende-Operation gehÃ¶rt eine Empfangsoperation.
 
 
 
@@ -61,29 +58,29 @@ BEISPIEL Senden einer Nachricht.
 
 main (int argc, char* argv[]) {
 
- int myrank; // beinhaltet die Nummer des Prozesses, auf dem diese Instanz des Programms läuft
+ int myrank; // beinhaltet die Nummer des Prozesses, auf dem diese Instanz des Programms lÃ¤uft
  int size;   // beinhaltet die Anzahl der Prozesse insgesamt
- int from;                                 // wird den Vorgänger eines Prozesses beinhalten
+ int from;                                 // wird den VorgÃ¤nger eines Prozesses beinhalten
  int to;                                   // wird den Nachfolger eines Prozesses beinhalten
  MPI_Status status;                        // eine Status-Variable, die hier ignoriert wird
  char message[8];                          // beinhaltet die Nachricht
 
  MPI_Init(&argc, &argv);                   // MPI initialisieren
- MPI_Comm_rank(MPI_COMM_WORLD, &myrank);   // Nummer des Prozesses holen, auf dem diese Instanz des Programms läuft
+ MPI_Comm_rank(MPI_COMM_WORLD, &myrank);   // Nummer des Prozesses holen, auf dem diese Instanz des Programms lÃ¤uft
  MPI_Comm_size(MPI_COMM_WORLD, &size);     // Anzahl der Prozesse merken
 
  sprintf(message, "MESSAGE");
 
- if (myrank!=0) {                          // wenn diese Instanz nicht auf dem ersten Proozeß läuft
-  from=(size+myrank-1) % size;             // Vorgänger bestimmen
+ if (myrank!=0) {                          // wenn diese Instanz nicht auf dem ersten ProozeÃŸ lÃ¤uft
+  from=(size+myrank-1) % size;             // VorgÃ¤nger bestimmen
   MPI_Recv (message,8,MPI_CHAR,from,0,MPI_COMM_WORLD,&status);
-                                           // vom Vorgänger empfangen
-  // Eigentlich müßte es heißen : Darauf warten, daß der Vorgänger eine Nachricht sendet
+                                           // vom VorgÃ¤nger empfangen
+  // Eigentlich mÃ¼ÃŸte es heiÃŸen : Darauf warten, daÃŸ der VorgÃ¤nger eine Nachricht sendet
   
   printf("Process %d received message %s from process %d.\n", myrank, message, from);
  } 
 
- if (myrank!=(size-1)) {                   // wenn diese Instanz nicht auf dem letzten Prozeß läuft
+ if (myrank!=(size-1)) {                   // wenn diese Instanz nicht auf dem letzten ProzeÃŸ lÃ¤uft
   to=(myrank+1) % size;                    // Nachfolger bestimmen
   printf("Process %d is sending message %s to process %d.\n",myrank,message,to);
   MPI_Send (message,strlen(message)+1,MPI_CHAR,to,0,MPI_COMM_WORLD);
@@ -92,22 +89,19 @@ main (int argc, char* argv[]) {
 
  MPI_Finalize();                           // MPI beenden
  exit(0);
-
 }
 //##################################################
 
 Damit wird das Wandern einer Nachricht durch alle Prozesse simuliert. Das funktioniert, da hier die Funktionen MPI_Send und MPI_Recv synchronisierend sind.
 
 
-
 Ale Prozesse ansteuersn mit Broadcast
 - MPI_Bcast(&num, 1, MPI_INT, 0, MPI_COMM_WORLD);
 
 
-
 Wichtige Befehle
 
-Parallel zum eigentlichen Programm ausführen
+Parallel zum eigentlichen Programm ausfÃ¼hren
 - MPI_Isend
 - MPI_Ibsend
 - MPI_Irsend
@@ -127,14 +121,14 @@ Warten erzwingen um zu Synchronisieren
 
 
 //################################################################
-Ein Schönes Beispiel
-/* Prozeß 0 spielt den Manager */
+Ein SchÃ¶nes Beispiel
+/* ProzeÃŸ 0 spielt den Manager */
 
  if (rank == 0) {
 
   /* Daten vorbereiten */ 
   workers = size - 1;
-  /*hier alles was wir senden möchten*/
+  /*hier alles was wir senden mÃ¶chten*/
   data = malloc(sizeof(int) * workers * len);
   request = malloc(sizeof(MPI_Request) * workers);
   
@@ -149,7 +143,7 @@ Ein Schönes Beispiel
 
    /* nichtblockierendes Senden verwenden */
    MPI_Isend(data + i * len, len, MPI_INT, dest, dest, MPI_COMM_WORLD, &request[i]);
-   /* Hier wird an fünfter Stelle ein Tag-Parameter benutzt, der die Operation kennzeichnet.
+   /* Hier wird an fÃ¼nfter Stelle ein Tag-Parameter benutzt, der die Operation kennzeichnet.
       Dasselbe passiert beim Empfangen. */
   }
 
@@ -171,17 +165,16 @@ Ein Schönes Beispiel
   /* Hier neue Population berechnen */
   //##########
 
-
-  /* und aufrämen */
+  /* und aufrÃ¤men */
   free(data);
   free(sum);
   free(request);
  }
 
- /* Code für die Arbeiter */
+ /* Code fÃ¼r die Arbeiter */
  else {
 
-  /* Behälter für Daten vorbereiten */
+  /* BehÃ¤lter fÃ¼r Daten vorbereiten */
   data = malloc(sizeof(int) * len);
   mysum = 0;
 
@@ -193,17 +186,16 @@ Ein Schönes Beispiel
   //##########
   
 
-  /* und wieder zurück an den Manager senden */
+  /* und wieder zurÃ¼ck an den Manager senden */
   MPI_Send(&mysum, 1, MPI_INT, 0, rank, MPI_COMM_WORLD);
 
-  /* und wieder aufrämen */
+  /* und wieder aufrÃ¤men */
   free(data);
  }
 
  MPI_Finalize();
  return 0;
 //##########################################################
-
 
 
 
@@ -226,7 +218,7 @@ Sammeln von Datenstrukturen
 #define ARRAYSIZE 16000000
 #define MASTER 0
 
-/* Behälter für Daten */
+/* BehÃ¤lter fÃ¼r Daten */
 float data[ARRAYSIZE];
 
 int main(int argc,char *argv[]) {
@@ -244,7 +236,7 @@ int main(int argc,char *argv[]) {
  MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
  MPI_Comm_rank(MPI_COMM_WORLD,&taskid);
 
- /* Anzahl der Prozesse muß durch 4 teilbar sein */
+ /* Anzahl der Prozesse muÃŸ durch 4 teilbar sein */
  if (numtasks % 4 != 0) {
   printf("Exiting, number of tasks must be divisible by 4, it is currently %d.\n", numtasks);
   MPI_Abort(MPI_COMM_WORLD, rc);
@@ -275,7 +267,7 @@ int main(int argc,char *argv[]) {
   offset = offset + chunksize;
  }
 
- /* der Manager muß seinen Teil beitragen */
+ /* der Manager muÃŸ seinen Teil beitragen */
  offset = 0;
  mysum = update(offset, chunksize, taskid);
 
@@ -303,7 +295,7 @@ int main(int argc,char *argv[]) {
 
  }
 
- /* Code für Arbeiter */
+ /* Code fÃ¼r Arbeiter */
 
  if (taskid > MASTER) {
 
@@ -315,7 +307,7 @@ int main(int argc,char *argv[]) {
   /* aufaddieren
   mysum = update(offset, chunksize, taskid);
 
-  /* und Daten zurückschicken */
+  /* und Daten zurÃ¼ckschicken */
   dest = MASTER;
   MPI_Send(&offset, 1, MPI_INT, dest, tag1, MPI_COMM_WORLD);
   MPI_Send(&data[offset], chunksize, MPI_FLOAT, MASTER, tag2, MPI_COMM_WORLD);
@@ -326,7 +318,6 @@ int main(int argc,char *argv[]) {
  }
 
  MPI_Finalize();
-
 }
 
 /* Summe der Daten eines einzelnen Prozesses berechnen */
@@ -359,7 +350,6 @@ Zeitmessung
 
 
 
-
 Fehlerbehandlung
 - MPI_WTime
 - MPI_WTick
@@ -380,5 +370,5 @@ typedef struct {
     int reserved[2];
 } MPI_Status;
 
-Das Mitglied MPI_SOURCE gibt die Quelle an, die bei der Kommunikationsoperation beteiligt war, das Mitglied MPI_TAG gibt die Kennzeichnung (tag) der Nachricht zurück, die mit der Kommunikationsoperation behandelt worden ist. MPI_ERROR gibt den Fehler/Erfolg wieder, der bei dieser Nachricht aufgetreten ist. Das Mitglied size schließlich gibt die Größe der Nachricht an.
+Das Mitglied MPI_SOURCE gibt die Quelle an, die bei der Kommunikationsoperation beteiligt war, das Mitglied MPI_TAG gibt die Kennzeichnung (tag) der Nachricht zurÃ¼ck, die mit der Kommunikationsoperation behandelt worden ist. MPI_ERROR gibt den Fehler/Erfolg wieder, der bei dieser Nachricht aufgetreten ist. Das Mitglied size schlieÃŸlich gibt die GrÃ¶ÃŸe der Nachricht an.
 
