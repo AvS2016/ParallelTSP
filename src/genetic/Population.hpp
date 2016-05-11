@@ -19,6 +19,24 @@ namespace tsp
         {
             return individuals_;
         }
+
+        double getMeanFitness()
+        {
+            double sum = 0;
+            for (Individual &ind: individuals_)
+                sum += ind.getFitness();
+
+            return sum / individuals_.size();
+        }
+
+        double getMeanDistance()
+        {
+            double sum = 0;
+            for (Individual &ind: individuals_)
+                sum += ind.getDistance();
+
+            return sum / individuals_.size();
+        }
     };
 }
 

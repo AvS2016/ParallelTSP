@@ -3,7 +3,6 @@
 #include "data/GraphSerializer.hpp"
 #include "data/PathSerializer.hpp"
 #include "genetic/GeneticSolver.hpp"
-#include "genetic/PopulationAnalyzer.hpp"
 
 namespace po = boost::program_options;
 
@@ -72,7 +71,7 @@ int main(int argc, char **argv)
         std::cout << "Done\n";
         std::cout << "  Best Distance: " << solver.getBest().getDistance() << "\n";
         std::cout << "  Best Normalized: " << solver.getBest().getNormalizedFitness() << "\n";
-        std::cout << "  Mean Distance: " << tsp::PopulationAnalyzer::getMeanFitness(solver.getPopulation()) << "\n";
+        std::cout << "  Mean Distance: " << solver.getPopulation().getMeanDistance() << "\n";
     }
 
     std::cout << "Saving Path to '" << vm["outfile"].as<std::string>() << "'... ";
