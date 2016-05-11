@@ -8,6 +8,11 @@
 namespace tsp
 {
 
+    static double drand()
+    {
+        return static_cast<double>(std::rand()) /  static_cast<double>(RAND_MAX);
+    }
+
     static double nodeDistance(const Node& n1, const Node &n2)
     {
         double dx = n1.x() - n2.x();
@@ -15,9 +20,9 @@ namespace tsp
         return sqrt(dx * dx + dy * dy);
     }
 
-    static bool lessFitness(const Individual &i1, const Individual &i2)
+    static bool lessNormalizedFitness(const Individual &i1, const Individual &i2)
     {
-        return i1.getNormalizedFitess() > i2.getNormalizedFitess();
+        return i1.getNormalizedFitness() < i2.getNormalizedFitness();
     }
 
 
@@ -29,54 +34,74 @@ namespace tsp
 
     GeneticSolver::~GeneticSolver()
     {
+        delete nextPopulation_;
+        delete currPopulation_;
     }
 
     void GeneticSolver::updateFitness()
     {
-        // calc fitness
-        double fitnessSum = 0;
+        // calculate distance and find maximum
+        double maxDistance = 0;
         for(Individual &ind : currPopulation_->getIndividuals())
         {
             assert(PathVerifier::verify(graph_, ind.getPath()));
 
-            double sum = 0;
+            double accumDistance = 0;
             for(unsigned int i = 0; i + 1 < ind.getPath().size(); ++i)
             {
                 Node curr = graph_[ind.getPath()[i]];
                 Node next = graph_[ind.getPath()[i+1]];
-                sum += nodeDistance(curr, next);
+                accumDistance += nodeDistance(curr, next);
             }
-            ind.setFitness(1 / sum);
-            fitnessSum += ind.getFitness();
-        }
-        // calc normalized fitness
-        for(Individual &ind : currPopulation_->getIndividuals())
-        {
-            ind.setNormalizedFitness(ind.getFitness() / fitnessSum);
+            ind.setDistance(accumDistance);
+            if (accumDistance > maxDistance)
+                maxDistance = accumDistance;
         }
 
+        // calc fitness relative to maximum distance (shorter = greater fitness)
+        double fitnessSum = 0;
+        for(Individual &ind : currPopulation_->getIndividuals())
+        {
+            double fitness = maxDistance / ind.getDistance();
+            fitness = fitness * fitness;
+            ind.setFitness(fitness);
+            fitnessSum += ind.getFitness();
+        }
+
+        // calc normalized fitness
+        for(Individual &ind : currPopulation_->getIndividuals())
+            ind.setNormalizedFitness(ind.getFitness() / fitnessSum);
+
         // sort descending to fitness
-        std::sort(currPopulation_->getIndividuals().begin(), currPopulation_->getIndividuals().end(), lessFitness);
+        std::sort(currPopulation_->getIndividuals().begin(),
+                currPopulation_->getIndividuals().end(),
+                lessNormalizedFitness);
+
+        for (Individual &ind : currPopulation_->getIndividuals())
+            std::cout << ind.getFitness() << ",";
+        std::cout << "\n";
     }
 
     void GeneticSolver::select()
     {
-        unsigned int selIndividuals = 0;
-        while(selIndividuals < parents_.size())
+        unsigned int parentCount = 0;
+        while(parentCount < parents_.size())
         {
-            double fit = static_cast<double>(std::rand() % 1000000) / 1000000.0;
-            double sum = 0;
+            // generate target fitness value
+            double selectFitness = drand();
+            double accumFitness = 0;
             for (unsigned int i = 0; i < currPopulation_->getIndividuals().size(); ++i)
             {
-                // calculated accumulated value and check if is fit enough
-                sum += currPopulation_->getIndividuals()[i].getNormalizedFitess();
-                if (sum >= fit)
+                // calculated accumulated fitness
+                accumFitness += currPopulation_->getIndividuals()[i].getNormalizedFitness();
+                // check if random fitness is in interval
+                if (accumFitness >= selectFitness)
                 {
                     // check if previous parent was same
-                    if(selIndividuals % 2 == 1 && parents_[selIndividuals-1] == static_cast<int>(i))
+                    if(parentCount % 2 == 1 && parents_[parentCount-1] == static_cast<int>(i))
                         continue;
-                    parents_[selIndividuals] = i;
-                    ++selIndividuals;
+                    parents_[parentCount] = i;
+                    ++parentCount;
                     break;
                 }
             }
@@ -108,11 +133,11 @@ namespace tsp
 
     void GeneticSolver::mutate()
     {
-        unsigned int mutations = static_cast<unsigned int>((nextPopulation_->getIndividuals().size()) * settings_.mutationChance);
-        for (unsigned int i = 0; i < mutations; ++i)
+        for (unsigned int i = 0; i < nextPopulation_->getIndividuals().size(); ++i)
         {
-            unsigned int idx = std::rand() % nextPopulation_->getIndividuals().size();
-            mutator_.mutate(currPopulation_->getIndividuals()[idx]);
+            double shouldMutate = drand();
+            if (shouldMutate <= settings_.mutationChance)
+                mutator_.mutate(currPopulation_->getIndividuals()[i]);
         }
     }
 
@@ -151,7 +176,7 @@ namespace tsp
 
     Individual &GeneticSolver::getBest()
     {
-        return currPopulation_->getIndividuals().front();
+        return currPopulation_->getIndividuals().back();
     }
 
     Population &GeneticSolver::getPopulation()

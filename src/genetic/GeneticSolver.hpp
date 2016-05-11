@@ -17,15 +17,6 @@ namespace tsp
             double mutationChance;
         };
 
-        enum ReproductionState
-        {
-            DEAD = 0,
-            SELECTED,
-            CROSSED,
-            BREEDED,
-            MUTATED
-        };
-
     private:
         const Graph &graph_;
         Settings settings_;

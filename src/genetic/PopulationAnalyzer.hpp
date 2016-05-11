@@ -13,6 +13,7 @@ namespace tsp
     public:
 
         static double getMeanFitness(Population &population);
+        static double getMeanDistance(Population &population);
 
     };
 
