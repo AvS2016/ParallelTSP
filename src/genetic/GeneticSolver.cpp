@@ -1,7 +1,6 @@
 #include <random>
 #include <cassert>
 #include <algorithm>
-#include <iostream>
 #include "GeneticSolver.hpp"
 #include "data/PathVerifier.hpp"
 
@@ -76,10 +75,6 @@ namespace tsp
         std::sort(currPopulation_->getIndividuals().begin(),
                 currPopulation_->getIndividuals().end(),
                 lessNormalizedFitness);
-
-        for (Individual &ind : currPopulation_->getIndividuals())
-            std::cout << ind.getFitness() << ",";
-        std::cout << "\n";
     }
 
     void GeneticSolver::select()
@@ -157,21 +152,15 @@ namespace tsp
 
     void GeneticSolver::nextGeneration()
     {
-        std::cout << "select\n";
         select();
-        std::cout << "crossover\n";
         crossover();
-        std::cout << "mutate\n";
         mutate();
-        std::cout << "swap\n";
 
         Population *tmp = currPopulation_;
         currPopulation_ = nextPopulation_;
         nextPopulation_ = tmp;
 
-        std::cout << "update fitness\n";
         updateFitness();
-        std::cout << "done\n";
     }
 
     Individual &GeneticSolver::getBest()

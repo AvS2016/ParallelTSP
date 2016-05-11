@@ -26,7 +26,6 @@ namespace tsp
 
         // prepare individual
         individual.getPath().resize(graph_.size() + 1);
-
         individual.getPath()[0] = startNode_;
         visited[startNode_] = true;
 
@@ -54,6 +53,7 @@ namespace tsp
             }
         }
 
+        // end node = start node
         individual.getPath()[pathIdx] = startNode_;
     }
 

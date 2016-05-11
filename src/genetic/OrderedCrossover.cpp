@@ -17,17 +17,17 @@ namespace tsp
 
     void OrderedCrossover::initGeneTracker(const unsigned int size, const int start)
     {
-        individualGene_.resize(size);
-        populationGene_.resize(size);
-        for (unsigned int i = 0; i < individualGene_.size(); ++i)
+        childGeneInUse_.resize(size);
+        graphNodeInUse_.resize(size);
+        for (unsigned int i = 0; i < childGeneInUse_.size(); ++i)
         {
-            individualGene_[i] = false;
-            populationGene_[i] = false;
+            childGeneInUse_[i] = false;
+            graphNodeInUse_[i] = false;
         }
 
-        individualGene_[0] = true;
-        individualGene_[individualGene_.size()-1] = true;
-        populationGene_[start] = true;
+        childGeneInUse_[0] = true;
+        childGeneInUse_[childGeneInUse_.size()-1] = true;
+        graphNodeInUse_[start] = true;
     }
 
     void OrderedCrossover::cross(Individual &parent1, Individual &parent2, Individual &child)
@@ -41,34 +41,35 @@ namespace tsp
         child.getPath()[0] = parent1.getPath()[0];
         child.getPath()[child.getPath().size()-1] = parent1.getPath().back();
 
-        unsigned int added = 0;
-        unsigned int toAdd = parent1.getPath().size() / 2;
-        while (added < toAdd)
+        // determine a random interval of genes to be inherited
+        unsigned int startIdx = 1 + (std::rand() % ((parent1.getPath().size() - 2) / 2));
+        unsigned int length = 1 + (std::rand() % (parent1.getPath().size() - startIdx - 2));
+
+        // apply genes from parent1
+        for(unsigned int i = 0; i < length; ++i)
         {
-            int idx = std::rand() % parent1.getPath().size();
-            if (!individualGene_[idx])
-            {
-                ++added;
-                individualGene_[idx] = true;
-                populationGene_[parent1.getPath()[idx]] = true;
-                child.getPath()[idx] = parent1.getPath()[idx];
-            }
+            unsigned int idx = i + startIdx;
+            int node = parent1.getPath()[idx];
+            childGeneInUse_[idx] = true;
+            child.getPath()[idx] = node;
+            graphNodeInUse_[node] = true;
         }
 
-        added = 0;
+        // apply remaining genes from parent2
+        unsigned int childIdx = 0;
         for (unsigned int i = 0; i < parent2.getPath().size(); ++i)
         {
             int node =  parent2.getPath()[i];
             // check if this node was already used
-            if(populationGene_[node])
+            if(graphNodeInUse_[node])
                 continue;
 
             // find index to insert the gene
-            while(added < individualGene_.size() && individualGene_[added])
-                ++added;
+            while(childIdx < childGeneInUse_.size() && childGeneInUse_[childIdx])
+                ++childIdx;
 
-            individualGene_[added] = true;
-            child.getPath()[added] = node;
+            childGeneInUse_[childIdx] = true;
+            child.getPath()[childIdx] = node;
         }
     }
 }

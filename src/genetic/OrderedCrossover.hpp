@@ -8,8 +8,8 @@ namespace tsp
     class OrderedCrossover
     {
     private:
-        std::vector<bool> individualGene_;
-        std::vector<bool> populationGene_;
+        std::vector<bool> childGeneInUse_;
+        std::vector<bool> graphNodeInUse_;
 
         void initGeneTracker(const unsigned int size, const int start);
     public:
