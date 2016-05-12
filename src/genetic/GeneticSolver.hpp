@@ -1,7 +1,9 @@
 #ifndef GENETIC_GENETICSOLVER_HPP_
 #define GENETIC_GENETICSOLVER_HPP_
 
-#include "data/Graph.hpp"
+#include "utils/Random.hpp"
+#include "genetic/FitnessUpdater.hpp"
+#include "genetic/RouletteWheelSelector.hpp"
 #include "genetic/OrderedCrossover.hpp"
 #include "genetic/RandomPopulationGenerator.hpp"
 #include "genetic/SwapMutation.hpp"
@@ -20,12 +22,15 @@ namespace tsp
     private:
         const Graph &graph_;
         Settings settings_;
+        Random rand_;
 
         Population *currPopulation_;
         Population *nextPopulation_;
 
         std::vector<int> parents_;
 
+        FitnessUpdater fitnessUpdater_;
+        RouletteWheelSelector selector_;
         OrderedCrossover crossover_;
         RandomPopulationGenerator populationGen_;
         SwapMutation mutator_;
@@ -34,6 +39,7 @@ namespace tsp
         void select();
         void crossover();
         void mutate();
+        void swapPopulations();
 
     public:
         GeneticSolver(const Graph& graph);

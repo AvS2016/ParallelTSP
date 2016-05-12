@@ -20,6 +20,11 @@ namespace tsp
             return individuals_;
         }
 
+        const std::vector<Individual>& getIndividuals() const
+        {
+            return individuals_;
+        }
+
         double getMeanFitness()
         {
             double sum = 0;

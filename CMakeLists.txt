@@ -7,6 +7,7 @@ set(PROJ_LIBRARIES
     "json"
     "data"
     "genetic"
+    "utils"
 )
 set(PROJ_EXEC
     "generator"

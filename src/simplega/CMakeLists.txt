@@ -1,5 +1,5 @@
 set(EXEC_NAME simplega)
-set(EXEC_LIBRARIES genetic data json ${Boost_PROGRAM_OPTIONS_LIBRARY})
+set(EXEC_LIBRARIES genetic utils data json ${Boost_PROGRAM_OPTIONS_LIBRARY})
 file(GLOB src *.cpp)
 
 add_executable(${EXEC_NAME} ${src})

@@ -1,0 +1,21 @@
+#ifndef UTILS_RANDOM_HPP_
+#define UTILS_RANDOM_HPP_
+
+namespace tsp
+{
+    class Random
+    {
+    public:
+        Random();
+        ~Random();
+
+        int nextInt();
+        int nextInt(const int max);
+        int nextInt(const int min, const int max);
+
+        double nextFloat();
+        double nextDouble();
+    };
+}
+
+#endif
