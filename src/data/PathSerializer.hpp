@@ -9,10 +9,10 @@ namespace tsp
     class PathSerializer
     {
     private:
-        PathSerializer()
-        { }
-        ~PathSerializer()
-        { }
+        PathSerializer() {
+        }
+        ~PathSerializer() {
+        }
 
     public:
         static bool deserialize(Path &path, std::istream &is);

@@ -9,10 +9,10 @@ namespace tsp
     class GraphSerializer
     {
     private:
-        GraphSerializer()
-        { }
-        ~GraphSerializer()
-        { }
+        GraphSerializer() {
+        }
+        ~GraphSerializer() {
+        }
 
     public:
         static bool deserialize(Graph &graph, std::istream &is);

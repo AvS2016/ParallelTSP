@@ -8,10 +8,10 @@ namespace tsp
 {
     typedef std::vector<int> Path;
 
-    inline std::string pathToStr(const Path& p)
+    inline std::string pathToStr(const Path &p)
     {
         std::stringstream ss;
-        for (unsigned int i = 0; i < p.size(); ++i)
+        for(unsigned int i = 0; i < p.size(); ++i)
             ss << p[i] << ",";
 
         return ss.str();

@@ -18,10 +18,9 @@ namespace tsp
     {
         int idx1, idx2;
         idx1 = RAND_IDX(individual.getPath().size());
-        do
-        {
+        do {
             idx2 = RAND_IDX(individual.getPath().size());
-        } while (idx1 == idx2);
+        } while(idx1 == idx2);
 
         int tmp = individual.getPath()[idx1];
         individual.getPath()[idx1] = individual.getPath()[idx2];

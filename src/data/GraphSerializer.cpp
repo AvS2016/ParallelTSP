@@ -9,7 +9,7 @@ namespace tsp
         return root.isObject() && root["nodes"].isArray();
     }
 
-    bool GraphSerializer::deserialize(Graph &graph, std::istream& is)
+    bool GraphSerializer::deserialize(Graph &graph, std::istream &is)
     {
         Json::Value root;
         Json::Reader reader;
@@ -23,11 +23,12 @@ namespace tsp
         Json::Value &nodes = root["nodes"];
         graph.resize(nodes.size());
         for(unsigned int i = 0; i < nodes.size(); ++i)
-            graph[i] = Node(nodes[i]["id"].asInt(), nodes[i]["x"].asInt(), nodes[i]["y"].asInt());
+            graph[i] = Node(nodes[i]["id"].asInt(), nodes[i]["x"].asInt(),
+                            nodes[i]["y"].asInt());
         return true;
     }
 
-    bool GraphSerializer::serialize(const Graph &graph, std::ostream& os)
+    bool GraphSerializer::serialize(const Graph &graph, std::ostream &os)
     {
         Json::StyledStreamWriter writer;
         Json::Value root;
@@ -36,8 +37,7 @@ namespace tsp
         // serialize nodes
         root["nodes"].resize(graph.size());
         Json::Value &nodes = root["nodes"];
-        for(unsigned int i = 0; i < nodes.size(); ++i)
-        {
+        for(unsigned int i = 0; i < nodes.size(); ++i) {
             nodes[i]["id"] = graph[i].id();
             nodes[i]["x"] = graph[i].x();
             nodes[i]["y"] = graph[i].y();
@@ -48,13 +48,13 @@ namespace tsp
         return true;
     }
 
-    bool GraphSerializer::load(Graph &graph, const std::string& file)
+    bool GraphSerializer::load(Graph &graph, const std::string &file)
     {
         std::ifstream is(file);
         return deserialize(graph, is);
     }
 
-    bool GraphSerializer::save(const Graph &graph, const std::string& file)
+    bool GraphSerializer::save(const Graph &graph, const std::string &file)
     {
         std::ofstream os(file);
         return serialize(graph, os);

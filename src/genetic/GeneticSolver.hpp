@@ -42,7 +42,7 @@ namespace tsp
         void swapPopulations();
 
     public:
-        GeneticSolver(const Graph& graph);
+        GeneticSolver(const Graph &graph);
         ~GeneticSolver();
 
         void setSettings(const Settings &settings);

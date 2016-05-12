@@ -9,16 +9,15 @@ namespace tsp
         if(!root.isArray())
             return false;
 
-        for(const Json::Value &v : root)
-        {
-            if (!v.isUInt())
+        for(const Json::Value & v : root) {
+            if(!v.isUInt())
                 return false;
         }
 
         return true;
     }
 
-    bool PathSerializer::deserialize(Path& path, std::istream& is)
+    bool PathSerializer::deserialize(Path &path, std::istream &is)
     {
         Json::Value root;
         Json::Reader reader;
@@ -29,13 +28,13 @@ namespace tsp
             return false;
 
         path.resize(root.size());
-        for (unsigned int i = 0; i < path.size(); ++i)
+        for(unsigned int i = 0; i < path.size(); ++i)
             path[i] = root[i].asUInt();
 
         return true;
     }
 
-    bool PathSerializer::serialize(const Path& path, std::ostream& os)
+    bool PathSerializer::serialize(const Path &path, std::ostream &os)
     {
         Json::StyledStreamWriter writer;
         Json::Value root(Json::arrayValue);
@@ -49,13 +48,13 @@ namespace tsp
         return true;
     }
 
-    bool PathSerializer::load(Path& path, const std::string& file)
+    bool PathSerializer::load(Path &path, const std::string &file)
     {
         std::ifstream is(file);
         return deserialize(path, is);
     }
 
-    bool PathSerializer::save(const Path& path, const std::string& file)
+    bool PathSerializer::save(const Path &path, const std::string &file)
     {
         std::ofstream os(file);
         return serialize(path, os);

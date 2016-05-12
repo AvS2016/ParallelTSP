@@ -5,7 +5,7 @@ namespace tsp
 {
 
     RandomPopulationGenerator::RandomPopulationGenerator(const Graph &graph)
-    :graph_(graph), startNode_(0)
+        : graph_(graph), startNode_(0)
     {
     }
 
@@ -18,10 +18,10 @@ namespace tsp
         startNode_ = startNode;
     }
 
-    void RandomPopulationGenerator::generateIndividual(Individual& individual)
+    void RandomPopulationGenerator::generateIndividual(Individual &individual)
     {
         std::vector<bool> visited(graph_.size());
-        for (unsigned int i = 0; i < visited.size(); ++i)
+        for(unsigned int i = 0; i < visited.size(); ++i)
             visited[i] = false;
 
         // prepare individual
@@ -31,11 +31,9 @@ namespace tsp
 
         // generate path with random nodes
         unsigned int pathIdx = 1;
-        while(pathIdx + 1 < graph_.size())
-        {
+        while(pathIdx + 1 < graph_.size()) {
             int node = std::rand() % graph_.size();
-            if (!visited[node])
-            {
+            if(!visited[node]) {
                 visited[node] = true;
                 individual.getPath()[pathIdx] = node;
                 ++pathIdx;
@@ -43,10 +41,8 @@ namespace tsp
         }
 
         // find last remaining node
-        for (unsigned int i = 0; i < visited.size(); ++i)
-        {
-            if(!visited[i])
-            {
+        for(unsigned int i = 0; i < visited.size(); ++i) {
+            if(!visited[i]) {
                 individual.getPath()[pathIdx] = i;
                 ++pathIdx;
                 break;
@@ -57,10 +53,11 @@ namespace tsp
         individual.getPath()[pathIdx] = startNode_;
     }
 
-    void RandomPopulationGenerator::generatePopulation(Population& population, const unsigned int size)
+    void RandomPopulationGenerator::generatePopulation(Population &population,
+            const unsigned int size)
     {
         population.getIndividuals().resize(size);
-        for (Individual &ind : population.getIndividuals())
+        for(Individual & ind : population.getIndividuals())
             generateIndividual(ind);
     }
 

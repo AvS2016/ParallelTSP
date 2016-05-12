@@ -10,34 +10,30 @@ namespace tsp
     private:
         std::vector<Individual> individuals_;
     public:
-        Population()
-        { }
-        ~Population()
-        { }
+        Population() {
+        }
+        ~Population() {
+        }
 
-        std::vector<Individual>& getIndividuals()
-        {
+        std::vector<Individual> &getIndividuals() {
             return individuals_;
         }
 
-        const std::vector<Individual>& getIndividuals() const
-        {
+        const std::vector<Individual> &getIndividuals() const {
             return individuals_;
         }
 
-        double getMeanFitness()
-        {
+        double getMeanFitness() {
             double sum = 0;
-            for (Individual &ind: individuals_)
+            for(Individual & ind : individuals_)
                 sum += ind.getFitness();
 
             return sum / individuals_.size();
         }
 
-        double getMeanDistance()
-        {
+        double getMeanDistance() {
             double sum = 0;
-            for (Individual &ind: individuals_)
+            for(Individual & ind : individuals_)
                 sum += ind.getDistance();
 
             return sum / individuals_.size();

@@ -10,10 +10,10 @@ namespace tsp
     class PathVerifier
     {
     private:
-        PathVerifier()
-        { }
-        ~PathVerifier()
-        { }
+        PathVerifier() {
+        }
+        ~PathVerifier() {
+        }
 
     public:
         static bool verify(const Graph &graph, const Path &path);

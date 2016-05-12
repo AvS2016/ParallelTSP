@@ -8,7 +8,7 @@
 namespace tsp
 {
 
-    static double nodeDistance(const Node& n1, const Node &n2)
+    static double nodeDistance(const Node &n1, const Node &n2)
     {
         double dx = n1.x() - n2.x();
         double dy = n1.y() - n2.y();
@@ -16,13 +16,13 @@ namespace tsp
     }
 
     static bool lessNormalizedFitness(const Individual &i1,
-            const Individual &i2)
+                                      const Individual &i2)
     {
         return i1.getNormalizedFitness() < i2.getNormalizedFitness();
     }
 
     FitnessUpdater::FitnessUpdater(const Graph &graph)
-            : graph_(graph)
+        : graph_(graph)
     {
     }
 
@@ -34,7 +34,7 @@ namespace tsp
     {
         // calculate distance and find maximum
         double maxDistance = 0;
-        for(Individual &ind : population.getIndividuals()) {
+        for(Individual & ind : population.getIndividuals()) {
             assert(PathVerifier::verify(graph_, ind.getPath()));
 
             double accumDistance = 0;
@@ -50,7 +50,7 @@ namespace tsp
 
         // calc fitness relative to maximum distance (shorter = greater fitness)
         double fitnessSum = 0;
-        for(Individual &ind : population.getIndividuals()) {
+        for(Individual & ind : population.getIndividuals()) {
             double fitness = maxDistance / ind.getDistance();
             fitness = fitness * fitness;
             ind.setFitness(fitness);
@@ -58,12 +58,12 @@ namespace tsp
         }
 
         // calc normalized fitness
-        for(Individual &ind : population.getIndividuals())
+        for(Individual & ind : population.getIndividuals())
             ind.setNormalizedFitness(ind.getFitness() / fitnessSum);
 
         // sort descending to fitness
         std::sort(population.getIndividuals().begin(),
-                population.getIndividuals().end(), lessNormalizedFitness);
+                  population.getIndividuals().end(), lessNormalizedFitness);
     }
 
 }

@@ -12,28 +12,25 @@ namespace tsp
         int y_;
     public:
         Node()
-        : id_(-1), x_(-1), y_(-1)
-        { }
+            : id_(-1), x_(-1), y_(-1) {
+        }
 
         Node(const int id, const int x, const int y)
-        :id_(id), x_(x), y_(y)
-        { }
+            : id_(id), x_(x), y_(y) {
+        }
 
-        ~Node()
-        { }
+        ~Node() {
+        }
 
-        int id() const
-        {
+        int id() const {
             return id_;
         }
 
-        int x() const
-        {
+        int x() const {
             return x_;
         }
 
-        int y() const
-        {
+        int y() const {
             return y_;
         }
     };

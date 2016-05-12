@@ -9,7 +9,7 @@ namespace tsp
     class RandomPopulationGenerator
     {
     private:
-        const Graph& graph_;
+        const Graph &graph_;
         unsigned int startNode_;
     public:
         RandomPopulationGenerator(const Graph &graph);
