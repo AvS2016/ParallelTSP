@@ -10,7 +10,7 @@ In Abstimmung des Betreuen Professors und innerhalb des Entwicklungsteams wurde 
 * C++ mit Boostframework
 * MPI als Protokoll
 * Github als Versionierung
-* Text nur in Form vom Markup Dateien
+* Text nur in Form vom Markdown Dateien
 * [Codierungsrichtlinien](https://github.com/AvS2016/ParallelTSP/blob/master/doc/CodeStyle.md)
 
 *Der projektbetreuende Professor hält die gewählten Techniken für das Forschungsprojekt im akademischen Umfeld für geeignet und sieht zuversichtlich der Projektpräsentation entgegegen.*
