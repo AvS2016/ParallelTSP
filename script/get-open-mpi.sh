@@ -9,6 +9,11 @@ cd dep
 
 export OPEN_MPI_DIR="$(pwd)/openmpi"
 
+if [ -d "$OPEN_MPI_DIR" ]; then
+    echo "OpenMPI already installed."
+    return
+fi
+
 # install open MPI
 dlfile "$MPI_URL" "$MPI_ARCH"
 tar xzf "$MPI_ARCH"

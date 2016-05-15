@@ -9,6 +9,11 @@ cd dep
 
 export BOOST_INSTALL_DIR="$(pwd)/boost"
 
+if [ -d "$BOOST_INSTALL_DIR" ]; then
+    echo "Boost already installed."
+    return
+fi
+
 # install boost MPI
 dlfile "$BOOST_URL" "$BOOST_ARCH"
 tar xzf "$BOOST_ARCH"

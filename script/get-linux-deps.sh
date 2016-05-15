@@ -32,3 +32,6 @@ cd "$WORK_DIR"
 
 cd "$WORK_DIR"
 . script/get-boost.sh
+
+cd "$WORK_DIR"
+. script/get-catch.sh
