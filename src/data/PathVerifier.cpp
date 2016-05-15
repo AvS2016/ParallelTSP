@@ -8,7 +8,7 @@ namespace tsp
         for(unsigned int i = 0; i < visited.size(); ++i)
             visited[i] = 0;
 
-        if(path.front() != path.back())
+        if(path.empty() || path.front() != path.back())
             return false;
 
         // count visits per node
