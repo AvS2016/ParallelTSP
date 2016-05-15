@@ -50,3 +50,17 @@ Könnte die Länge des gesamten Weges sein
 * Zufälliger Tausch von Streckenabschnitten um ganz andere Lösungsansätze zu erhalten.
 
 Insgesamt denke ich das alle Individuen innerhalb einer Population sich vereinen sollen. Da die Hälfte für die neue Population weg fällt können wir die 5 Besten Individuen aus der letzten Population weiter mitnehmen.
+
+## Parallele genetische Algorithmen
+
+* https://en.wikipedia.org/wiki/Genetic_algorithm#Parallel_implementations
+* http://www.maths.tcd.ie/~rmurphy/Project/Report/report.html
+
+Prinzipiell 2 Arten:
+
+* Jeder Knoten im Netzwerk repräsentiert einzelnes Individuum
+* jeder Knoten hat eigene Subpopulation
+  * Individuen werden zwischen Maschinen ausgetauscht
+  * wieviele?
+  * welche? (die besten, random, etc.)
+  * In welcher Reihenfolge werden Individuen ausgetauscht? (Ring, Peer-to-Peer, etc.)
