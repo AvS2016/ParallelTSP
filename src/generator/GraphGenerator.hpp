@@ -11,9 +11,9 @@ namespace tsp
     class GraphGenerator
     {
     private:
-        int width_;
-        int height_;
-        int nodes_;
+        unsigned int width_;
+        unsigned int height_;
+        unsigned int nodes_;
         std::map<std::string, bool> exists_;
         std::string generateNodeID(int x, int y);
         Random rand_;
@@ -21,7 +21,7 @@ namespace tsp
         GraphGenerator();
         ~GraphGenerator();
 
-        void setSettings(int width, int height, int nodes);
+        void setSettings(const unsigned int width, const unsigned int height, const unsigned int nodes);
 
         void generate(Graph &graph);
     };

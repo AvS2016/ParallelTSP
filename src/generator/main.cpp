@@ -13,9 +13,9 @@ int parseArguments(int argc, char **argv)
     po::options_description desc("Allowed Options");
     desc.add_options()
     ("help,h", "show help text")
-    ("width,W", po::value<int>(), "define width of the map")
-    ("height,H", po::value<int>(), "define height of the map")
-    ("nodes,n", po::value<int>(), "define number of nodes")
+    ("width,W", po::value<unsigned int>(), "define width of the map")
+    ("height,H", po::value<unsigned int>(), "define height of the map")
+    ("nodes,n", po::value<unsigned int>(), "define number of nodes")
     ("file,f", po::value<std::string>(), "path to file")
     ;
 
@@ -46,13 +46,13 @@ int generateGraph()
     std::cout << "Graph Generator" << "\n";
     std::cout << "===============" << "\n";
     std::cout << "Parameters:" << "\n";
-    std::cout << "-- width:  " << vm["width"].as<int>() << "\n";
-    std::cout << "-- height: " << vm["height"].as<int>() << "\n";
-    std::cout << "-- nodes:  " << vm["nodes"].as<int>() << "\n";
+    std::cout << "-- width:  " << vm["width"].as<unsigned int>() << "\n";
+    std::cout << "-- height: " << vm["height"].as<unsigned int>() << "\n";
+    std::cout << "-- nodes:  " << vm["nodes"].as<unsigned int>() << "\n";
     std::cout << "Generating graph ..." << "\n";
-    gen.setSettings(vm["width"].as<int>(),
-                    vm["height"].as<int>(),
-                    vm["nodes"].as<int>());
+    gen.setSettings(vm["width"].as<unsigned int>(),
+                    vm["height"].as<unsigned int>(),
+                    vm["nodes"].as<unsigned int>());
     gen.generate(graph);
 
     std::cout << "Saving graph ..." << "\n";

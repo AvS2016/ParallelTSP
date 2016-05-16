@@ -14,7 +14,7 @@ namespace tsp
     {
     }
 
-    void GraphGenerator::setSettings(int width, int height, int nodes)
+    void GraphGenerator::setSettings(const unsigned int width, const unsigned int height, const unsigned int nodes)
     {
         width_ = width;
         height_ = height;
@@ -30,16 +30,15 @@ namespace tsp
 
     void GraphGenerator::generate(Graph &graph)
     {
-
         exists_.clear();
         std::string id;
         graph.resize(nodes_);
-        for(int i = 0; i < nodes_; ++i) {
+        for(unsigned int i = 0; i < nodes_; ++i) {
             int x, y;
             do {
 
-            	x = rand_.nextInt(width_);
-            	y = rand_.nextInt(height_);
+                x = rand_.nextInt(width_);
+                y = rand_.nextInt(height_);
                 id = generateNodeID(x, y);
             } while(exists_.find(id) != exists_.end());
 
