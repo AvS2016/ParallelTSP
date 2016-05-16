@@ -10,5 +10,5 @@ install:
     - sudo apt-get install -qq g++-4.8
     - export CXX="g++-4.8"
     - $CXX --version
-    - ./script/get-linux-deps
+    - ./script/get-linux-deps.sh
 script: mkdir -p build && cd build && cmake .. && make -j 8 && src/test/testga
