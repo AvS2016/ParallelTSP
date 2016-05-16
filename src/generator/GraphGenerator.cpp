@@ -6,7 +6,7 @@ namespace tsp
 {
 
     GraphGenerator::GraphGenerator()
-        : width_(0), height_(0), nodes_(0)
+        : width_(0), height_(0), nodes_(0), rand_()
     {
     }
 
@@ -30,14 +30,16 @@ namespace tsp
 
     void GraphGenerator::generate(Graph &graph)
     {
+
         exists_.clear();
         std::string id;
         graph.resize(nodes_);
         for(int i = 0; i < nodes_; ++i) {
             int x, y;
             do {
-                x = rand() % width_;
-                y = rand() % width_;
+
+            	x = rand_.nextInt(width_);
+            	y = rand_.nextInt(height_);
                 id = generateNodeID(x, y);
             } while(exists_.find(id) != exists_.end());
 

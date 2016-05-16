@@ -1,15 +1,19 @@
 #include <random>
 #include "Random.hpp"
+#include <ctime>
 
 namespace tsp
 {
 
     Random::Random()
     {
+    	// Shake the RNG
+    	std::srand(std::time(0));
     }
 
     Random::~Random()
     {
+
         // TODO Auto-generated destructor stub
     }
 

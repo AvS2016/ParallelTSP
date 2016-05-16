@@ -1,5 +1,5 @@
 set(EXEC_NAME graphgen)
-set(EXEC_LIBRARIES data json)
+set(EXEC_LIBRARIES data json utils)
 file(GLOB src *.cpp)
 
 add_executable(${EXEC_NAME} ${src})
