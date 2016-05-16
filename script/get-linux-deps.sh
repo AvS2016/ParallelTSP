@@ -14,7 +14,7 @@ dlfile()
     RET=$?
     set -e
     if [ "$RET" = "0" ]; then
-        wget "$URL" -O "$FILE"
+        wget --no-check-certificate "$URL" -O "$FILE"
     else
         curl -o "$FILE" -L "$URL"
     fi
