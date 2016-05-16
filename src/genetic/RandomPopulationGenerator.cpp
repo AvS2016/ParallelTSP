@@ -20,6 +20,12 @@ namespace tsp
 
     void RandomPopulationGenerator::generateIndividual(Individual &individual)
     {
+        if(graph_.size() == 0)
+        {
+            individual.getPath().clear();
+            return;
+        }
+
         std::vector<bool> visited(graph_.size());
         for(unsigned int i = 0; i < visited.size(); ++i)
             visited[i] = false;
