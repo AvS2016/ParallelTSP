@@ -1,4 +1,4 @@
-# ParallelTSP
+# ParallelTSP ![Build](https://travis-ci.org/AvS2016/ParallelTSP.svg?branch=master)
 
 This is a parallelised genetic algorithm to solve the TSP across multiple machines.
 
