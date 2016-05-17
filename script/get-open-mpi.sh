@@ -16,4 +16,4 @@ rm -f "$MPI_ARCH"
 cd "$MPI_DIR"
 
 ./configure --prefix="$OPEN_MPI_DIR"
-make -j2 install
+make -j4 install
