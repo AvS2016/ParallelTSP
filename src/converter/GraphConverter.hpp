@@ -9,13 +9,17 @@ namespace tsp
     class GraphConverter
     {
     private:
-        std::string filename_;
+        std::string pathFile_;
+        std::string dataFile_;
+        std::string plotFile_;
+        std::string resultFile_;
 
     public:
         GraphConverter();
         ~GraphConverter();
 
-        bool drawGraph(Graph &graph, std::string filename);
+        int createPlot(Graph &graph, const std::string& pathFile, const std::string& dataFile);
+        bool drawGraph(const std::string& plotFile);
     };
 
 }
