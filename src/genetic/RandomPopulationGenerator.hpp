@@ -3,6 +3,7 @@
 
 #include "data/Graph.hpp"
 #include "genetic/Population.hpp"
+#include "utils/Random.hpp"
 
 namespace tsp
 {
@@ -11,6 +12,7 @@ namespace tsp
     private:
         const Graph &graph_;
         unsigned int startNode_;
+        Random rand_;
     public:
         RandomPopulationGenerator(const Graph &graph);
         ~RandomPopulationGenerator();

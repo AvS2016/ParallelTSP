@@ -1,4 +1,3 @@
-#include <random>
 #include "RandomPopulationGenerator.hpp"
 
 namespace tsp
@@ -38,7 +37,7 @@ namespace tsp
         // generate path with random nodes
         unsigned int pathIdx = 1;
         while(pathIdx + 1 < graph_.size()) {
-            int node = std::rand() % graph_.size();
+            int node = rand_.nextInt(graph_.size());
             if(!visited[node]) {
                 visited[node] = true;
                 individual.getPath()[pathIdx] = node;

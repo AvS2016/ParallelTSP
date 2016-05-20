@@ -1,5 +1,4 @@
 #include <cassert>
-#include <random>
 #include <iostream>
 #include "OrderedCrossover.hpp"
 
@@ -42,10 +41,8 @@ namespace tsp
         child.getPath()[child.getPath().size() - 1] = parent1.getPath().back();
 
         // determine a random interval of genes to be inherited
-        unsigned int startIdx = 1 + (std::rand() % ((parent1.getPath().size() - 2) /
-                                     2));
-        unsigned int length = 1 + (std::rand() % (parent1.getPath().size() - startIdx -
-                                   2));
+        unsigned int startIdx = 1 + rand_.nextInt((parent1.getPath().size() - 2) / 2);
+        unsigned int length = 1 + rand_.nextInt(parent1.getPath().size() - startIdx - 2);
 
         // apply genes from parent1
         for(unsigned int i = 0; i < length; ++i) {

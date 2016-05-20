@@ -1,7 +1,7 @@
 #include <random>
 #include "SwapMutation.hpp"
 
-#define RAND_IDX(s) ((std::rand() % (s - 2)) + 1)
+#define RAND_IDX(s) (rand_.nextInt(s - 2) + 1)
 
 namespace tsp
 {

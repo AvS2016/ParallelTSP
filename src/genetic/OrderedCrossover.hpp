@@ -2,6 +2,7 @@
 #define GENETIC_ORDEREDCROSSOVER_HPP_
 
 #include "genetic/Individual.hpp"
+#include "utils/Random.hpp"
 
 namespace tsp
 {
@@ -10,6 +11,7 @@ namespace tsp
     private:
         std::vector<bool> childGeneInUse_;
         std::vector<bool> graphNodeInUse_;
+        Random rand_;
 
         void initGeneTracker(const unsigned int size, const int start);
     public:
