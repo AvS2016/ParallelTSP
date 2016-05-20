@@ -47,7 +47,6 @@ namespace tsp
         void init();
         void nextGeneration();
 
-        Individual &getBest();
         Population &getPopulation();
     };
 

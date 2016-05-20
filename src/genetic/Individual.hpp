@@ -48,8 +48,11 @@ namespace tsp
             return normalizedFitness_;
         }
 
-
         Path &getPath() {
+            return path_;
+        }
+
+        const Path &getPath() const{
             return path_;
         }
     };

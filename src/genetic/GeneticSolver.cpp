@@ -98,11 +98,6 @@ namespace tsp
         updateFitness();
     }
 
-    Individual &GeneticSolver::getBest()
-    {
-        return currPopulation_->getIndividuals().back();
-    }
-
     Population &GeneticSolver::getPopulation()
     {
         return *currPopulation_;
