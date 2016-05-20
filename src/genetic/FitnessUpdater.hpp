@@ -11,10 +11,14 @@ namespace tsp
     {
     private:
         const Graph &graph_;
+        std::vector<double> distances_;
+
+        double calcPathDistance(const Path &path);
     public:
         FitnessUpdater(const Graph &graph);
         ~FitnessUpdater();
 
+        void init();
         void update(Population &population);
     };
 

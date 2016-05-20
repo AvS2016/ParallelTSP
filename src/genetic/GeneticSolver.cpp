@@ -29,6 +29,8 @@ namespace tsp
 
     void GeneticSolver::init()
     {
+        fitnessUpdater_.init();
+
         populationGen_.generatePopulation(*currPopulation_, settings_.populationSize);
         nextPopulation_->getIndividuals().resize(settings_.populationSize);
         parents_.resize(settings_.populationSize * 2);
