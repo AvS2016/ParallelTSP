@@ -3,6 +3,7 @@
 #include "data/GraphSerializer.hpp"
 #include "data/PathSerializer.hpp"
 #include "genetic/GeneticSolver.hpp"
+#include "utils/Random.hpp"
 
 namespace po = boost::program_options;
 
@@ -46,6 +47,8 @@ int parseArguments(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
+    tsp::Random::shakeRNG();
+
     int ret = parseArguments(argc, argv);
     if(ret)
         return ret;
@@ -60,8 +63,11 @@ int main(int argc, char **argv)
     s.populationSize = vm["population"].as<unsigned int>();
     s.mutationChance = 0.01;
 
+    std::cout << "Initializing solver...";
+    std::cout.flush();
     solver.setSettings(s);
     solver.init();
+    std::cout << "Done\n";
 
     for(unsigned int i = 0; i < vm["generations"].as<unsigned int>(); ++i) {
         std::cout << "Calculating Generation " << i + 1 << "... ";

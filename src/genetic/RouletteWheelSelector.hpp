@@ -3,7 +3,6 @@
 
 #include "data/Graph.hpp"
 #include "genetic/Population.hpp"
-#include "utils/Random.hpp"
 
 namespace tsp
 {
@@ -11,7 +10,6 @@ namespace tsp
     {
     private:
         const Graph &graph_;
-        Random rand_;
     public:
         RouletteWheelSelector(const Graph &graph);
         ~RouletteWheelSelector();

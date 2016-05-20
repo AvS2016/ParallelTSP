@@ -1,11 +1,12 @@
 #include <cassert>
 #include "RouletteWheelSelector.hpp"
+#include "utils/Random.hpp"
 
 namespace tsp
 {
 
     RouletteWheelSelector::RouletteWheelSelector(const Graph &graph)
-        : graph_(graph), rand_()
+        : graph_(graph)
     {
     }
 
@@ -21,7 +22,7 @@ namespace tsp
         unsigned int parentCount = 0;
         while(parentCount < parents.size()) {
             // generate target fitness value
-            double selectFitness = rand_.nextDouble();
+            double selectFitness = Random::nextDouble();
             double accumFitness = 0;
             for(unsigned int i = 0; i < population.getIndividuals().size(); ++i) {
                 // calculated accumulated fitness

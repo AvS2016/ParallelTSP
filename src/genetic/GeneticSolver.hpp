@@ -1,7 +1,6 @@
 #ifndef GENETIC_GENETICSOLVER_HPP_
 #define GENETIC_GENETICSOLVER_HPP_
 
-#include "utils/Random.hpp"
 #include "genetic/FitnessUpdater.hpp"
 #include "genetic/RouletteWheelSelector.hpp"
 #include "genetic/OrderedCrossover.hpp"
@@ -22,7 +21,6 @@ namespace tsp
     private:
         const Graph &graph_;
         Settings settings_;
-        Random rand_;
 
         Population *currPopulation_;
         Population *nextPopulation_;

@@ -1,13 +1,13 @@
 #include <cassert>
 #include "GeneticSolver.hpp"
 #include "data/PathVerifier.hpp"
-
+#include "utils/Random.hpp"
 
 namespace tsp
 {
 
     GeneticSolver::GeneticSolver(const Graph &graph)
-        : graph_(graph), settings_(), rand_(), currPopulation_(new Population()),
+        : graph_(graph), settings_(), currPopulation_(new Population()),
           nextPopulation_(new Population()),
           fitnessUpdater_(graph), selector_(graph), crossover_(), populationGen_(graph),
           mutator_()
@@ -76,7 +76,7 @@ namespace tsp
     void GeneticSolver::mutate()
     {
         for(unsigned int i = 0; i < nextPopulation_->getIndividuals().size(); ++i) {
-            double shouldMutate = rand_.nextDouble();
+            double shouldMutate = Random::nextDouble();
             if(shouldMutate <= settings_.mutationChance)
                 mutator_.mutate(currPopulation_->getIndividuals()[i]);
         }

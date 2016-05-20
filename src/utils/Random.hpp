@@ -5,16 +5,19 @@ namespace tsp
 {
     class Random
     {
+    private:
+        Random() {}
+        ~Random() {}
+
     public:
-        Random();
-        ~Random();
+        static void shakeRNG();
 
-        int nextInt();
-        int nextInt(const int max);
-        int nextInt(const int min, const int max);
+        static int nextInt();
+        static int nextInt(const int max);
+        static int nextInt(const int min, const int max);
 
-        double nextFloat();
-        double nextDouble();
+        static double nextFloat();
+        static double nextDouble();
     };
 }
 

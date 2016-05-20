@@ -2,6 +2,7 @@
 #include <iostream>
 #include "GraphGenerator.hpp"
 #include "data/GraphSerializer.hpp"
+#include "utils/Random.hpp"
 
 namespace po = boost::program_options;
 
@@ -65,6 +66,8 @@ int generateGraph()
 
 int main(int argc, char **argv)
 {
+    tsp::Random::shakeRNG();
+
     int ret = parseArguments(argc, argv);
     if(ret)
         return ret;

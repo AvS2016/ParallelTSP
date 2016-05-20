@@ -3,7 +3,6 @@
 
 #include "data/Graph.hpp"
 #include <map>
-#include "utils/Random.hpp"
 
 namespace tsp
 {
@@ -16,7 +15,6 @@ namespace tsp
         unsigned int nodes_;
         std::map<std::string, bool> exists_;
         std::string generateNodeID(int x, int y);
-        Random rand_;
     public:
         GraphGenerator();
         ~GraphGenerator();

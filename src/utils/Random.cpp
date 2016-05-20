@@ -1,20 +1,13 @@
-#include <random>
 #include "Random.hpp"
+#include <random>
 #include <ctime>
 
 namespace tsp
 {
 
-    Random::Random()
+    void Random::shakeRNG()
     {
-    	// Shake the RNG
     	std::srand(std::time(0));
-    }
-
-    Random::~Random()
-    {
-
-        // TODO Auto-generated destructor stub
     }
 
     int Random::nextInt()

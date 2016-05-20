@@ -1,12 +1,13 @@
 #include <cmath>
 #include <sstream>
 #include "GraphGenerator.hpp"
+#include "utils/Random.hpp"
 
 namespace tsp
 {
 
     GraphGenerator::GraphGenerator()
-        : width_(0), height_(0), nodes_(0), rand_()
+        : width_(0), height_(0), nodes_(0)
     {
     }
 
@@ -37,8 +38,8 @@ namespace tsp
             int x, y;
             do {
 
-                x = rand_.nextInt(width_);
-                y = rand_.nextInt(height_);
+                x = Random::nextInt(width_);
+                y = Random::nextInt(height_);
                 id = generateNodeID(x, y);
             } while(exists_.find(id) != exists_.end());
 
