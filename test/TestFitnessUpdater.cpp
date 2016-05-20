@@ -30,7 +30,6 @@ TEST_CASE("FitnessUpdater")
 
         for(Individual &i : pop.getIndividuals())
         {
-            REQUIRE(i.getDistance() == 0);
             REQUIRE(i.getFitness() == 0);
             REQUIRE(i.getNormalizedFitness() == 0);
         }
@@ -38,9 +37,9 @@ TEST_CASE("FitnessUpdater")
         fu.update(pop);
 
         // check if sorted, greatest dist to lowest
-        REQUIRE(doubleEqual(pop.getIndividuals()[0].getDistance(),4.828427125));
-        REQUIRE(doubleEqual(pop.getIndividuals()[1].getDistance(),4));
-        REQUIRE(doubleEqual(pop.getIndividuals()[2].getDistance(),4));
+        // REQUIRE(doubleEqual(pop.getIndividuals()[0].getDistance(),4.828427125));
+        // REQUIRE(doubleEqual(pop.getIndividuals()[1].getDistance(),4));
+        // REQUIRE(doubleEqual(pop.getIndividuals()[2].getDistance(),4));
 
         // check if fitness is correct
         // REQUIRE(doubleEqual(pop.getIndividuals()[0].getFitness(),1));

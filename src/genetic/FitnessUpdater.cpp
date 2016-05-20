@@ -37,7 +37,7 @@ namespace tsp
         distances_.resize(graph_.size());
     }
 
-    double FitnessUpdater::calcPathDistance(const Path &path)
+    double FitnessUpdater::calcScaledDistance(const Path &path)
     {
         // calculate squared distance between all nodes
         // and find maximum
@@ -65,23 +65,33 @@ namespace tsp
     {
         assert(graph_.size() == distances_.size());
 
-        // calculate distance and find maximum
+        // calculate scaled distance and find maximum
         double maxDistance = 0;
         for(Individual & ind : population.getIndividuals()) {
             assert(PathVerifier::verify(graph_, ind.getPath()));
 
-            double pathDistance = calcPathDistance(ind.getPath());
-            ind.setDistance(pathDistance);
+            double pathDistance = calcScaledDistance(ind.getPath());
+            ind.setFitness(pathDistance);
             if(pathDistance > maxDistance)
                 maxDistance = pathDistance;
         }
 
         // calc fitness relative to maximum distance (shorter = greater fitness)
-        double fitnessSum = 0;
+        // and find maximum to scale it down
+        double maxFitness = 0;
         for(Individual & ind : population.getIndividuals()) {
-            double fitness = maxDistance / ind.getDistance();
+            double fitness = maxDistance / ind.getFitness();
             fitness = std::pow(fitness, FITNESS_POW);
             ind.setFitness(fitness);
+
+            if (fitness > maxFitness)
+                maxFitness = fitness;
+        }
+
+        // scale fitness down and calculate sum
+        double fitnessSum = 0;
+        for(Individual & ind : population.getIndividuals()) {
+            ind.setFitness(ind.getFitness() / maxFitness);
             fitnessSum += ind.getFitness();
         }
 

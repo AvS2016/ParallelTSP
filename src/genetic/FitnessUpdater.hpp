@@ -13,7 +13,7 @@ namespace tsp
         const Graph &graph_;
         std::vector<double> distances_;
 
-        double calcPathDistance(const Path &path);
+        double calcScaledDistance(const Path &path);
     public:
         FitnessUpdater(const Graph &graph);
         ~FitnessUpdater();

@@ -78,6 +78,8 @@ int main(int argc, char **argv)
         std::cout << "Done\n";
         std::cout << "  Best Distance: " << analyser.getBestDistance(solver.getPopulation()) << "\n";
         std::cout << "  Mean Distance: " << analyser.getMeanDistance(solver.getPopulation()) << "\n";
+        std::cout << "  Best Fitness: " << analyser.getBestFitness(solver.getPopulation()) << "\n";
+        std::cout << "  Mean Fitness: " << analyser.getMeanFitness(solver.getPopulation()) << "\n";
         std::cout << "  Best Norm. Fitness: " << analyser.getBestNormalizedFitness(solver.getPopulation()) << "\n";
     }
 
