@@ -48,3 +48,9 @@ A sample hostfile looks like this:
 root@192.168.1.3 slots=2
 root@192.168.1.4 slots=2
 ```
+## Visualisation
+
+Execute the following command to convert a path to *.svg (current folder: ParallelTSP)
+```
+./build/src/converter/graphconv -g <<graph file>> -p <<tsp-path file>> -o <<target svg>>
+```
