@@ -2,13 +2,17 @@ language: cpp
 
 compiler: gcc
 
+branches:
+    only:
+        - master
+
 before_install:
-    - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-    - sudo apt-get update -qq
+    - travis_wait sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+    - travis_wait sudo apt-get update -qq
 install:
 # g++4.8.1
     - sudo apt-get install -qq g++-4.8
     - export CXX="g++-4.8"
     - $CXX --version
-    - ./script/get-linux-deps.sh
+    - travis_wait 60 ./script/get-linux-deps.sh &> /dev/null
 script: mkdir -p build && cd build && cmake .. && make -j 8 && ./test/testga
