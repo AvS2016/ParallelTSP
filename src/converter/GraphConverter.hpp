@@ -18,8 +18,8 @@ namespace tsp
         GraphConverter();
         ~GraphConverter();
 
-        int createPlot(Graph &graph, const std::string& pathFile, const std::string& dataFile);
-        bool drawGraph(const std::string& plotFile);
+        int createPlot(Graph &graph, const std::string &pathFile, const std::string &dataFile);
+        bool drawGraph();
     };
 
 }
