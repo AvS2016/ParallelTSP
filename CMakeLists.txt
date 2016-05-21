@@ -11,6 +11,7 @@ set(PROJ_LIBRARIES
 )
 set(PROJ_EXEC
     "generator"
+    "converter"
     "simplega"
 )
 

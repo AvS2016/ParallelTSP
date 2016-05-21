@@ -24,4 +24,4 @@ mkdir -p build
 if [ "$(cat 'project-config.jam' | grep 'using mpi')" = "" ]; then
     echo "using mpi : $OPEN_MPI_DIR/bin/mpicc ;" >> "project-config.jam"
 fi
-./b2 --build-dir=build -j2 --prefix="$BOOST_INSTALL_DIR" install
+./b2 --build-dir=build -j4 --prefix="$BOOST_INSTALL_DIR" install
