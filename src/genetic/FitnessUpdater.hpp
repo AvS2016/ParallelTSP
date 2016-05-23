@@ -11,10 +11,12 @@ namespace tsp
     {
     private:
         const Graph &graph_;
+        unsigned int fitnessPow_;
     public:
         FitnessUpdater(const Graph &graph);
         ~FitnessUpdater();
 
+        void setFitnessPow(const unsigned int pow);
         void update(Population &population);
     };
 

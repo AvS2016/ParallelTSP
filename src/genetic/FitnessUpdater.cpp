@@ -5,8 +5,6 @@
 #include "FitnessUpdater.hpp"
 #include "data/PathVerifier.hpp"
 
-#define FITNESS_POW 50
-
 namespace tsp
 {
 
@@ -24,12 +22,17 @@ namespace tsp
     }
 
     FitnessUpdater::FitnessUpdater(const Graph &graph)
-        : graph_(graph)
+        : graph_(graph), fitnessPow_(1)
     {
     }
 
     FitnessUpdater::~FitnessUpdater()
     {
+    }
+
+    void FitnessUpdater::setFitnessPow(const unsigned int pow)
+    {
+        fitnessPow_ = pow;
     }
 
     void FitnessUpdater::update(Population &population)
@@ -54,7 +57,7 @@ namespace tsp
         double fitnessSum = 0;
         for(Individual & ind : population.getIndividuals()) {
             double fitness = maxDistance / ind.getFitness();
-            fitness = std::pow(fitness, FITNESS_POW);
+            fitness = std::pow(fitness, fitnessPow_);
             ind.setFitness(fitness);
             fitnessSum += ind.getFitness();
         }

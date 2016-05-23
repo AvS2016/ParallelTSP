@@ -17,6 +17,7 @@ namespace tsp
             unsigned int populationSize;
             double mutationChance;
             double elitismRate;
+            unsigned int fitnessPow;
         };
 
     private:

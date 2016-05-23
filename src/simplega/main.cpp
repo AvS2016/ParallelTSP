@@ -62,8 +62,9 @@ int main(int argc, char **argv)
     tsp::GeneticSolver::Settings s;
     s.startNode = vm["start"].as<unsigned int>();
     s.populationSize = vm["population"].as<unsigned int>();
-    s.mutationChance = 0.20;
+    s.mutationChance = 0.01;
     s.elitismRate = 0.01;
+    s.fitnessPow = 50;
 
     std::cout << "Initializing solver...";
     std::cout.flush();
