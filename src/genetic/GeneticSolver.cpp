@@ -10,7 +10,7 @@ namespace tsp
         : graph_(graph), settings_(), currPopulation_(new Population()),
           nextPopulation_(new Population()),
           fitnessUpdater_(graph), selector_(graph), crossover_(), populationGen_(graph),
-          mutator_()
+          mutator_(), eliteCount_(0)
     {
 
     }
@@ -29,9 +29,11 @@ namespace tsp
 
     void GeneticSolver::init()
     {
+        eliteCount_ = static_cast<unsigned int>(settings_.elitismRate * settings_.populationSize);
+
         populationGen_.generatePopulation(*currPopulation_, settings_.populationSize);
         nextPopulation_->getIndividuals().resize(settings_.populationSize);
-        parents_.resize(settings_.populationSize * 2);
+        parents_.resize((settings_.populationSize - eliteCount_) * 2);
         updateFitness();
     }
 
@@ -45,11 +47,18 @@ namespace tsp
         selector_.select(*currPopulation_, parents_);
     }
 
+    void GeneticSolver::applyElite()
+    {
+        assert(eliteCount_ < currPopulation_->getIndividuals().size());
+        for(unsigned int i = 0; i < eliteCount_; ++i) {
+            // best individuals are in the back
+            unsigned int idx = currPopulation_->getIndividuals().size() - i - 1;
+            nextPopulation_->getIndividuals()[idx] = currPopulation_->getIndividuals()[idx];
+        }
+    }
+
     void GeneticSolver::crossover()
     {
-        assert(currPopulation_->getIndividuals().size() % 2 == 0);
-        assert((currPopulation_->getIndividuals().size() / 2) % 2 == 0);
-
         for(unsigned int i = 0; i < parents_.size(); i += 2) {
             int p1 = parents_[i];
             int p2 = parents_[i + 1];
@@ -90,6 +99,7 @@ namespace tsp
     void GeneticSolver::nextGeneration()
     {
         select();
+        applyElite();
         crossover();
         mutate();
         swapPopulations();

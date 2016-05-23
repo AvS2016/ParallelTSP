@@ -16,6 +16,7 @@ namespace tsp
             unsigned int startNode;
             unsigned int populationSize;
             double mutationChance;
+            double elitismRate;
         };
 
     private:
@@ -33,8 +34,12 @@ namespace tsp
         RandomPopulationGenerator populationGen_;
         SwapMutation mutator_;
 
+        unsigned int eliteCount_;
+
+        unsigned int getElitismCount();
         void updateFitness();
         void select();
+        void applyElite();
         void crossover();
         void mutate();
         void swapPopulations();

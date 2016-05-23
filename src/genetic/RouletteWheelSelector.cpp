@@ -17,8 +17,6 @@ namespace tsp
     void RouletteWheelSelector::select(const Population &population,
                                        std::vector<int> &parents)
     {
-        assert(parents.size() == population.getIndividuals().size() * 2);
-
         unsigned int parentCount = 0;
         while(parentCount < parents.size()) {
             // generate target fitness value
