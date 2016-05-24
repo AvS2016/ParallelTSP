@@ -1,0 +1,13 @@
+# Protokoll 24.05.2016
+
+* Elitism implementiert
+  * beste x% der Individuen überleben in die nächste Generation
+  * beste Lösung geht nicht mehr verloren
+* Fitnessexponent von 50 macht Algorithmus sehr agressiv
+  * konvergiert sehr schnell gegen eine Lösung
+  * Population besteht sehr schnell nur noch aus den gleichen Lösungen (keine Vielfalt)
+* Test mit Exponent 10 zeigt immer noch schnelles ausdünnen des Genpool
+* früher: beste Lösung ging wieder verloren mit niedrigem Exponent, keine nennenswerte Verbesserung
+  * heute mit Elitism: beste Lösung wird immer behalten, Genpool der Population fluktuiert jedoch
+* graphconv zeichnet zu große Punkte und Linien
+  * wenn zu viele Konten, verdecken einander
