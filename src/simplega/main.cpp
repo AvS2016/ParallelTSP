@@ -6,12 +6,14 @@
 #include "genetic/GeneticSolver.hpp"
 #include "genetic/GeneticAnalyser.hpp"
 #include "utils/Random.hpp"
+#include "net/PopulationExchanger.hpp"
 
 namespace po = boost::program_options;
 
 tsp::Graph graph;
 tsp::GeneticSolver solver(graph);
 tsp::Config cfg;
+tsp::PopulationExchanger *ex;
 
 int parseArguments(int argc, char **argv)
 {
@@ -28,6 +30,7 @@ int parseArguments(int argc, char **argv)
     ("elitism,e", po::value<double>(), "elitism rate")
     ("mutation,m", po::value<double>(), "mutation chance")
     ("fitness,f", po::value<unsigned int>(), "fitness power")
+	("network,n", "fitness power")
     ;
     try {
         po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -81,6 +84,8 @@ int parseArguments(int argc, char **argv)
         cfg.gaSettings.mutationChance = vm["mutation"].as<double>();
     if(vm.count("fitness"))
         cfg.gaSettings.fitnessPow = vm["fitness"].as<unsigned int>();
+    if(vm.count("network"))
+		ex = new tsp::PopulationExchanger(argc, argv);
 
     return 0;
 }
@@ -89,6 +94,7 @@ int parseArguments(int argc, char **argv)
 int main(int argc, char **argv)
 {
     tsp::Random::shakeRNG();
+    ex = NULL;
 
     int ret = parseArguments(argc, argv);
     if(ret)
@@ -124,6 +130,12 @@ int main(int argc, char **argv)
         std::cout << "Calculating Generation " << i + 1 << "... ";
         std::cout.flush();
         solver.nextGeneration();
+
+        if(ex != NULL) {
+        	ex->exchange(solver.getPopulation());
+        	solver.updateFitness();
+        }
+
         std::cout << " Done\n";
         std::cout << "  Best Distance: " << analyser.getBestDistance(solver.getPopulation()) << "\n";
         std::cout << "  Mean Distance: " << analyser.getMeanDistance(solver.getPopulation()) << "\n";

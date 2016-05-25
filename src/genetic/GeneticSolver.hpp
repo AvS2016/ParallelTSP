@@ -38,7 +38,6 @@ namespace tsp
         unsigned int eliteCount_;
 
         unsigned int getElitismCount();
-        void updateFitness();
         void select();
         void applyElite();
         void crossover();
@@ -51,6 +50,7 @@ namespace tsp
 
         void setSettings(const Settings &settings);
         void init();
+        void updateFitness();
         void nextGeneration();
 
         Population &getPopulation();

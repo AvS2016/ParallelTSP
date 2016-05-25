@@ -15,6 +15,15 @@ namespace tsp {
 		boost::mpi::environment env_;
 		boost::mpi::communicator world_;
 		unsigned int exchangeCount_;
+		int rank_;
+		int src_;
+		int dest_;
+		std::vector<unsigned int> toSend_;
+		std::vector<bool> used_;
+		 std::vector<Path> received_;
+
+		void sendIndividuals (Population &p);
+		void recvIndividuals ();
 	public:
 		PopulationExchanger(int argc, char **argv);
 		~PopulationExchanger();
