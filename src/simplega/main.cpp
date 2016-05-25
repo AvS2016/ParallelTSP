@@ -30,7 +30,8 @@ int parseArguments(int argc, char **argv)
     ("elitism,e", po::value<double>(), "elitism rate")
     ("mutation,m", po::value<double>(), "mutation chance")
     ("fitness,f", po::value<unsigned int>(), "fitness power")
-	("network,n", "fitness power")
+	("exchange,x", po::value<double>(), "exchange rate")
+	("network,n", "activate MPI network mode")
     ;
     try {
         po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -84,8 +85,13 @@ int parseArguments(int argc, char **argv)
         cfg.gaSettings.mutationChance = vm["mutation"].as<double>();
     if(vm.count("fitness"))
         cfg.gaSettings.fitnessPow = vm["fitness"].as<unsigned int>();
+    if(vm.count("exchange"))
+    	cfg.exchangeRate = vm["exchange"].as<double>();
     if(vm.count("network"))
+    {
 		ex = new tsp::PopulationExchanger(argc, argv);
+		ex->setExchangeCount(cfg.exchangeRate * cfg.gaSettings.populationSize);
+    }
 
     return 0;
 }
@@ -149,6 +155,9 @@ int main(int argc, char **argv)
     tsp::PathSerializer::save(solver.getPopulation().getBestIndividual().getPath(),
                               cfg.pathFile);
     std::cout << " Done\n";
+
+    if(ex != NULL)
+    	delete ex;
 
     return 0;
 }

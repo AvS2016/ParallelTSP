@@ -14,7 +14,8 @@ namespace tsp
                 root["startNode"].isUInt() &&
                 root["elitismRate"].isDouble() &&
                 root["fitnessPower"].isUInt() &&
-                root["mutationChance"].isDouble();
+                root["mutationChance"].isDouble() &&
+				root["exchangeRate"].isDouble();
     }
 
     bool ConfigSerializer::deserialize(Config &cfg, std::istream &is)
@@ -30,6 +31,7 @@ namespace tsp
         cfg.generationCount = root["generationCount"].asUInt();
         cfg.graphFile = root["graphFile"].asString();
         cfg.pathFile = root["pathFile"].asString();
+        cfg.exchangeRate = root["exchangeRate"].asDouble();
         // solver settings
         cfg.gaSettings.populationSize = root["populationSize"].asUInt();
         cfg.gaSettings.startNode = root["startNode"].asUInt();
@@ -53,6 +55,7 @@ namespace tsp
         root["elitismRate"] = cfg.gaSettings.elitismRate;
         root["fitnessPower"] = cfg.gaSettings.fitnessPow;
         root["mutationChance"] = cfg.gaSettings.mutationChance;
+        root["exchangeRate"] = cfg.exchangeRate;
 
         writer.write(os, root);
 

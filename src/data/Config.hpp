@@ -11,6 +11,7 @@ namespace tsp
         std::string graphFile;
         std::string pathFile;
         GeneticSolver::Settings gaSettings;
+        double exchangeRate;
     };
 
 }
