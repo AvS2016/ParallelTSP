@@ -5,17 +5,17 @@
 #include "data/ConfigSerializer.hpp"
 #include "genetic/GeneticSolver.hpp"
 #include "genetic/GeneticAnalyser.hpp"
-#include "utils/Random.hpp"
 #include "net/PopulationExchanger.hpp"
+#include "utils/Random.hpp"
 
 namespace po = boost::program_options;
 
 tsp::Graph graph;
 tsp::GeneticSolver solver(graph);
 tsp::Config cfg;
-tsp::PopulationExchanger *ex;
+tsp::PopulationExchanger *ex = NULL;
 
-int parseArguments(int argc, char **argv)
+static int parseArguments(int argc, char **argv)
 {
     po::variables_map vm;
     po::options_description desc("Allowed Options");
@@ -57,6 +57,7 @@ int parseArguments(int argc, char **argv)
         return 1;
     }
 
+    // load config file if specified
     if(hasConfig) {
         std::cout << "Loading Config from '" << vm["config"].as<std::string>() <<
                   "' ...";
@@ -68,6 +69,12 @@ int parseArguments(int argc, char **argv)
         std::cout << " Done\n";
     }
 
+    if(vm.count("exchange"))
+        cfg.exchangeRate = vm["exchange"].as<double>();
+    if(vm.count("network")) {
+        ex = new tsp::PopulationExchanger(argc, argv);
+        ex->setExchangeCount(cfg.exchangeRate * cfg.gaSettings.populationSize);
+    }
     if(vm.count("infile"))
         cfg.graphFile = vm["infile"].as<std::string>();
     if(vm.count("outfile"))
@@ -84,26 +91,19 @@ int parseArguments(int argc, char **argv)
         cfg.gaSettings.mutationChance = vm["mutation"].as<double>();
     if(vm.count("fitness"))
         cfg.gaSettings.fitnessPow = vm["fitness"].as<unsigned int>();
-    if(vm.count("exchange"))
-        cfg.exchangeRate = vm["exchange"].as<double>();
-    if(vm.count("network")) {
-        ex = new tsp::PopulationExchanger(argc, argv);
-        ex->setExchangeCount(cfg.exchangeRate * cfg.gaSettings.populationSize);
-    }
 
     return 0;
 }
 
-
-int main(int argc, char **argv)
+static int exchangeConfig()
 {
-    tsp::Random::shakeRNG();
-    ex = NULL;
+    // TODO Process 0 send config to all other processes
+    // only if network is activated
+    return 0;
+}
 
-    int ret = parseArguments(argc, argv);
-    if(ret)
-        return ret;
-
+static void printParameters()
+{
     std::cout << "Parameters\n";
     std::cout << "  graph file: " << cfg.graphFile << "\n";
     std::cout << "  path file: " << cfg.pathFile << "\n";
@@ -113,7 +113,11 @@ int main(int argc, char **argv)
     std::cout << "  elitism rate: " << cfg.gaSettings.elitismRate << "\n";
     std::cout << "  mutation chance: " << cfg.gaSettings.mutationChance << "\n";
     std::cout << "  fitness power: " << cfg.gaSettings.fitnessPow << "\n";
+    std::cout << "  exchange rate: " << cfg.exchangeRate << "\n";
+}
 
+static int loadGraph()
+{
     std::cout << "Loading Graph ...";
     std::cout.flush();
     if(!tsp::GraphSerializer::load(graph, cfg.graphFile)) {
@@ -122,6 +126,11 @@ int main(int argc, char **argv)
     }
     std::cout << " Done\n";
 
+    return 0;
+}
+
+static void runAlgorithm()
+{
     std::cout << "Initializing solver...";
     std::cout.flush();
     solver.setSettings(cfg.gaSettings);
@@ -151,12 +160,59 @@ int main(int argc, char **argv)
         std::cout << "  Best Norm. Fitness: " << analyser.getBestNormalizedFitness(
                       solver.getPopulation()) << "\n";
     }
+}
 
+static int gatherResults()
+{
+    // TODO Process 0 should gather best individuals from all processes
+    // select best from those
+    // only gather if network is activated
+    return 0;
+}
+
+static int savePath()
+{
     std::cout << "Saving Path ...";
     std::cout.flush();
-    tsp::PathSerializer::save(solver.getPopulation().getBestIndividual().getPath(),
-                              cfg.pathFile);
+    if(!tsp::PathSerializer::save(solver.getPopulation().getBestIndividual().getPath(),
+                              cfg.pathFile))
+    {
+        std::cout << " Failed\n";
+        return 1;
+    }
+
     std::cout << " Done\n";
+
+    return 0;
+}
+
+int main(int argc, char **argv)
+{
+    tsp::Random::shakeRNG();
+
+    int ret = parseArguments(argc, argv);
+    if(ret)
+        return ret;
+
+    ret = exchangeConfig();
+    if(ret)
+        return ret;
+
+    printParameters();
+
+    ret = loadGraph();
+    if(ret)
+        return ret;
+
+    runAlgorithm();
+
+    ret = gatherResults();
+    if(ret)
+        return ret;
+
+    ret = savePath();
+    if(ret)
+        return ret;
 
     if(ex != NULL)
         delete ex;
