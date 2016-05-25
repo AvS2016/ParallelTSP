@@ -1,4 +1,6 @@
 #include "data/ConfigSerializer.hpp"
+#include <fstream>
+#include <json/json.h>
 
 namespace tsp
 {
@@ -32,8 +34,8 @@ namespace tsp
         cfg.gaSettings.populationSize = root["populationSize"].asUInt();
         cfg.gaSettings.startNode = root["startNode"].asUInt();
         cfg.gaSettings.elitismRate = root["elitismRate"].asDouble();
-        cfg.gaSettings.fitnessPow = root["fitnessPower"];
-        cfg.gaSettings.mutationChance = root["mutationChance"];
+        cfg.gaSettings.fitnessPow = root["fitnessPower"].asUInt();
+        cfg.gaSettings.mutationChance = root["mutationChance"].asDouble();
 
         return true;
     }

@@ -1,0 +1,10 @@
+{
+    "graphFile" : "SampleGraph.json",
+    "pathFile" : "SamplePath.json",
+    "generationCount" : 10,
+    "populationSize" : 100,
+    "startNode" : 1,
+    "elitismRate" : 0.01,
+    "mutationChance" : 0.01,
+    "fitnessPower" : 10
+}

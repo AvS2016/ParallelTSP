@@ -1,6 +1,7 @@
 #ifndef DATA_CONFIGSERIALIZER_HPP_
 #define DATA_CONFIGSERIALIZER_HPP_
 
+#include <istream>
 #include "data/Config.hpp"
 
 namespace tsp
