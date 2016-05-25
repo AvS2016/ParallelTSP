@@ -7,15 +7,15 @@ namespace tsp
     static bool validateConfig(const Json::Value &root)
     {
         return root.isObject() &&
-                root["generationCount"].isUInt() &&
-                root["graphFile"].isString() &&
-                root["pathFile"].isString() &&
-                root["populationSize"].isUInt() &&
-                root["startNode"].isUInt() &&
-                root["elitismRate"].isDouble() &&
-                root["fitnessPower"].isUInt() &&
-                root["mutationChance"].isDouble() &&
-				root["exchangeRate"].isDouble();
+               root["generationCount"].isUInt() &&
+               root["graphFile"].isString() &&
+               root["pathFile"].isString() &&
+               root["populationSize"].isUInt() &&
+               root["startNode"].isUInt() &&
+               root["elitismRate"].isDouble() &&
+               root["fitnessPower"].isUInt() &&
+               root["mutationChance"].isDouble() &&
+               root["exchangeRate"].isDouble();
     }
 
     bool ConfigSerializer::deserialize(Config &cfg, std::istream &is)

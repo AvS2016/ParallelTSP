@@ -5,8 +5,7 @@
 
 namespace tsp
 {
-    struct Config
-    {
+    struct Config {
         unsigned int generationCount;
         std::string graphFile;
         std::string pathFile;

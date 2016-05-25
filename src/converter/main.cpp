@@ -14,22 +14,21 @@ int parseArguments(int argc, char **argv)
 {
     po::options_description desc("Allowed Options");
     desc.add_options()
-        ("help,h", "show help text")
-        ("graph,g", po::value<std::string>(), "path to graph file")
-        ("path,p", po::value<std::string>(), "path to path file")
-        ("image,o", po::value<std::string>(), "output path")
+    ("help,h", "show help text")
+    ("graph,g", po::value<std::string>(), "path to graph file")
+    ("path,p", po::value<std::string>(), "path to path file")
+    ("image,o", po::value<std::string>(), "output path")
     ;
 
-    try
-    {
+    try {
         po::store(po::parse_command_line(argc, argv, desc), vm);
         po::notify(vm);
-    } catch (std::exception &e) {
+    } catch(std::exception &e) {
         std::cout << e.what() << "\n";
         return 1;
     }
 
-    if (vm.count("help") ||
+    if(vm.count("help") ||
             !vm.count("graph") ||
             !vm.count("path") ||
             !vm.count("image")) {
@@ -52,36 +51,34 @@ int convertGraph()
     std::cout << "-- image:  " << vm["image"].as<std::string>() << std::endl;
 
     std::cout << "Loading graph ..." << std::endl;
-    if (!tsp::GraphSerializer::load(graph, vm["graph"].as<std::string>()))
-    {
+    if(!tsp::GraphSerializer::load(graph, vm["graph"].as<std::string>())) {
         std::cout << "File not found!" << std::endl;
         return 1;
-    }
-    else
-    {
+    } else {
         std::cout << "Creating plot script ..." << std::endl;
-        int res = conv.createPlot(graph, vm["path"].as<std::string>(), vm["image"].as<std::string>());
-        switch (res){
-            case 0:
-                std::cout << "Script created." << std::endl;
-                break;
-            case 1:
-                std::cout << "Can´t parse path." << std::endl;
-                return 1;
-            case 2:
-                std::cout << "Parsed path is not valid." << std::endl;
-                return 1;
+        int res = conv.createPlot(graph, vm["path"].as<std::string>(),
+                                  vm["image"].as<std::string>());
+        switch(res) {
+        case 0:
+            std::cout << "Script created." << std::endl;
+            break;
+        case 1:
+            std::cout << "Can´t parse path." << std::endl;
+            return 1;
+        case 2:
+            std::cout << "Parsed path is not valid." << std::endl;
+            return 1;
         }
 
         // create image
-		std::cout << "Drawing graph ..." << std::endl;
-		if (conv.drawGraph()){
-			std::cout << "Graph saved to file." << std::endl;
-			return 0;
-		} else {
-			std::cout << "Error while drawing the graph." << std::endl;
-			return 1;
-		}
+        std::cout << "Drawing graph ..." << std::endl;
+        if(conv.drawGraph()) {
+            std::cout << "Graph saved to file." << std::endl;
+            return 0;
+        } else {
+            std::cout << "Error while drawing the graph." << std::endl;
+            return 1;
+        }
     }
     return 0;
 }
@@ -92,9 +89,9 @@ int main(int argc, char **argv)
     if(ret)
         return ret;
 
-   ret = convertGraph();
-   if(ret)
-       return ret;
+    ret = convertGraph();
+    if(ret)
+        return ret;
 
     return 0;
 }

@@ -15,7 +15,7 @@ namespace tsp
     }
 
     GeneticAnalyser::GeneticAnalyser(const Graph &graph)
-    :graph_(graph)
+        : graph_(graph)
     {
 
     }
@@ -25,11 +25,10 @@ namespace tsp
 
     }
 
-    double GeneticAnalyser::getDistance(const Individual& ind)
+    double GeneticAnalyser::getDistance(const Individual &ind)
     {
         double sum = 0;
-        for(unsigned int i = 0; i + 1 < ind.getPath().size(); ++i)
-        {
+        for(unsigned int i = 0; i + 1 < ind.getPath().size(); ++i) {
             const Node &n1 = graph_[ind.getPath()[i]];
             const Node &n2 = graph_[ind.getPath()[i + 1]];
             sum += calcNodeDistance(n1, n2);
@@ -37,12 +36,12 @@ namespace tsp
         return sum;
     }
 
-    double GeneticAnalyser::getBestDistance(const Population& pop)
+    double GeneticAnalyser::getBestDistance(const Population &pop)
     {
         return getDistance(pop.getBestIndividual());
     }
 
-    double GeneticAnalyser::getBestFitness(const Population& pop)
+    double GeneticAnalyser::getBestFitness(const Population &pop)
     {
         return pop.getBestIndividual().getFitness();
     }
@@ -52,15 +51,14 @@ namespace tsp
         return pop.getBestIndividual().getNormalizedFitness();
     }
 
-    double GeneticAnalyser::getMeanDistance(const Population& pop)
+    double GeneticAnalyser::getMeanDistance(const Population &pop)
     {
         distances_.resize(pop.getIndividuals().size());
 
         double max = 0;
-        for(unsigned int i = 0; i < distances_.size(); ++i)
-        {
+        for(unsigned int i = 0; i < distances_.size(); ++i) {
             distances_[i] = GeneticAnalyser::getDistance(pop.getIndividuals()[i]);
-            if (distances_[i] > max)
+            if(distances_[i] > max)
                 max = distances_[i];
         }
 
@@ -72,20 +70,20 @@ namespace tsp
         return sum * (max / STRETCH_FACTOR);
     }
 
-    double GeneticAnalyser::getMeanFitness(const Population& pop)
+    double GeneticAnalyser::getMeanFitness(const Population &pop)
     {
         double sum = 0;
-        for(const Individual &ind : pop.getIndividuals())
+        for(const Individual & ind : pop.getIndividuals())
             sum += ind.getFitness();
         return sum / pop.getIndividuals().size();
     }
 
-    double GeneticAnalyser::getMeanNormalizedFitness(const Population& pop)
+    double GeneticAnalyser::getMeanNormalizedFitness(const Population &pop)
     {
-       double sum = 0;
-       for(const Individual &ind : pop.getIndividuals())
-           sum += ind.getNormalizedFitness();
-       return sum / pop.getIndividuals().size();
+        double sum = 0;
+        for(const Individual & ind : pop.getIndividuals())
+            sum += ind.getNormalizedFitness();
+        return sum / pop.getIndividuals().size();
     }
 
 }

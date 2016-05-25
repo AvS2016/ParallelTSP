@@ -45,7 +45,8 @@ namespace tsp
 
         // determine a random interval of genes to be inherited
         unsigned int startIdx = 1 + Random::nextInt((parent1.getPath().size() - 2) / 2);
-        unsigned int length = 1 + Random::nextInt(parent1.getPath().size() - startIdx - 2);
+        unsigned int length = 1 + Random::nextInt(parent1.getPath().size() - startIdx -
+                              2);
 
         // apply genes from parent1
         for(unsigned int i = 0; i < length; ++i) {

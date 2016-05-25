@@ -8,7 +8,7 @@ namespace tsp
 {
 
     GraphConverter::GraphConverter()
-    : pathFile_(""), dataFile_(""), plotFile_(""), resultFile_("")
+        : pathFile_(""), dataFile_(""), plotFile_(""), resultFile_("")
     {
     }
 
@@ -16,7 +16,8 @@ namespace tsp
     {
     }
 
-    int GraphConverter::createPlot(Graph &graph, const std::string &pathFile, const std::string &resultFile)
+    int GraphConverter::createPlot(Graph &graph, const std::string &pathFile,
+                                   const std::string &resultFile)
     {
         pathFile_ = pathFile;
         dataFile_ = "tsp.dat";
@@ -27,17 +28,17 @@ namespace tsp
         Path path;
 
         PathSerializer::load(path, pathFile_);
-        
+
         // write *.dat file
         std::ofstream os(dataFile_);
         os << "#TSP Points\n";
-        for(unsigned int i = 0; i < path.size(); ++i){
+        for(unsigned int i = 0; i < path.size(); ++i) {
             uint nodeId = path[i];
-            if (nodeId < graph.size()) 
+            if(nodeId < graph.size())
                 os << graph[nodeId].x() << " " << graph[nodeId].y() << std::endl;
         }
         os.close();
-        
+
         // write *.plt file
         /*
         set style line <index> {{linetype  | lt} <line_type> | <colorspec>}
@@ -47,8 +48,8 @@ namespace tsp
                                {{pointsize | ps} <point_size>}
                                {palette}
         */
-        float density = (float)(graph.width() * graph.height())/(path.size()-1);
-        float lineWidth = density/100, pointSize = density/100;
+        float density = (float)(graph.width() * graph.height()) / (path.size() - 1);
+        float lineWidth = density / 100, pointSize = density / 100;
 
         os.open(plotFile_, std::ofstream::out);
         os << "set terminal svg size 350,262 fname 'Verdana' fsize 10" << std::endl;
@@ -56,8 +57,10 @@ namespace tsp
         os << "set terminal svg enhanced background rgb 'white'" << std::endl;
         os << "set tics font ', 8'" << std::endl;
         os << "set nokey" << std::endl;
-        os << "set title 'TSP Graph Visualisation (points: " << path.size()-1 << ")'" << std::endl;
-        os << "set style line 1 lc rgb '#0060ad' lt 1 lw " << lineWidth << " pt 7 ps " << pointSize << "   # --- blue" << std::endl;
+        os << "set title 'TSP Graph Visualisation (points: " << path.size() - 1 << ")'"
+           << std::endl;
+        os << "set style line 1 lc rgb '#0060ad' lt 1 lw " << lineWidth << " pt 7 ps "
+           << pointSize << "   # --- blue" << std::endl;
         os << "plot '" << dataFile_ << "' with linespoints ls 1" << std::endl;
         os.close();
 
@@ -66,9 +69,9 @@ namespace tsp
 
     bool GraphConverter::drawGraph()
     {
-    	const std::string cmd = "gnuplot " + plotFile_;
-    	system(cmd.c_str());
-    	//TODO: delete temporary files
+        const std::string cmd = "gnuplot " + plotFile_;
+        system(cmd.c_str());
+        //TODO: delete temporary files
         return true;
     }
 

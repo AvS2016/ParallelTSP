@@ -4,6 +4,7 @@
 *.settings
 *~
 *.swp
+*.orig
 dep
 build
 

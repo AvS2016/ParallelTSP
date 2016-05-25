@@ -19,7 +19,8 @@ namespace tsp
         GraphGenerator();
         ~GraphGenerator();
 
-        void setSettings(const unsigned int width, const unsigned int height, const unsigned int nodes);
+        void setSettings(const unsigned int width, const unsigned int height,
+                         const unsigned int nodes);
 
         void generate(Graph &graph);
     };

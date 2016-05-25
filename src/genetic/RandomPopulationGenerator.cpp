@@ -21,8 +21,7 @@ namespace tsp
 
     void RandomPopulationGenerator::generateIndividual(Individual &individual)
     {
-        if(graph_.size() == 0)
-        {
+        if(graph_.size() == 0) {
             individual.getPath().clear();
             return;
         }

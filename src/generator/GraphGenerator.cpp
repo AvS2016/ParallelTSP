@@ -15,7 +15,8 @@ namespace tsp
     {
     }
 
-    void GraphGenerator::setSettings(const unsigned int width, const unsigned int height, const unsigned int nodes)
+    void GraphGenerator::setSettings(const unsigned int width,
+                                     const unsigned int height, const unsigned int nodes)
     {
         width_ = width;
         height_ = height;

@@ -24,14 +24,15 @@ int parseArguments(int argc, char **argv)
     ("config,c", po::value<std::string>(), "config file")
     ("infile,i", po::value<std::string>(), "graph definition file")
     ("outfile,o", po::value<std::string>(), "path output file")
-    ("generations,g", po::value<unsigned int>(), "amount of generations to be calculated")
+    ("generations,g", po::value<unsigned int>(),
+     "amount of generations to be calculated")
     ("population,p", po::value<unsigned int>(), "population size")
     ("start,s", po::value<unsigned int>(), "start node")
     ("elitism,e", po::value<double>(), "elitism rate")
     ("mutation,m", po::value<double>(), "mutation chance")
     ("fitness,f", po::value<unsigned int>(), "fitness power")
-	("exchange,x", po::value<double>(), "exchange rate")
-	("network,n", "activate MPI network mode")
+    ("exchange,x", po::value<double>(), "exchange rate")
+    ("network,n", "activate MPI network mode")
     ;
     try {
         po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -43,26 +44,24 @@ int parseArguments(int argc, char **argv)
 
     bool hasConfig = vm.count("config");
     bool hasOpt = vm.count("infile") &&
-            vm.count("outfile") &&
-            vm.count("generations") &&
-            vm.count("population") &&
-            vm.count("start") &&
-            vm.count("elitism") &&
-            vm.count("mutation") &&
-            vm.count("fitness");
+                  vm.count("outfile") &&
+                  vm.count("generations") &&
+                  vm.count("population") &&
+                  vm.count("start") &&
+                  vm.count("elitism") &&
+                  vm.count("mutation") &&
+                  vm.count("fitness");
     bool hasHelp = vm.count("help");
-    if( hasHelp || !(hasConfig || hasOpt))
-    {
+    if(hasHelp || !(hasConfig || hasOpt)) {
         std::cout << desc << "\n";
         return 1;
     }
 
-    if(hasConfig)
-    {
-        std::cout << "Loading Config from '" << vm["config"].as<std::string>() << "' ...";
+    if(hasConfig) {
+        std::cout << "Loading Config from '" << vm["config"].as<std::string>() <<
+                  "' ...";
         std::cout.flush();
-        if(!tsp::ConfigSerializer::load(cfg, vm["config"].as<std::string>()))
-        {
+        if(!tsp::ConfigSerializer::load(cfg, vm["config"].as<std::string>())) {
             std::cout << " Failed\n";
             return 1;
         }
@@ -86,11 +85,10 @@ int parseArguments(int argc, char **argv)
     if(vm.count("fitness"))
         cfg.gaSettings.fitnessPow = vm["fitness"].as<unsigned int>();
     if(vm.count("exchange"))
-    	cfg.exchangeRate = vm["exchange"].as<double>();
-    if(vm.count("network"))
-    {
-		ex = new tsp::PopulationExchanger(argc, argv);
-		ex->setExchangeCount(cfg.exchangeRate * cfg.gaSettings.populationSize);
+        cfg.exchangeRate = vm["exchange"].as<double>();
+    if(vm.count("network")) {
+        ex = new tsp::PopulationExchanger(argc, argv);
+        ex->setExchangeCount(cfg.exchangeRate * cfg.gaSettings.populationSize);
     }
 
     return 0;
@@ -118,8 +116,7 @@ int main(int argc, char **argv)
 
     std::cout << "Loading Graph ...";
     std::cout.flush();
-    if(!tsp::GraphSerializer::load(graph, cfg.graphFile))
-    {
+    if(!tsp::GraphSerializer::load(graph, cfg.graphFile)) {
         std::cout << " Failed\n";
         return 1;
     }
@@ -138,16 +135,21 @@ int main(int argc, char **argv)
         solver.nextGeneration();
 
         if(ex != NULL) {
-        	ex->exchange(solver.getPopulation());
-        	solver.updateFitness();
+            ex->exchange(solver.getPopulation());
+            solver.updateFitness();
         }
 
         std::cout << " Done\n";
-        std::cout << "  Best Distance: " << analyser.getBestDistance(solver.getPopulation()) << "\n";
-        std::cout << "  Mean Distance: " << analyser.getMeanDistance(solver.getPopulation()) << "\n";
-        std::cout << "  Best Fitness: " << analyser.getBestFitness(solver.getPopulation()) << "\n";
-        std::cout << "  Mean Fitness: " << analyser.getMeanFitness(solver.getPopulation()) << "\n";
-        std::cout << "  Best Norm. Fitness: " << analyser.getBestNormalizedFitness(solver.getPopulation()) << "\n";
+        std::cout << "  Best Distance: " << analyser.getBestDistance(
+                      solver.getPopulation()) << "\n";
+        std::cout << "  Mean Distance: " << analyser.getMeanDistance(
+                      solver.getPopulation()) << "\n";
+        std::cout << "  Best Fitness: " << analyser.getBestFitness(
+                      solver.getPopulation()) << "\n";
+        std::cout << "  Mean Fitness: " << analyser.getMeanFitness(
+                      solver.getPopulation()) << "\n";
+        std::cout << "  Best Norm. Fitness: " << analyser.getBestNormalizedFitness(
+                      solver.getPopulation()) << "\n";
     }
 
     std::cout << "Saving Path ...";
@@ -157,7 +159,7 @@ int main(int argc, char **argv)
     std::cout << " Done\n";
 
     if(ex != NULL)
-    	delete ex;
+        delete ex;
 
     return 0;
 }

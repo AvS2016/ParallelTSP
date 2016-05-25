@@ -29,7 +29,8 @@ namespace tsp
 
     void GeneticSolver::init()
     {
-        eliteCount_ = static_cast<unsigned int>(settings_.elitismRate * settings_.populationSize);
+        eliteCount_ = static_cast<unsigned int>(settings_.elitismRate *
+                                                settings_.populationSize);
 
         fitnessUpdater_.setFitnessPow(settings_.fitnessPow);
         populationGen_.generatePopulation(*currPopulation_, settings_.populationSize);

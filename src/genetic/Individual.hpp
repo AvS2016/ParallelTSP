@@ -43,7 +43,7 @@ namespace tsp
             return path_;
         }
 
-        const Path &getPath() const{
+        const Path &getPath() const {
             return path_;
         }
     };

@@ -7,7 +7,7 @@ namespace tsp
 
     void Random::shakeRNG()
     {
-    	std::srand(std::time(0));
+        std::srand(std::time(0));
     }
 
     int Random::nextInt()

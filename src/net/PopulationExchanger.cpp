@@ -18,7 +18,7 @@ namespace tsp
 
     void PopulationExchanger::exchange(Population &p)
     {
-    	assert(world_.size() % 2 == 0);
+        assert(world_.size() % 2 == 0);
 
         rank_ = world_.rank();
         dest_ = (rank_ + 1) % world_.size();
@@ -30,9 +30,9 @@ namespace tsp
 
         // init vectors
         for(unsigned int i = 0; i < used_.size(); ++i)
-        	used_[i] = false;
+            used_[i] = false;
         for(unsigned int i = 0; i < received_.size(); ++i)
-        	received_[i].resize(p.getIndividuals().size() + 1);
+            received_[i].resize(p.getIndividuals().size() + 1);
 
         // prepare rnd individuals to send
         for(unsigned int i = 0; i < exchangeCount_; ++i) {
@@ -46,13 +46,11 @@ namespace tsp
         }
 
         if(rank_ % 2 == 0) {
-        	sendIndividuals(p);
-        	recvIndividuals();
-        }
-        else
-        {
-        	recvIndividuals();
-        	sendIndividuals(p);
+            sendIndividuals(p);
+            recvIndividuals();
+        } else {
+            recvIndividuals();
+            sendIndividuals(p);
         }
 
         // Replace old with new individuals
@@ -60,18 +58,20 @@ namespace tsp
             p.getIndividuals()[toSend_[i]].getPath() = received_[i];
     }
 
-	void PopulationExchanger::sendIndividuals(Population &p) {
-		for(unsigned int i = 0; i < exchangeCount_; ++i) {
-		            world_.send(dest_, TAG, p.getIndividuals()[toSend_[i]].getPath());
-		        }
+    void PopulationExchanger::sendIndividuals(Population &p)
+    {
+        for(unsigned int i = 0; i < exchangeCount_; ++i) {
+            world_.send(dest_, TAG, p.getIndividuals()[toSend_[i]].getPath());
+        }
 
-	}
+    }
 
-	void PopulationExchanger::recvIndividuals() {
+    void PopulationExchanger::recvIndividuals()
+    {
         for(unsigned int i = 0; i < exchangeCount_; ++i) {
             world_.recv(src_, TAG, received_[i]);
         }
-	}
+    }
 
     void PopulationExchanger::setExchangeCount(unsigned int count)
     {
