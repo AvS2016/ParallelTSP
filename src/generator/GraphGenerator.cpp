@@ -32,6 +32,9 @@ namespace tsp
     {
         exists_.clear();
         std::string id;
+
+        graph.setWidth(width_);
+        graph.setHeight(height_);
         graph.resize(nodes_);
         for(unsigned int i = 0; i < nodes_; ++i) {
             int x, y;

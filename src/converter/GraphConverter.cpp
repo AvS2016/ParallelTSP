@@ -39,11 +39,25 @@ namespace tsp
         os.close();
         
         // write *.plt file
+        /*
+        set style line <index> {{linetype  | lt} <line_type> | <colorspec>}
+                               {{linecolor | lc} <colorspec>}
+                               {{linewidth | lw} <line_width>}
+                               {{pointtype | pt} <point_type>}
+                               {{pointsize | ps} <point_size>}
+                               {palette}
+        */
+        float density = (float)(graph.width() * graph.height())/(path.size()-1);
+        float lineWidth = density/100, pointSize = density/100;
+
         os.open(plotFile_, std::ofstream::out);
         os << "set terminal svg size 350,262 fname 'Verdana' fsize 10" << std::endl;
         os << "set output '" << resultFile_ << "'" << std::endl;
-        os << "set title 'TSP Graph Visualisation (points: " << path.size() << ")'" << std::endl;
-        os << "set style line 1 lc rgb '#0060ad' lt 1 lw 2 pt 7 ps 1.0   # --- blue" << std::endl;
+        os << "set terminal svg enhanced background rgb 'white'" << std::endl;
+        os << "set tics font ', 8'" << std::endl;
+        os << "set nokey" << std::endl;
+        os << "set title 'TSP Graph Visualisation (points: " << path.size()-1 << ")'" << std::endl;
+        os << "set style line 1 lc rgb '#0060ad' lt 1 lw " << lineWidth << " pt 7 ps " << pointSize << "   # --- blue" << std::endl;
         os << "plot '" << dataFile_ << "' with linespoints ls 1" << std::endl;
         os.close();
 

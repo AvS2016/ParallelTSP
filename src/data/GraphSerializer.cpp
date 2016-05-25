@@ -19,6 +19,8 @@ namespace tsp
         if(!validateGraph(root))
             return false;
 
+        graph.setWidth(root["width"].asUInt());
+        graph.setHeight(root["height"].asUInt());
         // deserialize nodes
         Json::Value &nodes = root["nodes"];
         graph.resize(nodes.size());
@@ -33,6 +35,8 @@ namespace tsp
         Json::StyledStreamWriter writer;
         Json::Value root;
 
+        root["width"] = graph.width();
+        root["height"] = graph.height();
         root["nodes"] = Json::Value(Json::arrayValue);
         // serialize nodes
         root["nodes"].resize(graph.size());
