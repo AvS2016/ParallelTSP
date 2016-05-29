@@ -15,4 +15,4 @@ install:
     - export CXX="g++-4.8"
     - $CXX --version
     - ./script/get-linux-deps.sh
-script: mkdir -p build && cd build && cmake .. && make -j 8 && ./test/testga
+script: mkdir -p build && cd build && cmake -D CMAKE_COLOR_MAKEFILE=OFF .. && make && ./test/testga
