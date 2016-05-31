@@ -11,6 +11,7 @@ namespace tsp
 
     public:
         static void shakeRNG();
+        static void shakeRNG(unsigned int seed);
 
         static int nextInt();
         static int nextInt(const int max);
