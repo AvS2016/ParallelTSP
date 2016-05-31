@@ -3,6 +3,7 @@
 #include <boost/serialization/vector.hpp>
 #include <boost/mpi.hpp>
 #include <cassert>
+#include <iostream>
 #define TAG 0
 
 namespace tsp
@@ -76,18 +77,21 @@ namespace tsp
 
     void PopulationExchanger::gather(Population &p)
     {
-    	// 0 is main collector
-		if (isMaster()) {
-		    std::vector<Path> bestIndividuals;
-		    boost::mpi::gather(world_, p.getBestIndividual().getPath(), bestIndividuals, 0);
+        // 0 is main collector
+        if(isMaster()) {
+            std::vector<Path> bestIndividuals;
+            boost::mpi::gather(world_, p.getBestIndividual().getPath(), bestIndividuals, 0);
 
-		    // overwrite current pupulation with best individuals.. dont need them anymore
-		    for(unsigned int i=0; i< bestIndividuals.size(); ++i)
-		    	p.getIndividuals()[i].getPath() = bestIndividuals[i];
+            // overwrite current pupulation with best individuals.. dont need them anymore
+            for(unsigned int i = 0; i < bestIndividuals.size(); ++i) {
+                std::cout << "-- Process " << i << " reported " << pathToStr(
+                              bestIndividuals[i]) << "\n";
+                p.getIndividuals()[i].getPath() = bestIndividuals[i];
+            }
 
-		  } else {
-			  boost::mpi::gather(world_, p.getBestIndividual().getPath(), 0);
-		  }
+        } else {
+            boost::mpi::gather(world_, p.getBestIndividual().getPath(), 0);
+        }
 
 
     }
@@ -97,9 +101,10 @@ namespace tsp
         exchangeCount_ = count;
     }
 
-bool PopulationExchanger::isMaster() {
-	return world_.rank() == 0;
-}
+    bool PopulationExchanger::isMaster()
+    {
+        return world_.rank() == 0;
+    }
 
 
 
