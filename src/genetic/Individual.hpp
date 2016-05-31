@@ -46,6 +46,9 @@ namespace tsp
         const Path &getPath() const {
             return path_;
         }
+
+
+
     };
 }
 

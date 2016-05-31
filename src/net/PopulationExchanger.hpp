@@ -31,9 +31,9 @@ namespace tsp
         ~PopulationExchanger();
 
         void exchange(Population &p);
-
-
+        void gather(Population &p);
         void setExchangeCount(unsigned int count);
+        bool isMaster();
     };
 
 }

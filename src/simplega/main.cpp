@@ -144,8 +144,11 @@ static void runAlgorithm()
         solver.nextGeneration();
 
         if(ex != NULL) {
+        	std::cout << "Exchange individuals ... ";
+			std::cout.flush();
             ex->exchange(solver.getPopulation());
             solver.updateFitness();
+            std::cout << "Done\n";
         }
 
         std::cout << " Done\n";
@@ -160,18 +163,29 @@ static void runAlgorithm()
         std::cout << "  Best Norm. Fitness: " << analyser.getBestNormalizedFitness(
                       solver.getPopulation()) << "\n";
     }
-}
 
-static int gatherResults()
-{
-    // TODO Process 0 should gather best individuals from all processes
-    // select best from those
-    // only gather if network is activated
-    return 0;
+    if(ex != NULL){
+    	std::cout << "Gathering best individuals ... ";
+    	std::cout.flush();
+    	ex->gather(solver.getPopulation());
+    	solver.updateFitness();
+    	std::cout << "Done\n";
+
+    	if(ex->isMaster()) {
+    		std::cout << "=============================\n";
+			std::cout << "Final Results\n";
+			std::cout << "  Best Distance: " <<  analyser.getBestDistance(
+					solver.getPopulation()) << "\n";
+    	}
+    }
 }
 
 static int savePath()
 {
+
+	if(ex != NULL && !ex->isMaster())
+		return 0;
+
     std::cout << "Saving Path ...";
     std::cout.flush();
     if(!tsp::PathSerializer::save(solver.getPopulation().getBestIndividual().getPath(),
@@ -205,10 +219,6 @@ int main(int argc, char **argv)
         return ret;
 
     runAlgorithm();
-
-    ret = gatherResults();
-    if(ret)
-        return ret;
 
     ret = savePath();
     if(ret)

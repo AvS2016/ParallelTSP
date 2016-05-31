@@ -1,6 +1,7 @@
 #include "PopulationExchanger.hpp"
 #include "utils/Random.hpp"
 #include <boost/serialization/vector.hpp>
+#include <boost/mpi.hpp>
 #include <cassert>
 #define TAG 0
 
@@ -73,9 +74,33 @@ namespace tsp
         }
     }
 
+    void PopulationExchanger::gather(Population &p)
+    {
+    	// 0 is main collector
+		if (isMaster()) {
+		    std::vector<Path> bestIndividuals;
+		    boost::mpi::gather(world_, p.getBestIndividual().getPath(), bestIndividuals, 0);
+
+		    // overwrite current pupulation with best individuals.. dont need them anymore
+		    for(unsigned int i=0; i< bestIndividuals.size(); ++i)
+		    	p.getIndividuals()[i].getPath() = bestIndividuals[i];
+
+		  } else {
+			  boost::mpi::gather(world_, p.getBestIndividual().getPath(), 0);
+		  }
+
+
+    }
+
     void PopulationExchanger::setExchangeCount(unsigned int count)
     {
         exchangeCount_ = count;
     }
+
+bool PopulationExchanger::isMaster() {
+	return world_.rank() == 0;
+}
+
+
 
 }
