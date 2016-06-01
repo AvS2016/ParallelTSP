@@ -155,19 +155,24 @@ static void runAlgorithm()
 
     tsp::GeneticAnalyser analyser(graph);
     for(unsigned int i = 0; i < cfg.generationCount; ++i) {
+
         std::cout << "Calculating Generation " << i + 1 << "... ";
         std::cout.flush();
         solver.nextGeneration();
+        std::cout << " Done\n";
 
         if(ex != NULL) {
-            std::cout << "Exchange individuals ... ";
+            std::cout << "Exchanging individuals ... ";
             std::cout.flush();
             ex->exchange(solver.getPopulation());
-            solver.updateFitness();
             std::cout << "Done\n";
         }
 
-        std::cout << " Done\n";
+        std::cout << "Updating fitness ... ";
+        std::cout.flush();
+        solver.updateFitness();
+        std::cout << "Done\n";
+
         std::cout << "  Best Distance: " << analyser.getBestDistance(
                       solver.getPopulation()) << "\n";
         std::cout << "  Mean Distance: " << analyser.getMeanDistance(
