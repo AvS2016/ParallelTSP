@@ -5,7 +5,9 @@
 #include <cassert>
 #include <iostream>
 #include "utils/Random.hpp"
+
 #define TAG 0
+#define MASTER_RANK 0
 
 namespace tsp
 {
@@ -81,7 +83,7 @@ namespace tsp
         // 0 is main collector
         if(isMaster()) {
             std::vector<Path> bestIndividuals;
-            boost::mpi::gather(world_, p.getBestIndividual().getPath(), bestIndividuals, 0);
+            boost::mpi::gather(world_, p.getBestIndividual().getPath(), bestIndividuals, MASTER_RANK);
 
             // overwrite current pupulation with best individuals.. dont need them anymore
             for(unsigned int i = 0; i < bestIndividuals.size(); ++i) {
@@ -91,13 +93,13 @@ namespace tsp
             }
 
         } else {
-            boost::mpi::gather(world_, p.getBestIndividual().getPath(), 0);
+            boost::mpi::gather(world_, p.getBestIndividual().getPath(), MASTER_RANK);
         }
     }
 
     void PopulationExchanger::exchangeConfig(Config &cfg)
     {
-        boost::mpi::broadcast(world_, cfg, 0);
+        boost::mpi::broadcast(world_, cfg, MASTER_RANK);
     }
 
     void PopulationExchanger::setExchangeCount(unsigned int count)
@@ -107,7 +109,7 @@ namespace tsp
 
     bool PopulationExchanger::isMaster() const
     {
-        return world_.rank() == 0;
+        return world_.rank() == MASTER_RANK;
     }
 
     int PopulationExchanger::getRank() const
