@@ -6,5 +6,6 @@
     "startNode" : 1,
     "elitismRate" : 0.01,
     "mutationChance" : 0.01,
-    "fitnessPower" : 10
+    "fitnessPower" : 10,
+    "exchangeRate" : 0.1
 }

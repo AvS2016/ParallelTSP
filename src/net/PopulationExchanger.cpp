@@ -93,8 +93,6 @@ namespace tsp
         } else {
             boost::mpi::gather(world_, p.getBestIndividual().getPath(), 0);
         }
-
-
     }
 
     void PopulationExchanger::exchangeConfig(Config &cfg)

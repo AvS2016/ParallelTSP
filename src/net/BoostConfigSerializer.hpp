@@ -1,7 +1,6 @@
 #ifndef NET_BOOSTCONFIGSERIALIZER_HPP_
 #define NET_BOOSTCONFIGSERIALIZER_HPP_
 
-#include <boost/mpi.hpp>
 #include <boost/archive/text_oarchive.hpp>
 #include <boost/archive/text_iarchive.hpp>
 #include <net/BoostConfigSerializer.hpp>
@@ -35,11 +34,9 @@ namespace boost {
     }
 }
 
-BOOST_IS_MPI_DATATYPE(tsp::GeneticSolver::Settings);
 BOOST_CLASS_TRACKING(tsp::GeneticSolver::Settings,track_never);
 BOOST_CLASS_VERSION(tsp::GeneticSolver::Settings, 1);
 
-BOOST_IS_MPI_DATATYPE(tsp::Config);
 BOOST_CLASS_TRACKING(tsp::Config,track_never);
 BOOST_CLASS_VERSION(tsp::Config, 1);
 
