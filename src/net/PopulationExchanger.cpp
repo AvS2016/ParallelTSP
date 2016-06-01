@@ -1,9 +1,10 @@
 #include "PopulationExchanger.hpp"
-#include "utils/Random.hpp"
 #include <boost/serialization/vector.hpp>
 #include <boost/mpi.hpp>
+#include <net/BoostConfigSerializer.hpp>
 #include <cassert>
 #include <iostream>
+#include "utils/Random.hpp"
 #define TAG 0
 
 namespace tsp
@@ -96,14 +97,24 @@ namespace tsp
 
     }
 
+    void PopulationExchanger::exchangeConfig(Config &cfg)
+    {
+        boost::mpi::broadcast(world_, cfg, 0);
+    }
+
     void PopulationExchanger::setExchangeCount(unsigned int count)
     {
         exchangeCount_ = count;
     }
 
-    bool PopulationExchanger::isMaster()
+    bool PopulationExchanger::isMaster() const
     {
         return world_.rank() == 0;
+    }
+
+    int PopulationExchanger::getRank() const
+    {
+        return world_.rank();
     }
 
 

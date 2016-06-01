@@ -42,6 +42,7 @@ static int parseArguments(int argc, char **argv)
         return 1;
     }
 
+    // check if required options were given
     bool hasConfig = vm.count("config");
     bool hasOpt = vm.count("infile") &&
                   vm.count("outfile") &&
@@ -57,6 +58,20 @@ static int parseArguments(int argc, char **argv)
         return 1;
     }
 
+    // create network component if we are in network mode
+    if(vm.count("network")) {
+        std::cout << "Network mode activated.\n";
+        ex = new tsp::PopulationExchanger(argc, argv);
+
+        // seed the random number generator with our rank and time
+        tsp::Random::shakeRNG(ex->getRank() * std::time(0));
+
+        // if we are not master then return here and
+        // receive config through network
+        if(!ex->isMaster())
+            return 0;
+    }
+
     // load config file if specified
     if(hasConfig) {
         std::cout << "Loading Config from '" << vm["config"].as<std::string>() <<
@@ -69,12 +84,9 @@ static int parseArguments(int argc, char **argv)
         std::cout << " Done\n";
     }
 
+    // set all config parameters
     if(vm.count("exchange"))
         cfg.exchangeRate = vm["exchange"].as<double>();
-    if(vm.count("network")) {
-        ex = new tsp::PopulationExchanger(argc, argv);
-        ex->setExchangeCount(cfg.exchangeRate * cfg.gaSettings.populationSize);
-    }
     if(vm.count("infile"))
         cfg.graphFile = vm["infile"].as<std::string>();
     if(vm.count("outfile"))
@@ -95,11 +107,15 @@ static int parseArguments(int argc, char **argv)
     return 0;
 }
 
-static int exchangeConfig()
+static void exchangeConfig()
 {
-    // TODO Process 0 send config to all other processes
-    // only if network is activated
-    return 0;
+    if(ex == NULL)
+        return;
+
+    ex->exchangeConfig(cfg);
+    ex->setExchangeCount(cfg.exchangeRate * cfg.gaSettings.populationSize);
+
+    return;
 }
 
 static void printParameters()
@@ -208,10 +224,7 @@ int main(int argc, char **argv)
     if(ret)
         return ret;
 
-    ret = exchangeConfig();
-    if(ret)
-        return ret;
-
+    exchangeConfig();
     printParameters();
 
     ret = loadGraph();

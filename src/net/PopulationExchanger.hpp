@@ -7,6 +7,7 @@
 
 // internal libs
 #include "genetic/Population.hpp"
+#include "data/Config.hpp"
 
 namespace tsp
 {
@@ -32,8 +33,10 @@ namespace tsp
 
         void exchange(Population &p);
         void gather(Population &p);
+        void exchangeConfig(Config &cfg);
         void setExchangeCount(unsigned int count);
-        bool isMaster();
+        bool isMaster() const;
+        int getRank() const;
     };
 
 }
