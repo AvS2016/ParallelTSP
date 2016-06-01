@@ -85,7 +85,9 @@ namespace tsp
 
     void GeneticSolver::mutate()
     {
-        for(unsigned int i = 0; i < nextPopulation_->getIndividuals().size(); ++i) {
+        assert(nextPopulation_->getIndividuals().size() > eliteCount_);
+
+        for(unsigned int i = 0; i < (nextPopulation_->getIndividuals().size() - eliteCount_); ++i) {
             double shouldMutate = Random::nextDouble();
             if(shouldMutate <= settings_.mutationChance)
                 mutator_.mutate(currPopulation_->getIndividuals()[i]);
@@ -106,7 +108,6 @@ namespace tsp
         crossover();
         mutate();
         swapPopulations();
-        updateFitness();
     }
 
     Population &GeneticSolver::getPopulation()
