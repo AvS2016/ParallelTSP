@@ -83,7 +83,8 @@ namespace tsp
         // 0 is main collector
         if(isMaster()) {
             std::vector<Path> bestIndividuals;
-            boost::mpi::gather(world_, p.getBestIndividual().getPath(), bestIndividuals, MASTER_RANK);
+            boost::mpi::gather(world_, p.getBestIndividual().getPath(), bestIndividuals,
+                               MASTER_RANK);
 
             // overwrite current pupulation with best individuals.. dont need them anymore
             for(unsigned int i = 0; i < bestIndividuals.size(); ++i) {
