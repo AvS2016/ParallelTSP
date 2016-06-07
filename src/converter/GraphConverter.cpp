@@ -48,11 +48,13 @@ namespace tsp
                                {{pointsize | ps} <point_size>}
                                {palette}
         */
-        float density = (float)(graph.width() * graph.height()) / (path.size() - 1);
-        float lineWidth = density / 100, pointSize = density / 100;
+
+        int wHeight = 600, wWidth = 480;
+        float density = (float)(wHeight*wWidth) / (path.size() - 1);
+        float lineWidth = density / 3000, pointSize = density / 6000;
 
         os.open(plotFile_, std::ofstream::out);
-        os << "set terminal svg size 350,262 fname 'Verdana' fsize 10" << std::endl;
+        os << "set terminal svg size " << wWidth << "," << wHeight << " fname 'Verdana' fsize 10" << std::endl;
         os << "set output '" << resultFile_ << "'" << std::endl;
         os << "set terminal svg enhanced background rgb 'white'" << std::endl;
         os << "set tics font ', 8'" << std::endl;
