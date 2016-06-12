@@ -72,7 +72,9 @@ static int parseArguments(int argc, char **argv)
         ex = new tsp::PopulationExchanger(argc, argv);
 
         // seed the random number generator with our rank and time
-        tsp::Random::shakeRNG(ex->getRank() * std::time(0));
+        int seed = (ex->getRank() + 1) * std::time(0);
+        LOG_ALWS << "Seed " << seed << "\n";
+        tsp::Random::shakeRNG(seed);
 
         // if we are not master then return here and
         // receive config through network
@@ -191,12 +193,20 @@ static void runAlgorithm()
     }
 
     if(ex != NULL) {
-        LOG_ALWS << "Gathering best individuals ...\n";
+        LOG_INFO << "Gathering best individuals ...\n";
         ex->gather(solver.getPopulation());
-        solver.updateFitness();
+
+        if(ex->isMaster())
+        {
+            solver.updateFitness();
+            LOG_ALWS << "Received " << solver.getPopulation().getIndividuals().size() << " solutions\n";
+            for(unsigned int i = 0; i < solver.getPopulation().getIndividuals().size(); ++i)
+                LOG_ALWS << "  solution " << i << ": " << analyser.getDistance(solver.getPopulation().getIndividuals()[i]) << "\n";
+        }
     }
 
     if(ex == NULL || ex->isMaster()) {
+
         LOG_ALWS << "=============================\n";
         LOG_ALWS << "Final Results\n";
         LOG_ALWS << "  Best Distance: " <<  analyser.getBestDistance(

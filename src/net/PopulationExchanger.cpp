@@ -86,12 +86,10 @@ namespace tsp
             boost::mpi::gather(world_, p.getBestIndividual().getPath(), bestIndividuals,
                                MASTER_RANK);
 
-            // overwrite current pupulation with best individuals.. dont need them anymore
-            for(unsigned int i = 0; i < bestIndividuals.size(); ++i) {
-                std::cout << "-- Process " << i << " reported " << pathToStr(
-                              bestIndividuals[i]) << "\n";
-                p.getIndividuals()[i].getPath() = bestIndividuals[i];
-            }
+            p.getIndividuals().resize(bestIndividuals.size());
+            // overwrite current population with best individuals
+            for(unsigned int i = 0; i < bestIndividuals.size(); ++i)
+                p.getIndividuals()[i].setPath(bestIndividuals[i]);
 
         } else {
             boost::mpi::gather(world_, p.getBestIndividual().getPath(), MASTER_RANK);

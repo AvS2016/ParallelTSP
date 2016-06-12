@@ -6,17 +6,9 @@
 namespace tsp
 {
 
-    static unsigned int getRealRand()
-    {
-        std::ifstream is("/dev/urandom");
-        unsigned int result;
-        is >> result;
-        return result;
-    }
-
     void Random::shakeRNG()
     {
-        std::srand(std::time(0) + getRealRand());
+        std::srand(std::time(0));
     }
 
     void Random::shakeRNG(unsigned int seed)

@@ -39,6 +39,11 @@ namespace tsp
             return normalizedFitness_;
         }
 
+        void setPath(const Path &path)
+        {
+            path_ = path;
+        }
+
         Path &getPath() {
             return path_;
         }
