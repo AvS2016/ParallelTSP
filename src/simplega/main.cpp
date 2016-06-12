@@ -8,12 +8,17 @@
 #include "net/PopulationExchanger.hpp"
 #include "utils/Random.hpp"
 
+#define LOG_ALWS std::cout << "[ALWS] "
+#define LOG_INFO if(!logQuiet) std::cout << "[INFO] "
+#define LOG_ERR std::cerr << "[ERROR] "
+
 namespace po = boost::program_options;
 
 tsp::Graph graph;
 tsp::GeneticSolver solver(graph);
 tsp::Config cfg;
 tsp::PopulationExchanger *ex = NULL;
+bool logQuiet = false;
 
 static int parseArguments(int argc, char **argv)
 {
@@ -21,6 +26,7 @@ static int parseArguments(int argc, char **argv)
     po::options_description desc("Allowed Options");
     desc.add_options()
     ("help,h", "show help text")
+    ("quiet,q", "activate quiet mode")
     ("config,c", po::value<std::string>(), "config file")
     ("infile,i", po::value<std::string>(), "graph definition file")
     ("outfile,o", po::value<std::string>(), "path output file")
@@ -58,9 +64,11 @@ static int parseArguments(int argc, char **argv)
         return 1;
     }
 
+    logQuiet = vm.count("quiet") > 0;
+
     // create network component if we are in network mode
     if(vm.count("network")) {
-        std::cout << "Network mode activated.\n";
+        LOG_INFO << "Network mode activated.\n";
         ex = new tsp::PopulationExchanger(argc, argv);
 
         // seed the random number generator with our rank and time
@@ -74,14 +82,12 @@ static int parseArguments(int argc, char **argv)
 
     // load config file if specified
     if(hasConfig) {
-        std::cout << "Loading Config from '" << vm["config"].as<std::string>() <<
-                  "' ...";
-        std::cout.flush();
+        LOG_INFO << "Loading Config from '" << vm["config"].as<std::string>() <<
+                  "' ...\n";
         if(!tsp::ConfigSerializer::load(cfg, vm["config"].as<std::string>())) {
-            std::cout << " Failed\n";
+            LOG_ERR << " Failed\n";
             return 1;
         }
-        std::cout << " Done\n";
     }
 
     // set all config parameters
@@ -120,84 +126,81 @@ static void exchangeConfig()
 
 static void printParameters()
 {
-    std::cout << "Parameters\n";
-    std::cout << "  graph file: " << cfg.graphFile << "\n";
-    std::cout << "  path file: " << cfg.pathFile << "\n";
-    std::cout << "  generation count: " << cfg.generationCount << "\n";
-    std::cout << "  population size: " << cfg.gaSettings.populationSize << "\n";
-    std::cout << "  start node: " << cfg.gaSettings.startNode << "\n";
-    std::cout << "  elitism rate: " << cfg.gaSettings.elitismRate << "\n";
-    std::cout << "  mutation chance: " << cfg.gaSettings.mutationChance << "\n";
-    std::cout << "  fitness power: " << cfg.gaSettings.fitnessPow << "\n";
-    std::cout << "  exchange rate: " << cfg.exchangeRate << "\n";
+    LOG_INFO << "Parameters\n";
+    LOG_INFO << "  graph file: " << cfg.graphFile << "\n";
+    LOG_INFO << "  path file: " << cfg.pathFile << "\n";
+    LOG_INFO << "  generation count: " << cfg.generationCount << "\n";
+    LOG_INFO << "  population size: " << cfg.gaSettings.populationSize << "\n";
+    LOG_INFO << "  start node: " << cfg.gaSettings.startNode << "\n";
+    LOG_INFO << "  elitism rate: " << cfg.gaSettings.elitismRate << "\n";
+    LOG_INFO << "  mutation chance: " << cfg.gaSettings.mutationChance << "\n";
+    LOG_INFO << "  fitness power: " << cfg.gaSettings.fitnessPow << "\n";
+    LOG_INFO << "  exchange rate: " << cfg.exchangeRate << "\n";
+}
+
+static void printCurrentGen(tsp::GeneticAnalyser &analyser)
+{
+    LOG_INFO << "  Best Distance: " << analyser.getBestDistance(
+                  solver.getPopulation()) << "\n";
+    LOG_INFO << "  Mean Distance: " << analyser.getMeanDistance(
+                  solver.getPopulation()) << "\n";
+    LOG_INFO << "  Best Fitness: " << analyser.getBestFitness(
+                  solver.getPopulation()) << "\n";
+    LOG_INFO << "  Mean Fitness: " << analyser.getMeanFitness(
+                  solver.getPopulation()) << "\n";
+    LOG_INFO << "  Best Norm. Fitness: " << analyser.getBestNormalizedFitness(
+                  solver.getPopulation()) << "\n";
 }
 
 static int loadGraph()
 {
-    std::cout << "Loading Graph ...";
-    std::cout.flush();
+    LOG_INFO << "Loading Graph ...\n";
     if(!tsp::GraphSerializer::load(graph, cfg.graphFile)) {
-        std::cout << " Failed\n";
+        LOG_ERR << " Failed\n";
         return 1;
     }
-    std::cout << " Done\n";
 
     return 0;
 }
 
 static void runAlgorithm()
 {
-    std::cout << "Initializing solver...";
-    std::cout.flush();
+    if(ex == NULL || ex->isMaster()) {
+        LOG_ALWS << "Solving TSP ...\n";
+    }
+
+    LOG_INFO << "Initializing solver...";
     solver.setSettings(cfg.gaSettings);
     solver.init();
-    std::cout << " Done\n";
 
     tsp::GeneticAnalyser analyser(graph);
     for(unsigned int i = 0; i < cfg.generationCount; ++i) {
 
-        std::cout << "Calculating Generation " << i + 1 << "... ";
-        std::cout.flush();
+        LOG_INFO << "Calculating Generation " << i + 1 << "...\n";
         solver.nextGeneration();
-        std::cout << " Done\n";
 
         if(ex != NULL) {
-            std::cout << "Exchanging individuals ... ";
-            std::cout.flush();
+            LOG_INFO << "Exchanging individuals ...\n";
             ex->exchange(solver.getPopulation());
-            std::cout << "Done\n";
         }
 
-        std::cout << "Updating fitness ... ";
-        std::cout.flush();
+        LOG_INFO << "Updating fitness ...\n";
         solver.updateFitness();
-        std::cout << "Done\n";
 
-        std::cout << "  Best Distance: " << analyser.getBestDistance(
-                      solver.getPopulation()) << "\n";
-        std::cout << "  Mean Distance: " << analyser.getMeanDistance(
-                      solver.getPopulation()) << "\n";
-        std::cout << "  Best Fitness: " << analyser.getBestFitness(
-                      solver.getPopulation()) << "\n";
-        std::cout << "  Mean Fitness: " << analyser.getMeanFitness(
-                      solver.getPopulation()) << "\n";
-        std::cout << "  Best Norm. Fitness: " << analyser.getBestNormalizedFitness(
-                      solver.getPopulation()) << "\n";
+        printCurrentGen(analyser);
     }
 
     if(ex != NULL) {
-        std::cout << "Gathering best individuals ... ";
-        std::cout.flush();
+        LOG_ALWS << "Gathering best individuals ...\n";
         ex->gather(solver.getPopulation());
         solver.updateFitness();
-        std::cout << "Done\n";
+    }
 
-        if(ex->isMaster()) {
-            std::cout << "=============================\n";
-            std::cout << "Final Results\n";
-            std::cout << "  Best Distance: " <<  analyser.getBestDistance(
-                          solver.getPopulation()) << "\n";
-        }
+    if(ex == NULL || ex->isMaster()) {
+        LOG_ALWS << "=============================\n";
+        LOG_ALWS << "Final Results\n";
+        LOG_ALWS << "  Best Distance: " <<  analyser.getBestDistance(
+                      solver.getPopulation()) << "\n";
     }
 }
 
@@ -207,8 +210,7 @@ static int savePath()
     if(ex != NULL && !ex->isMaster())
         return 0;
 
-    std::cout << "Saving Path ...";
-    std::cout.flush();
+    LOG_ALWS << "Saving Path ...\n";
     if(!tsp::PathSerializer::save(
                 solver.getPopulation().getBestIndividual().getPath(),
                 cfg.pathFile)) {
@@ -216,7 +218,6 @@ static int savePath()
         return 1;
     }
 
-    std::cout << " Done\n";
 
     return 0;
 }
