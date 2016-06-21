@@ -9,6 +9,7 @@
 #include "utils/Random.hpp"
 #include "utils/StopWatch.hpp"
 
+#define LOG_MAST if(ex == NULL || ex->isMaster()) std::cout << "[MAST] "
 #define LOG_ALWS std::cout << "[ALWS] "
 #define LOG_INFO if(!logQuiet) std::cout << "[INFO] "
 #define LOG_ERR std::cerr << "[ERROR] "
@@ -78,7 +79,6 @@ static int parseArguments(int argc, char **argv)
 
         // seed the random number generator with our rank and time
         int seed = (ex->getRank() + 1) * std::time(0);
-        LOG_ALWS << "Seed " << seed << "\n";
         tsp::Random::shakeRNG(seed);
 
         // if we are not master then return here and
@@ -130,6 +130,8 @@ static void exchangeConfig()
 {
     if(ex == NULL)
         return;
+
+    LOG_ALWS << "Process " << ex->getRank() << " READY\n";
 
     ex->exchangeConfig(cfg);
     ex->setExchangeCount(cfg.exchangeRate * cfg.gaSettings.populationSize);
@@ -200,10 +202,7 @@ static bool checkTermCond()
 
 static void runAlgorithm()
 {
-    if(ex == NULL || ex->isMaster()) {
-        LOG_ALWS << "Solving TSP ...\n";
-    }
-
+    LOG_MAST << "Solving TSP ...\n";
     LOG_INFO << "Initializing solver...";
     solver.setSettings(cfg.gaSettings);
     solver.init();
@@ -234,25 +233,23 @@ static void runAlgorithm()
 
         if(ex->isMaster()) {
             solver.updateFitness();
-            LOG_ALWS << "Received " << solver.getPopulation().getIndividuals().size() <<
+            LOG_MAST << "Received " << solver.getPopulation().getIndividuals().size() <<
                      " solutions\n";
             for(unsigned int i = 0; i < solver.getPopulation().getIndividuals().size(); ++i)
-                LOG_ALWS << "  solution " << i << ": " << analyser.getDistance(
+                LOG_MAST << "  solution " << i << ": " << analyser.getDistance(
                              solver.getPopulation().getIndividuals()[i]) << "\n";
         }
     }
 
     boost::posix_time::time_duration duration = watch.stop();
 
-    if(ex == NULL || ex->isMaster()) {
 
-        LOG_ALWS << "=============================\n";
-        LOG_ALWS << "Final Results\n";
-        LOG_ALWS << "  Best Distance: " <<  analyser.getBestDistance(
-                     solver.getPopulation()) << "\n";
-        LOG_ALWS << "  Time: " << boost::posix_time::to_simple_string(duration) << "\n";
-        LOG_ALWS << "  Generations: " << currentGen << "\n";
-    }
+    LOG_MAST << "=============================\n";
+    LOG_MAST << "Final Results\n";
+    LOG_MAST << "  Best Distance: " <<  analyser.getBestDistance(
+                 solver.getPopulation()) << "\n";
+    LOG_MAST << "  Time: " << boost::posix_time::to_simple_string(duration) << "\n";
+    LOG_MAST << "  Generations: " << currentGen << "\n";
 }
 
 static int savePath()
@@ -261,11 +258,11 @@ static int savePath()
     if(ex != NULL && !ex->isMaster())
         return 0;
 
-    LOG_ALWS << "Saving Path ...\n";
+    LOG_MAST << "Saving Path ...\n";
     if(!tsp::PathSerializer::save(
                 solver.getPopulation().getBestIndividual().getPath(),
                 cfg.pathFile)) {
-        std::cout << " Failed\n";
+        LOG_ERR << " Failed\n";
         return 1;
     }
 

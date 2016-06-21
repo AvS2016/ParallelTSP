@@ -8,6 +8,7 @@ set(EXEC_LIBRARIES
     ${Boost_PROGRAM_OPTIONS_LIBRARY}
     ${Boost_MPI_LIBRARY}
     ${Boost_SERIALIZATION_LIBRARY}
+    ${Boost_DATE_TIME_LIBRARY}
     ${MPI_CXX_LIBRARIES}
 )
 file(GLOB src *.cpp)
