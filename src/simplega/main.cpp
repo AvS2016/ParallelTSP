@@ -7,6 +7,7 @@
 #include "genetic/GeneticAnalyser.hpp"
 #include "net/PopulationExchanger.hpp"
 #include "utils/Random.hpp"
+#include "utils/StopWatch.hpp"
 
 #define LOG_ALWS std::cout << "[ALWS] "
 #define LOG_INFO if(!logQuiet) std::cout << "[INFO] "
@@ -19,6 +20,8 @@ tsp::GeneticSolver solver(graph);
 tsp::Config cfg;
 tsp::PopulationExchanger *ex = NULL;
 bool logQuiet = false;
+tsp::StopWatch watch;
+unsigned int currentGen = 0;
 
 static int parseArguments(int argc, char **argv)
 {
@@ -38,6 +41,7 @@ static int parseArguments(int argc, char **argv)
     ("mutation,m", po::value<double>(), "mutation chance")
     ("fitness,f", po::value<unsigned int>(), "fitness power")
     ("exchange,x", po::value<double>(), "exchange rate")
+    ("time,t", po::value<std::string>(), "time limit for execution")
     ("network,n", "activate MPI network mode")
     ;
     try {
@@ -52,14 +56,14 @@ static int parseArguments(int argc, char **argv)
     bool hasConfig = vm.count("config");
     bool hasOpt = vm.count("infile") &&
                   vm.count("outfile") &&
-                  vm.count("generations") &&
                   vm.count("population") &&
                   vm.count("start") &&
                   vm.count("elitism") &&
                   vm.count("mutation") &&
                   vm.count("fitness");
+    bool hasTermCond = vm.count("generations") || (vm.count("time") && tsp::checkDurationStr(vm["time"].as<std::string>()));
     bool hasHelp = vm.count("help");
-    if(hasHelp || !(hasConfig || hasOpt)) {
+    if(hasHelp || !(hasConfig || (hasOpt && hasTermCond))) {
         std::cout << desc << "\n";
         return 1;
     }
@@ -99,8 +103,10 @@ static int parseArguments(int argc, char **argv)
         cfg.graphFile = vm["infile"].as<std::string>();
     if(vm.count("outfile"))
         cfg.pathFile = vm["outfile"].as<std::string>();
-    if(vm.count("generations"))
+    if(vm.count("generations")) {
+        cfg.terminateType = tsp::TerminateType::GENERATIONS;
         cfg.generationCount = vm["generations"].as<unsigned int>();
+    }
     if(vm.count("population"))
         cfg.gaSettings.populationSize = vm["population"].as<unsigned int>();
     if(vm.count("start"))
@@ -111,6 +117,10 @@ static int parseArguments(int argc, char **argv)
         cfg.gaSettings.mutationChance = vm["mutation"].as<double>();
     if(vm.count("fitness"))
         cfg.gaSettings.fitnessPow = vm["fitness"].as<unsigned int>();
+    if(vm.count("time")) {
+        cfg.terminateType = tsp::TerminateType::TIME;
+        cfg.duration =tsp::durationFromStr(vm["time"].as<std::string>());
+    }
 
     return 0;
 }
@@ -132,6 +142,7 @@ static void printParameters()
     LOG_INFO << "  graph file: " << cfg.graphFile << "\n";
     LOG_INFO << "  path file: " << cfg.pathFile << "\n";
     LOG_INFO << "  generation count: " << cfg.generationCount << "\n";
+    LOG_INFO << "  duration: " << boost::posix_time::to_simple_string(cfg.duration) << "\n";
     LOG_INFO << "  population size: " << cfg.gaSettings.populationSize << "\n";
     LOG_INFO << "  start node: " << cfg.gaSettings.startNode << "\n";
     LOG_INFO << "  elitism rate: " << cfg.gaSettings.elitismRate << "\n";
@@ -165,6 +176,27 @@ static int loadGraph()
     return 0;
 }
 
+static bool checkTermCond()
+{
+    bool terminate = true;
+    switch(cfg.terminateType)
+    {
+    case tsp::TerminateType::GENERATIONS:
+        terminate = currentGen >= cfg.generationCount;
+        break;
+    case tsp::TerminateType::TIME:
+        terminate = watch.interim() >= cfg.duration;
+        if(ex != NULL) {
+            terminate = ex->broadcastTermCond(terminate);
+        }
+        break;
+    default:
+        assert(false);
+    }
+
+    return terminate;
+}
+
 static void runAlgorithm()
 {
     if(ex == NULL || ex->isMaster()) {
@@ -176,9 +208,11 @@ static void runAlgorithm()
     solver.init();
 
     tsp::GeneticAnalyser analyser(graph);
-    for(unsigned int i = 0; i < cfg.generationCount; ++i) {
+    watch.start();
 
-        LOG_INFO << "Calculating Generation " << i + 1 << "...\n";
+    while(!checkTermCond()) {
+
+        LOG_INFO << "Calculating Generation " << currentGen + 1 << "...\n";
         solver.nextGeneration();
 
         if(ex != NULL) {
@@ -190,6 +224,7 @@ static void runAlgorithm()
         solver.updateFitness();
 
         printCurrentGen(analyser);
+        ++currentGen;
     }
 
     if(ex != NULL) {
@@ -205,12 +240,15 @@ static void runAlgorithm()
         }
     }
 
+    boost::posix_time::time_duration duration = watch.stop();
+
     if(ex == NULL || ex->isMaster()) {
 
         LOG_ALWS << "=============================\n";
         LOG_ALWS << "Final Results\n";
         LOG_ALWS << "  Best Distance: " <<  analyser.getBestDistance(
                       solver.getPopulation()) << "\n";
+        LOG_ALWS << "  Time: " << boost::posix_time::to_simple_string(duration) << "\n";
     }
 }
 

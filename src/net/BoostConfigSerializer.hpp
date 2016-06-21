@@ -32,6 +32,7 @@ namespace boost
             ar &cfg.generationCount;
             ar &cfg.graphFile;
             ar &cfg.pathFile;
+            ar &cfg.terminateType;
         }
 
     }

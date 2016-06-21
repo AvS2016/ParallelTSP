@@ -34,6 +34,7 @@ namespace tsp
         void exchange(Population &p);
         void gather(Population &p);
         void exchangeConfig(Config &cfg);
+        bool broadcastTermCond(const bool cond);
         void setExchangeCount(unsigned int count);
         bool isMaster() const;
         int getRank() const;

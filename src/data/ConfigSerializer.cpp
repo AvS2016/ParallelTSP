@@ -1,13 +1,13 @@
 #include "data/ConfigSerializer.hpp"
 #include <fstream>
 #include <json/json.h>
+#include "utils/StopWatch.hpp"
 
 namespace tsp
 {
     static bool validateConfig(const Json::Value &root)
     {
         return root.isObject() &&
-               root["generationCount"].isUInt() &&
                root["graphFile"].isString() &&
                root["pathFile"].isString() &&
                root["populationSize"].isUInt() &&
@@ -15,7 +15,10 @@ namespace tsp
                root["elitismRate"].isDouble() &&
                root["fitnessPower"].isUInt() &&
                root["mutationChance"].isDouble() &&
-               root["exchangeRate"].isDouble();
+               root["exchangeRate"].isDouble() &&
+               (root["generationCount"].isUInt() ||
+                       (root["duration"].isString() &&
+                               checkDurationStr(root["duration"].asString())));
     }
 
     bool ConfigSerializer::deserialize(Config &cfg, std::istream &is)
@@ -28,7 +31,15 @@ namespace tsp
         if(!validateConfig(root))
             return false;
 
-        cfg.generationCount = root["generationCount"].asUInt();
+        if(root["generationCount"].isUInt()) {
+            cfg.terminateType = TerminateType::GENERATIONS;
+            cfg.generationCount = root["generationCount"].asUInt();
+        }
+        if(root["duration"].isString()) {
+            cfg.terminateType = TerminateType::TIME;
+            cfg.duration = durationFromStr(root["duration"].asString());
+        }
+
         cfg.graphFile = root["graphFile"].asString();
         cfg.pathFile = root["pathFile"].asString();
         cfg.exchangeRate = root["exchangeRate"].asDouble();

@@ -101,6 +101,13 @@ namespace tsp
         boost::mpi::broadcast(world_, cfg, MASTER_RANK);
     }
 
+    bool PopulationExchanger::broadcastTermCond(const bool cond)
+    {
+        bool result = cond;
+        boost::mpi::broadcast(world_, result, MASTER_RANK);
+        return result;
+    }
+
     void PopulationExchanger::setExchangeCount(unsigned int count)
     {
         exchangeCount_ = count;

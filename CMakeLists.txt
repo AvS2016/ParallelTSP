@@ -28,7 +28,7 @@ get_filename_component(MODULES_PATH "./cmake-modules" ABSOLUTE)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${MODULES_PATH})
 
 find_package(MPI REQUIRED)
-find_package(Boost REQUIRED mpi program_options serialization)
+find_package(Boost REQUIRED mpi program_options serialization date_time)
 find_package(Catch REQUIRED)
 
 include_directories(
