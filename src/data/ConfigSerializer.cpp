@@ -17,8 +17,8 @@ namespace tsp
                root["mutationChance"].isDouble() &&
                root["exchangeRate"].isDouble() &&
                (root["generationCount"].isUInt() ||
-                       (root["duration"].isString() &&
-                               checkDurationStr(root["duration"].asString())));
+                (root["duration"].isString() &&
+                 checkDurationStr(root["duration"].asString())));
     }
 
     bool ConfigSerializer::deserialize(Config &cfg, std::istream &is)

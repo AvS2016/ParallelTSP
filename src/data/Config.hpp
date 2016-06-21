@@ -7,8 +7,8 @@
 namespace tsp
 {
     enum TerminateType {
-            GENERATIONS = 0,
-            TIME
+        GENERATIONS = 0,
+        TIME
     };
 
     struct Config {

@@ -1,5 +1,8 @@
 .PHONY: all
 
+all:
+	@echo "specify target"
+
 format:
 	@astyle --options=.astylerc src/*/*.cpp src/*/*.hpp
 

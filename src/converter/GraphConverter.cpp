@@ -50,11 +50,12 @@ namespace tsp
         */
 
         int wHeight = 600, wWidth = 480;
-        float density = (float)(wHeight*wWidth) / (path.size() - 1);
+        float density = (float)(wHeight * wWidth) / (path.size() - 1);
         float lineWidth = density / 3000, pointSize = density / 6000;
 
         os.open(plotFile_, std::ofstream::out);
-        os << "set terminal svg size " << wWidth << "," << wHeight << " fname 'Verdana' fsize 10" << std::endl;
+        os << "set terminal svg size " << wWidth << "," << wHeight <<
+           " fname 'Verdana' fsize 10" << std::endl;
         os << "set output '" << resultFile_ << "'" << std::endl;
         os << "set terminal svg enhanced background rgb 'white'" << std::endl;
         os << "set tics font ', 8'" << std::endl;

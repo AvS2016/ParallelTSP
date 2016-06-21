@@ -8,14 +8,14 @@ namespace tsp
         std::string numbers = "0123456789";
         char delim = ':';
         return duration.size() == 8 &&
-                numbers.find(duration[0]) != std::string::npos &&
-                numbers.find(duration[1]) != std::string::npos &&
-                duration[2] == delim &&
-                numbers.find(duration[3]) != std::string::npos &&
-                numbers.find(duration[4]) != std::string::npos &&
-                duration[5] == delim &&
-                numbers.find(duration[6]) != std::string::npos &&
-                numbers.find(duration[7]) != std::string::npos;
+               numbers.find(duration[0]) != std::string::npos &&
+               numbers.find(duration[1]) != std::string::npos &&
+               duration[2] == delim &&
+               numbers.find(duration[3]) != std::string::npos &&
+               numbers.find(duration[4]) != std::string::npos &&
+               duration[5] == delim &&
+               numbers.find(duration[6]) != std::string::npos &&
+               numbers.find(duration[7]) != std::string::npos;
     }
 
     boost::posix_time::time_duration durationFromStr(const std::string &duration)
@@ -32,7 +32,7 @@ namespace tsp
 
 
     StopWatch::StopWatch()
-    :running_(false), start_()
+        : running_(false), start_()
     {
 
     }

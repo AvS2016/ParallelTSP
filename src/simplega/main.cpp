@@ -61,7 +61,8 @@ static int parseArguments(int argc, char **argv)
                   vm.count("elitism") &&
                   vm.count("mutation") &&
                   vm.count("fitness");
-    bool hasTermCond = vm.count("generations") || (vm.count("time") && tsp::checkDurationStr(vm["time"].as<std::string>()));
+    bool hasTermCond = vm.count("generations") || (vm.count("time")
+                       && tsp::checkDurationStr(vm["time"].as<std::string>()));
     bool hasHelp = vm.count("help");
     if(hasHelp || !(hasConfig || (hasOpt && hasTermCond))) {
         std::cout << desc << "\n";
@@ -89,7 +90,7 @@ static int parseArguments(int argc, char **argv)
     // load config file if specified
     if(hasConfig) {
         LOG_INFO << "Loading Config from '" << vm["config"].as<std::string>() <<
-                  "' ...\n";
+                 "' ...\n";
         if(!tsp::ConfigSerializer::load(cfg, vm["config"].as<std::string>())) {
             LOG_ERR << " Failed\n";
             return 1;
@@ -119,7 +120,7 @@ static int parseArguments(int argc, char **argv)
         cfg.gaSettings.fitnessPow = vm["fitness"].as<unsigned int>();
     if(vm.count("time")) {
         cfg.terminateType = tsp::TerminateType::TIME;
-        cfg.duration =tsp::durationFromStr(vm["time"].as<std::string>());
+        cfg.duration = tsp::durationFromStr(vm["time"].as<std::string>());
     }
 
     return 0;
@@ -142,7 +143,8 @@ static void printParameters()
     LOG_INFO << "  graph file: " << cfg.graphFile << "\n";
     LOG_INFO << "  path file: " << cfg.pathFile << "\n";
     LOG_INFO << "  generation count: " << cfg.generationCount << "\n";
-    LOG_INFO << "  duration: " << boost::posix_time::to_simple_string(cfg.duration) << "\n";
+    LOG_INFO << "  duration: " << boost::posix_time::to_simple_string(
+                 cfg.duration) << "\n";
     LOG_INFO << "  population size: " << cfg.gaSettings.populationSize << "\n";
     LOG_INFO << "  start node: " << cfg.gaSettings.startNode << "\n";
     LOG_INFO << "  elitism rate: " << cfg.gaSettings.elitismRate << "\n";
@@ -154,15 +156,15 @@ static void printParameters()
 static void printCurrentGen(tsp::GeneticAnalyser &analyser)
 {
     LOG_INFO << "  Best Distance: " << analyser.getBestDistance(
-                  solver.getPopulation()) << "\n";
+                 solver.getPopulation()) << "\n";
     LOG_INFO << "  Mean Distance: " << analyser.getMeanDistance(
-                  solver.getPopulation()) << "\n";
+                 solver.getPopulation()) << "\n";
     LOG_INFO << "  Best Fitness: " << analyser.getBestFitness(
-                  solver.getPopulation()) << "\n";
+                 solver.getPopulation()) << "\n";
     LOG_INFO << "  Mean Fitness: " << analyser.getMeanFitness(
-                  solver.getPopulation()) << "\n";
+                 solver.getPopulation()) << "\n";
     LOG_INFO << "  Best Norm. Fitness: " << analyser.getBestNormalizedFitness(
-                  solver.getPopulation()) << "\n";
+                 solver.getPopulation()) << "\n";
 }
 
 static int loadGraph()
@@ -179,8 +181,7 @@ static int loadGraph()
 static bool checkTermCond()
 {
     bool terminate = true;
-    switch(cfg.terminateType)
-    {
+    switch(cfg.terminateType) {
     case tsp::TerminateType::GENERATIONS:
         terminate = currentGen >= cfg.generationCount;
         break;
@@ -231,12 +232,13 @@ static void runAlgorithm()
         LOG_INFO << "Gathering best individuals ...\n";
         ex->gather(solver.getPopulation());
 
-        if(ex->isMaster())
-        {
+        if(ex->isMaster()) {
             solver.updateFitness();
-            LOG_ALWS << "Received " << solver.getPopulation().getIndividuals().size() << " solutions\n";
+            LOG_ALWS << "Received " << solver.getPopulation().getIndividuals().size() <<
+                     " solutions\n";
             for(unsigned int i = 0; i < solver.getPopulation().getIndividuals().size(); ++i)
-                LOG_ALWS << "  solution " << i << ": " << analyser.getDistance(solver.getPopulation().getIndividuals()[i]) << "\n";
+                LOG_ALWS << "  solution " << i << ": " << analyser.getDistance(
+                             solver.getPopulation().getIndividuals()[i]) << "\n";
         }
     }
 
@@ -247,8 +249,9 @@ static void runAlgorithm()
         LOG_ALWS << "=============================\n";
         LOG_ALWS << "Final Results\n";
         LOG_ALWS << "  Best Distance: " <<  analyser.getBestDistance(
-                      solver.getPopulation()) << "\n";
+                     solver.getPopulation()) << "\n";
         LOG_ALWS << "  Time: " << boost::posix_time::to_simple_string(duration) << "\n";
+        LOG_ALWS << "  Generations: " << currentGen << "\n";
     }
 }
 
