@@ -2,11 +2,11 @@
     "graphFile" : "graph/MediumGraph.json",
     "pathFile" : "solved.json",
     "generationCount" : 100,
-    "populationSize" : 3000,
+    "populationSize" : 1000,
     "startNode" : 1,
     "elitismRate" : 0.05,
-    "mutationChance" : 0.01,
+    "mutationChance" : 0.1,
     "fitnessPower" : 10,
     "exchangeRate" : 0.1,
-    "duration" : "00:01:00"
+    "duration" : "00:10:00"
 }

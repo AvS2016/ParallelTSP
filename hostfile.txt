@@ -1,0 +1,10 @@
+localhost slots=8
+pip02 slots=8
+pip03 slots=8
+pip04 slots=8
+pip05 slots=8
+pip06 slots=8
+pip08 slots=8
+pip09 slots=8
+pip10 slots=8
+pip11 slots=8
