@@ -74,7 +74,7 @@ namespace tsp
     {
         const std::string cmd = "gnuplot " + plotFile_;
         system(cmd.c_str());
-        //TODO: delete temporary files
+        //TODO: delete temporary files (tsp.dat and tsp.plt)
         return true;
     }
 
