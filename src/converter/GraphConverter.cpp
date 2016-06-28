@@ -59,12 +59,13 @@ namespace tsp
         os << "set output '" << resultFile_ << "'" << std::endl;
         os << "set terminal svg enhanced background rgb 'white'" << std::endl;
         os << "set tics font ', 8'" << std::endl;
-        os << "set nokey" << std::endl;
+        os << "unset key" << std::endl;
         os << "set title 'TSP Graph Visualisation (points: " << path.size() - 1 << ")'"
            << std::endl;
         os << "set style line 1 lc rgb '#0060ad' lt 1 lw " << lineWidth << " pt 7 ps "
            << pointSize << "   # --- blue" << std::endl;
         os << "plot '" << dataFile_ << "' with linespoints ls 1" << std::endl;
+	os << "quit" << std::endl;
         os.close();
 
         return 0;
