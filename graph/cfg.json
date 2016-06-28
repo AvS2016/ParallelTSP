@@ -1,12 +1,12 @@
 {
-    "graphFile" : "graph/MediumGraph.json",
+    "graphFile" : "graph/SmallGraph.json",
     "pathFile" : "solved.json",
     "generationCount" : 100,
-    "populationSize" : 1000,
+    "populationSize" : 3000,
     "startNode" : 1,
     "elitismRate" : 0.05,
     "mutationChance" : 0.1,
     "fitnessPower" : 10,
     "exchangeRate" : 0.1,
-    "duration" : "00:10:00"
+    "duration" : "00:01:00"
 }
