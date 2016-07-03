@@ -7,4 +7,7 @@
 *.orig
 dep
 build
-
+solved.svg
+solved.json
+tsp.dat
+tsp.plt
