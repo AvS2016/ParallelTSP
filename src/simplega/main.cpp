@@ -9,7 +9,8 @@
 #include "utils/Random.hpp"
 #include "utils/StopWatch.hpp"
 
-#define LOG_MAST if(ex == NULL || ex->isMaster()) std::cout << "[MAST] "
+#define IS_MASTER (ex == NULL || ex->isMaster())
+#define LOG_MAST if(IS_MASTER) std::cout << "[MAST] "
 #define LOG_ALWS std::cout << "[ALWS] "
 #define LOG_INFO if(!logQuiet) std::cout << "[INFO] "
 #define LOG_ERR std::cerr << "[ERROR] "
@@ -225,7 +226,14 @@ static void runAlgorithm()
 
         printCurrentGen(analyser);
         ++currentGen;
+
+        if(IS_MASTER) {
+            std::cout << ".";
+            std::cout.flush();
+        }
     }
+
+    std::cout << "\n";
 
     if(ex != NULL) {
         LOG_INFO << "Gathering best individuals ...\n";
