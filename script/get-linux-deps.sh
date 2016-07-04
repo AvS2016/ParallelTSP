@@ -4,6 +4,7 @@ CURRDIR=$PWD
 BASEDIR=$(cd "$(dirname "$0")"; pwd)
 WORK_DIR="$BASEDIR/.."
 PLATFORM="$(uname -a | grep -i -o -e ubuntu -e debian | tr '[:lower:]' '[:upper:]')"
+export THREADS="$1"
 
 dlfile()
 {

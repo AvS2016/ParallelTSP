@@ -4,6 +4,10 @@ BOOST_URL="http://downloads.sourceforge.net/project/boost/boost/1.60.0/boost_1_6
 BOOST_ARCH="boost_1_60_0.tar.gz"
 BOOST_DIR="boost_1_60_0"
 
+if [ "$THREADS" = "" ]; then
+    THREADS="1"
+fi
+
 mkdir -p dep
 cd dep
 
@@ -24,4 +28,4 @@ mkdir -p build
 if [ "$(cat 'project-config.jam' | grep 'using mpi')" = "" ]; then
     echo "using mpi : $OPEN_MPI_DIR/bin/mpicc ;" >> "project-config.jam"
 fi
-./b2 --build-dir=build -j4 --prefix="$BOOST_INSTALL_DIR" install
+./b2 --build-dir=build -j $THREADS --prefix="$BOOST_INSTALL_DIR" install
