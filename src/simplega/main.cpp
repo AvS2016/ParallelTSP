@@ -3,6 +3,7 @@
 #include "data/GraphSerializer.hpp"
 #include "data/PathSerializer.hpp"
 #include "data/ConfigSerializer.hpp"
+#include "data/StatisticsSerializer.hpp"
 #include "genetic/GeneticSolver.hpp"
 #include "genetic/GeneticAnalyser.hpp"
 #include "net/PopulationExchanger.hpp"
@@ -24,6 +25,8 @@ tsp::PopulationExchanger *ex = NULL;
 bool logQuiet = false;
 tsp::StopWatch watch;
 unsigned int currentGen = 0;
+tsp::Statistics stats;
+boost::posix_time::time_duration duration;
 
 static int parseArguments(int argc, char **argv)
 {
@@ -134,7 +137,7 @@ static void exchangeConfig()
 
     LOG_ALWS << "Process " << ex->getRank() << " READY\n";
 
-    ex->exchangeConfig(cfg);
+    ex->broadcastConfig(cfg);
     ex->setExchangeCount(cfg.exchangeRate * cfg.gaSettings.populationSize);
 
     return;
@@ -181,6 +184,20 @@ static int loadGraph()
     return 0;
 }
 
+static void initStats()
+{
+    stats.nodeCount = graph.size();
+    if(cfg.terminateType == tsp::TerminateType::GENERATIONS) {
+        stats.genCount = cfg.generationCount;
+        stats.timePerGen.resize(stats.genCount);
+        stats.distancePerGen.resize(stats.genCount);
+    } else {
+        stats.genCount = 0;
+        stats.timePerGen.resize(512);
+        stats.distancePerGen.resize(512);
+    }
+}
+
 static bool checkTermCond()
 {
     bool terminate = true;
@@ -201,6 +218,48 @@ static bool checkTermCond()
     return terminate;
 }
 
+static void catchStats(tsp::GeneticAnalyser &analyser)
+{
+    // keep vectors large enough
+    if(currentGen >= stats.timePerGen.size()) {
+        stats.timePerGen.resize(stats.timePerGen.size() * 2);
+        stats.distancePerGen.resize(stats.distancePerGen.size() * 2);
+    }
+
+    stats.timePerGen[currentGen] = watch.interim();
+    stats.distancePerGen[currentGen] = analyser.getBestDistance(solver.getPopulation());
+}
+
+static void finalizeStats(tsp::GeneticAnalyser &analyser)
+{
+    stats.genCount = currentGen;
+    stats.timePerGen.resize(currentGen);
+    stats.distancePerGen.resize(currentGen);
+    stats.finalDistance = analyser.getBestDistance(solver.getPopulation());
+    stats.totalTime = duration;
+
+    //exchange stats
+    if (ex != NULL)
+    {
+        std::vector<std::vector<double>> distlist;
+        ex->gatherDistPerGen(stats.distancePerGen, distlist);
+
+        // find the minimal distance for each generation
+        for(unsigned i = 0; i < stats.genCount; ++i)
+        {
+            double min = -1;
+            for(unsigned int j = 0; j < distlist.size(); ++j)
+            {
+                if(min < 0 || distlist[j][i] < min)
+                    min = distlist[j][i];
+            }
+            stats.distancePerGen[i] = min;
+        }
+    }
+
+    tsp::StatisticsSerializer::save(stats, "statistics.json");
+}
+
 static void runAlgorithm()
 {
     LOG_MAST << "Solving TSP ...\n";
@@ -218,12 +277,13 @@ static void runAlgorithm()
 
         if(ex != NULL) {
             LOG_INFO << "Exchanging individuals ...\n";
-            ex->exchange(solver.getPopulation());
+            ex->exchangePopulation(solver.getPopulation());
         }
 
         LOG_INFO << "Updating fitness ...\n";
         solver.updateFitness();
 
+        catchStats(analyser);
         printCurrentGen(analyser);
         ++currentGen;
 
@@ -237,7 +297,7 @@ static void runAlgorithm()
 
     if(ex != NULL) {
         LOG_INFO << "Gathering best individuals ...\n";
-        ex->gather(solver.getPopulation());
+        ex->gatherPopulation(solver.getPopulation());
 
         if(ex->isMaster()) {
             solver.updateFitness();
@@ -249,8 +309,8 @@ static void runAlgorithm()
         }
     }
 
-    boost::posix_time::time_duration duration = watch.stop();
-
+    duration = watch.stop();
+    finalizeStats(analyser);
 
     LOG_MAST << "=============================\n";
     LOG_MAST << "Final Results\n";
@@ -293,6 +353,7 @@ int main(int argc, char **argv)
     if(ret)
         return ret;
 
+    initStats();
     runAlgorithm();
 
     ret = savePath();

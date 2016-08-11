@@ -1,4 +1,5 @@
 #include "utils/StopWatch.hpp"
+#include <iomanip>
 
 namespace tsp
 {
@@ -7,7 +8,7 @@ namespace tsp
 
         std::string numbers = "0123456789";
         char delim = ':';
-        return duration.size() == 8 &&
+        return duration.size() >= 8 &&
                numbers.find(duration[0]) != std::string::npos &&
                numbers.find(duration[1]) != std::string::npos &&
                duration[2] == delim &&
@@ -20,7 +21,7 @@ namespace tsp
 
     boost::posix_time::time_duration durationFromStr(const std::string &duration)
     {
-        if(duration.size() != 8)
+        if(duration.size() < 8)
             return boost::posix_time::time_duration();
 
         int hours = std::strtol(duration.c_str(), NULL, 10);
@@ -28,6 +29,16 @@ namespace tsp
         int sec = std::strtol(&duration.c_str()[6], NULL, 10);
 
         return boost::posix_time::time_duration(hours, minutes, sec);
+    }
+
+    std::string durationToStr(const boost::posix_time::time_duration &duration)
+    {
+        std::stringstream ss;
+
+        ss << std::setfill('0') << std::setw(2) << duration.hours() << ":"
+                << std::setfill('0') << std::setw(2) << duration.minutes() << ":"
+                << std::setfill('0') << std::setw(2) << duration.seconds();
+        return ss.str();
     }
 
 

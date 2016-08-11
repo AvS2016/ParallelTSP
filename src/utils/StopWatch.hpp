@@ -7,6 +7,7 @@ namespace tsp
 {
     bool checkDurationStr(const std::string &duration);
     boost::posix_time::time_duration durationFromStr(const std::string &duration);
+    std::string durationToStr(const boost::posix_time::time_duration &duration);
 
     class StopWatch
     {

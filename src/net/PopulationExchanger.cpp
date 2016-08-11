@@ -21,7 +21,7 @@ namespace tsp
     {
     }
 
-    void PopulationExchanger::exchange(Population &p)
+    void PopulationExchanger::exchangePopulation(Population &p)
     {
         assert(world_.size() % 2 == 0);
 
@@ -78,7 +78,7 @@ namespace tsp
         }
     }
 
-    void PopulationExchanger::gather(Population &p)
+    void PopulationExchanger::gatherPopulation(Population &p)
     {
         // 0 is main collector
         if(isMaster()) {
@@ -96,7 +96,7 @@ namespace tsp
         }
     }
 
-    void PopulationExchanger::exchangeConfig(Config &cfg)
+    void PopulationExchanger::broadcastConfig(Config &cfg)
     {
         boost::mpi::broadcast(world_, cfg, MASTER_RANK);
     }
@@ -106,6 +106,16 @@ namespace tsp
         bool result = cond;
         boost::mpi::broadcast(world_, result, MASTER_RANK);
         return result;
+    }
+
+    void PopulationExchanger::gatherDistPerGen(std::vector<double> &distPerGen, std::vector<std::vector<double>> &result)
+    {
+        if(isMaster())
+        {
+            boost::mpi::gather(world_, distPerGen, result, MASTER_RANK);
+        } else {
+            boost::mpi::gather(world_, distPerGen, MASTER_RANK);
+        }
     }
 
     void PopulationExchanger::setExchangeCount(unsigned int count)

@@ -11,6 +11,7 @@ namespace tsp
                root["genCount"].isUInt() &&
                root["finalDist"].isDouble() &&
                root["nodeCount"].isUInt() &&
+               root["totalTime"].isString() &&
                root["distancePerGen"].isArray() &&
                root["timePerGen"].isArray() &&
                root["distancePerGen"].size() == root["timePerGen"].size();
@@ -21,7 +22,11 @@ namespace tsp
         {
             if(!root["distancePerGen"][i].isDouble())
                 return false;
-            if(!(root["distancePerGen"][i]).isString() && checkDurationStr(root["distancePerGen"][i].asString()))
+        }
+
+        for(unsigned int i = 0; i < root["timePerGen"].size(); ++i)
+        {
+            if(!root["timePerGen"][i].isString())
                 return false;
         }
 
@@ -41,6 +46,7 @@ namespace tsp
         stats.genCount = root["genCount"].asUInt();
         stats.finalDistance = root["finalDist"].asDouble();
         stats.nodeCount = root["nodeCount"].asUInt();
+        stats.totalTime = durationFromStr(root["totalTime"].asString());
 
         stats.distancePerGen.resize(stats.genCount);
         stats.timePerGen.resize(stats.genCount);
@@ -49,7 +55,7 @@ namespace tsp
             stats.distancePerGen[i] = root["distancePerGen"].asDouble();
 
         for(unsigned int i = 0; i < root["timePerGen"].size(); ++i)
-            stats.timePerGen[i] = durationFromStr(root["timePerGen"].asString());
+            stats.timePerGen[i] =durationFromStr(root["timePerGen"].asString());
 
         return true;
 
@@ -63,6 +69,7 @@ namespace tsp
         root["genCount"] = stats.genCount;
         root["finalDist"] = stats.finalDistance;
         root["nodeCount"] = stats.nodeCount;
+        root["totalTime"] = boost::posix_time::to_simple_string(stats.totalTime);
 
         root["distancePerGen"] = Json::Value(Json::arrayValue);
         root["timePerGen"] = Json::Value(Json::arrayValue);
@@ -74,7 +81,7 @@ namespace tsp
             root["distancePerGen"][i] = stats.distancePerGen[i];
 
         for(unsigned int i = 0; i < stats.timePerGen.size(); ++i)
-            root["timePerGen"][i] = durationToStr(stats.timePerGen[i]);
+            root["timePerGen"][i] = boost::posix_time::to_simple_string(stats.timePerGen[i]);
 
         writer.write(os, root);
 

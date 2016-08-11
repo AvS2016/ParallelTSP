@@ -1,13 +1,12 @@
 #ifndef NET_POPULATIONEXCHANGER_HPP_
 #define NET_POPULATIONEXCHANGER_HPP_
 
-// external libs
+#include <vector>
 #include <boost/mpi/environment.hpp>
 #include <boost/mpi/communicator.hpp>
-
-// internal libs
 #include "genetic/Population.hpp"
 #include "data/Config.hpp"
+#include "data/Statistics.hpp"
 
 namespace tsp
 {
@@ -31,10 +30,11 @@ namespace tsp
         PopulationExchanger(int argc, char **argv);
         ~PopulationExchanger();
 
-        void exchange(Population &p);
-        void gather(Population &p);
-        void exchangeConfig(Config &cfg);
+        void exchangePopulation(Population &p);
+        void gatherPopulation(Population &p);
+        void broadcastConfig(Config &cfg);
         bool broadcastTermCond(const bool cond);
+        void gatherDistPerGen(std::vector<double> &distPerGen, std::vector<std::vector<double>> &result);
         void setExchangeCount(unsigned int count);
         bool isMaster() const;
         int getRank() const;
