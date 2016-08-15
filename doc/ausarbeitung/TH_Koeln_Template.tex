@@ -1,0 +1,104 @@
+\documentclass[12pt,a4paper]{scrreprt}
+
+\usepackage{graphicx}
+\usepackage{a4}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage[nottoc,notindex,notlot]{tocbibind}
+\usepackage{nameref}
+\usepackage{subcaption}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{xcolor}
+\usepackage{longtable}
+
+\lstdefinestyle{MyCodeStyle}{
+	belowcaptionskip=1\baselineskip,
+	breaklines=true,
+	frame=single,
+	captionpos=b,
+	numbers=left,
+	xleftmargin=\parindent,,
+	showstringspaces=false,
+	basicstyle=\footnotesize\ttfamily,
+	keywordstyle=\bfseries\color{green!40!black},
+	commentstyle=\itshape\color{purple!40!black},
+	identifierstyle=\color{blue},
+	stringstyle=\color{orange}
+}
+\lstset{escapechar=@,style=MyCodeStyle}
+
+\newcommand{\includecode}[3]{\lstinputlisting[label=#1,caption=#2,float=ht,aboveskip=0pt,belowskip=0pt]{#3}}
+\newcommand{\absatz}{\\[12pt]}
+
+\newcommand{\thema}{Parallelisierter Genetischer Algorithmus für das TSP}
+\newcommand{\abgabedatum}{30.08.2016}
+\newcommand{\autorTitel}{Timo Bertsch\\Joram Markert\\Fabian Meyer}
+\newcommand{\autorAbs}{Timo Bertsch\\ & Joram Markert\\ & Fabian Meyer}
+\newcommand{\studiengang}{Master Computer Science}
+\newcommand{\prueferA}{Prof. Dr. Lutz Köhler}
+\newcommand{\prueferB}{Pascal}
+
+\newcommand{\zusammenfassung}{Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.}
+
+\begin{document}
+
+\include{cover}
+\pagenumbering{arabic}
+\include{abstract}
+\tableofcontents
+
+\setlength{\parindent}{0pt}
+
+\chapter{Einleitung}
+\label{chap:einleitung}
+
+einleitungs blabla
+
+\chapter{Das Travelling Salesman Problem}
+\label{chap:tsp}
+
+Was ist das problem / Ziel? Auf kombinatorische explosion eingehen; Quellen suchen und erklörung darauf stützen
+
+\chapter{Der Genetische Algorithmus}
+\label{chap:algorithmus}
+
+\section{Funktionsweise}
+\label{sec:funktionsweise}
+
+wie funktioniert ein genetischer algorithmus angewandt auf das TSP?
+
+\section{Parallelisierung}
+\label{sec:parallelisierung}
+
+prinzipielle parallelisierung; was ist die idee?; ohne auf MPI einzugehen!
+
+\chapter{Technologie}
+\label{chap:technologie}
+
+Programmiersprache; json; build system; unit test; github; travis CI; gnuplot etc.
+
+\section{MPI}
+\label{sec:mpi}
+
+wie funktioniert mpi prinzipiell?; p2p verbindung; ssh; broadcast, send, receive 
+
+\chapter{Testumgebung}
+\label{chap:testumgebung}
+
+MAC pool; programmierung auf linux;
+
+\chapter{Ergebnisse}
+\label{chap:ergebnisse}
+
+\clearpage
+\pagenumbering{Roman}
+\lstlistoflistings
+\addcontentsline{toc}{chapter}{\lstlistlistingname}
+\listoffigures
+\listoftables
+\bibliographystyle{plain}
+\bibliography{literature}
+
+\end{document}

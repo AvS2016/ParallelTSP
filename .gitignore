@@ -11,3 +11,12 @@ solved.svg
 solved.json
 tsp.dat
 tsp.plt
+
+*.aux
+*.lof
+*.log
+*.lol
+*.lot
+*.out
+*.synctex.gz
+*.toc
