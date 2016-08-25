@@ -12,6 +12,7 @@
 \usepackage{color}
 \usepackage{xcolor}
 \usepackage{longtable}
+\usepackage{amsmath}
 
 \lstdefinestyle{MyCodeStyle}{
 	belowcaptionskip=1\baselineskip,
@@ -64,10 +65,128 @@ Was ist das problem / Ziel? Auf kombinatorische explosion eingehen; Quellen such
 \chapter{Der Genetische Algorithmus}
 \label{chap:algorithmus}
 
+Im Rahmen dieses Projektes wurde ein genetischer Algorithmus entwickelt, mit dem das TSP gelöst wird. Genetische Algorithmen werden im Allgemeinen zur Lösungsfindung bei komplexen Suchproblemen verwendet, bei denen eine kombinatorische Explosion vorliegt und der Lösungsraum so groß ist, dass eine Lösung mit einer optimalen Brute Force Methode nicht möglich ist.\absatz
+Die allgemeine Funktionsweise dieses Algorithmus und die Varianten, die in diesem Projekt eingesetzt wurden, werden in \autoref{sec:funktionsweise} erläutert. Der Basisalgorithmus ist jedoch nicht nebenläufig konzipiert, daher mussten einige Modifikationen vorgenommen werden, um diesen in einem verteilten System einsetzen zu können. Diese Änderungen werden in \autoref{sec:parallelisierung} näher beschrieben.
+
 \section{Funktionsweise}
 \label{sec:funktionsweise}
 
-wie funktioniert ein genetischer algorithmus angewandt auf das TSP?
+Genetische Algorithmen basieren auf der Idee der natürlichen Auslese und ermitteln durch Selektion, Kombination und Evolution von möglichen Lösungen eine sehr gute bis perfekte Lösung für das gesuchte Problem.\\
+Eine Lösung des gegebenen Problems wird als \textit{Individuum} bezeichnet. Im Rahmen des TSP sind Individuen Wege, die die Lösungskriterien des TSP erfüllen (siehe \autoref{chap:tsp}). Die Reihenfolge der Knoten, die bei einem Individuum besucht werden, werden als dessen Eigenschaften oder Gene bezeichnet. Eine Menge von Individuen, auf der der Algorithmus operiert, wird \textit{Population} genannt. Der genetische Algorithmus arbeitet iterativ in sogenannten \textit{Generationen}. Die Individuen einer Population werden schrittweise in sogenannten \textit{Generationen} mit einer \textit{Fitness} bewertet, aussortiert und rekombiniert, um die Qualität der Lösungen zu verbessern. Die Phasen einer Generation werden in \autoref{tbl:phasen-algorithmus} zusammenfassend dargestellt (vgl. \cite{jacobsen12A}).
+\pagebreak
+\begin{center}
+\begin{longtable}{p{3.0cm} p{10cm}}
+
+Phase & Beschreibung \\
+\hline \\
+\textit{Initialisation} & Generiert die initiale Population und wird nur ein einziges Mal zu Beginn des Algorithmus ausgeführt. Die Population wird mit zufällig generierten Individuen erstellt.\\
+ & \\
+\textit{Evaluation} &  Die Individuen der aktuellen Generation werden mit einem Fitnesswert bewertet. Dieser Zahlenwert drückt aus wie gut das Individuum bzw. die Lösung des des Problems ist. In Bezug auf das TSP bedeutet eine kürzere Strecke der Lösung eine höhere Fitness des entsprechenden Individuums.\\
+ & \\
+\textit{Selection} & Aus den Individuen der aktuellen Generation werden diejenigen ausgewählt, die für die Crossover Phase verwendet und die in die nächste Generation übernommen werden. Hierbei ist es von zentraler Bedeutung, dass Individuen mit hoher Fitness mit einer höheren Wahrscheinlichkeit ausgewählt werden als die Individuen mit niedriger Fitness.\\
+ & \\
+\textit{Crossover} & Aus den ausgewählten Individuen (sog. Parents) werden duch die Kombination von deren Eigenschaften neue Individuen (sog. Children) erzeugt, die in die nächste Generation übernommen werden. In Bezug auf das TSP werden hier Teilwege der Parents so miteinander, dass die Children wieder eine valide Lösung des TSP darstellen.\\
+ & \\
+\textit{Mutation} & Die Gene der erzeugten Children werden per Zufall verändert, um eine Stagnation des Genpools zu verhindern und neue Lösungsmöglichkeiten zu erzeugen. Diese Stagnation kann auftreten, wenn über mehrere Generationen hinweg besonders fitte Individuen die Population dominieren.\\
+
+\caption{Phasen des genetischen Algorithmus}
+\label{tbl:phasen-algorithmus}
+\end{longtable}
+\end{center}
+
+Die Umsetzung dieser Phasen im Rahmen dieses Projekts wird in den folgenden Unterabschnitten anhand des Beispielgraphen in \autoref{fig:algo-sample} detailliert beschrieben.
+
+\begin{figure}[ht]
+  	\centering
+	\includegraphics[width=400pt]{images/algo_01_sample.png}
+	\caption{Beispielgraph}
+	\label{fig:algo-sample}
+\end{figure}
+
+Dieses Beispiel zeigt einen Graphen mit fünf Knoten, die jeweils durch die Nummer in ihrer Mitte identifiziert werden können.
+
+\subsection{Initialisation}
+\label{subsec:initialisation}
+
+Die \textit{Initialisation} Phase wird nur ein Mal zu Beginn des Algorithmus ausgeführt. In dieser Phase wird die initiale Population generiert, mit der der Algorithmus dann arbeitet. Die Individuen werden hierbei vollständig zufallsgeneriert, wobei jedes Individuum eine valide Lösung des TSP darstellt. Dieser Vorgang wird in \autoref{lst:algo-generierung} dargestellt.
+
+\includecode{lst:algo-generierung}{Generierung eines Individuums}{code/algo_01_generierung.pseudo}
+
+Um ein Individuum zu generieren, wird eine Liste (\textit{nodes}) aller möglichen Knoten für das Individuum, also Knoten aus dem Graphen, erstellt (l. 1). Aus dieser Liste wird dann ein Knoten zufällig ausgewählt (l. 5) und dem Individuum hinzugefügt (l. 6). Danach wird der Knoten aus der Liste der übrigen Knoten entfernt (l. 7) und dieser Prozess wird solange wiederholt bis keine Knoten mehr in \textit{nodes} vorhanden sind (l. 4).\absatz
+Mit diesem Verfahren können die Individuen in \autoref{fig:algo-sample-individuals} aus dem Beispielgraphen in \autoref{fig:algo-sample} generiert werden.
+
+\begin{figure}[ht]
+  	\centering
+	\includegraphics[width=400pt]{images/algo_02_init.png}
+	\caption{Beispiel: Zufällig generierte Individuen}
+	\label{fig:algo-sample-individuals}
+\end{figure}
+
+\subsection{Evaluation}
+\label{subsec:evaluation}
+
+In der \textit{Evaluation} Phase werden die Individuen der Population der aktuellen Generation bewertet und damit ihr Fitness Wert errechnet. Jedes Individuum stellt einen Weg durch den Graphen, also eine Liste aufeinander folgender Knoten, dar. Die Fitness errechnet sich aus der Länge dieses Weges. Diese Länge wird durch die Summe des euklidischen Abstands zwischen in der Liste aufeinanderfolgende Knoten beschrieben, wie in der folgenden Gleichung dargestellt wird.
+
+$$
+l_{individuum} = \sum_{i=1}^{n} \sqrt{(x_{i+1} - x_i)^2 + (y_{i+1} - y_i)^2}
+$$
+
+Dies wird für alle Individuen wiederholt. Hierbei gilt, dass umso länger der Weg ist umso niedriger ist der Fitnesswert eines Individuums. Damit verhält sich die Fitness also \textit{antiproportional} zur Länge des Weges.\\
+Aufgrund von Rundungsfehlern bei Gleitkommazahlen reicht ein einfacher Kehrwert der Länge des Weges nicht aus um die Fitness eines Individuums zu berechnen, da der Weg je nach Größe des Graphen entsprechend lang werden kann. Daher wird aus allen Individuen der aktuellen Population dasjenige gesucht, das den längsten Weg $l_{max}$ besitzt. Mit diesem Wert wird nun die Fitness $f_{individuum}$ jedes Individuums auf folgende Weise berechnet.
+
+$$
+f_{individuum} = \frac{l_{max}}{l_{individuum}}
+$$
+
+\autoref{tbl:algo-sample-fitness} zeigt die Weglänge und die Fitness der Individuen aus \autoref{fig:algo-sample-individuals}.
+
+\begin{center}
+\begin{longtable}{p{2.0cm} | p{7.0cm} | p{3.0cm}}
+Individuum & $l_{individuum}$ & $f_{individuum}$ \\
+\hline & & \\
+A & $1 + \sqrt{10} + \sqrt{10} + \sqrt{10} + 5 = 15.49$ & $\frac{19.34}{15.49} = 1.25$ \\
+& & \\
+B & $\sqrt{5} + \sqrt{20} + \sqrt{10} + \sqrt{20} + 5 = 19.34$ & $\frac{19.34}{19.34} = 1$ \\
+& & \\
+C & $\sqrt{5} + \sqrt{10} + \sqrt{10} + \sqrt{10} + 1 = 12.72$ & $\frac{19.34}{12.72} = 1.52$ \\
+& & \\
+D & $5 + \sqrt{20} + \sqrt{10} + \sqrt{20} + 1 = 18.11$ & $\frac{19.34}{18.11} = 1.07$\\
+
+\caption{Beispiel Fitness und Distanz}
+\label{tbl:algo-sample-fitness}
+\end{longtable}
+\end{center}
+
+\subsection{Selection}
+\label{subsec:selection}
+
+Während der \textit{Selection} Phase werden die Individuen (Parents) ausgewählt, aus denen die Individuen für die nächste Generation (Children) generiert werden. Die Auswahl geschieht anhand der Fitness der Individuen.Wichtig ist hierbei auch, dass ein einzelnes Individuum mehrfach ausgewählt werden kann.\\
+In diesem Projekt wurde zur Auswahl der Parents das \textit{Roulette-Wheel-Verfahren} verwendet. Hierbei werden die Individuen durch eine Zufallszahl ausgewählt, doch haben besonders fitte Individuen eine besonders hohe Chance ausgewählt zu werden. Hierbei wird die Fitness der Individuen auf das Intervall [0;1] normiert. Daraufhin wird eine Auswahlintervall für jedes Individuum berechnet, indem die Liste der Individuen angefangen beim fittesten Individuum durchlaufen wird und die Fitness aller vorangegangenen Individuen aufsummiert wird. Der sich daraus ergebende Wert ist die untere Grenze $g_{x unten}$ des Auswahlintervalls des Individuums $x$. Die obere Grenze $g_{x oben}$ wird durch die Summe aus unterer Grenze und der Fitness des aktuellen Individuums gebildet (vgl. \cite{rongqu14}). Die folgenden Gleichungen beschreiben den Rechenweg nochmals.
+
+$$
+g_{x unten} = \sum_{i=1}^{i<x} f_i
+$$
+$$
+g_{x oben} = g_{x unten} + f_x
+$$
+
+\autoref{fig:algo-sample-interval} zeigt die Auswahlintervalle der Individuen aus \autoref{fig:algo-sample-individuals}.
+
+\begin{figure}[ht]
+  	\centering
+	\includegraphics[width=300pt]{images/algo_03_interval.png}
+	\caption{Beispiel: Auswahlintervalle der Individuen}
+	\label{fig:algo-sample-interval}
+\end{figure}
+
+Nun wird eine Zufallszahl im Intervall [0;1] gewürfelt und es wird dasjenige Individuum zum Parent erwählt in dessen Intervall die Zufallszahl fällt. Dabei werden immer paare von zwei Parents gebildet, aus denen ein neues Individuum generiert wird. Dies wird solange wiederholt bis genügend Individuen ausgewählt wurden um die aktuelle Population vollständig zu ersetzen.\absatz
+Zusätzlich zur Auswahl der Individuen verwendet der Algorithmus außerdem eine \textit{Elitism} Mechanik, durch die die besten Individuen der aktuellen Generation in die nächste Generation übernommen werden. So wird verhindert, dass bereits gefundene sehr gute Lösungen wieder verworfen werden. Alle anderen Individuen der aktuellen Generation werden jedoch durch neue Individuen, die Children, ersetzt.
+
+\subsection{Crossover}
+\label{subsec:crossover}
+
+\subsection{Mutation}
+\label{subsec:mutation}
 
 \section{Parallelisierung}
 \label{sec:parallelisierung}

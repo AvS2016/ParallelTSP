@@ -20,6 +20,8 @@ tsp.plt
 *.out
 *.synctex.gz
 *.toc
+*.bbl
+*.blg
 
 statistics.json
 data
