@@ -85,9 +85,9 @@ Phase & Beschreibung \\
  & \\
 \textit{Selection} & Aus den Individuen der aktuellen Generation werden diejenigen ausgewählt, die für die Crossover Phase verwendet und die in die nächste Generation übernommen werden. Hierbei ist es von zentraler Bedeutung, dass Individuen mit hoher Fitness mit einer höheren Wahrscheinlichkeit ausgewählt werden als die Individuen mit niedriger Fitness.\\
  & \\
-\textit{Crossover} & Aus den ausgewählten Individuen (sog. Parents) werden duch die Kombination von deren Eigenschaften neue Individuen (sog. Children) erzeugt, die in die nächste Generation übernommen werden. In Bezug auf das TSP werden hier Teilwege der Parents so miteinander, dass die Children wieder eine valide Lösung des TSP darstellen.\\
+\textit{Crossover} & Aus den ausgewählten Individuen (sog. Eltern) werden duch die Kombination von deren Eigenschaften neue Individuen (sog. Kinder) erzeugt, die in die nächste Generation übernommen werden. In Bezug auf das TSP werden hier Teilwege der Eltern so miteinander, dass die Kinder wieder eine valide Lösung des TSP darstellen.\\
  & \\
-\textit{Mutation} & Die Gene der erzeugten Children werden per Zufall verändert, um eine Stagnation des Genpools zu verhindern und neue Lösungsmöglichkeiten zu erzeugen. Diese Stagnation kann auftreten, wenn über mehrere Generationen hinweg besonders fitte Individuen die Population dominieren.\\
+\textit{Mutation} & Die Gene der erzeugten Kinder werden per Zufall verändert, um eine Stagnation des Genpools zu verhindern und neue Lösungsmöglichkeiten zu erzeugen. Diese Stagnation kann auftreten, wenn über mehrere Generationen hinweg besonders fitte Individuen die Population dominieren.\\
 
 \caption{Phasen des genetischen Algorithmus}
 \label{tbl:phasen-algorithmus}
@@ -141,7 +141,7 @@ $$
 \autoref{tbl:algo-sample-fitness} zeigt die Weglänge und die Fitness der Individuen aus \autoref{fig:algo-sample-individuals}.
 
 \begin{center}
-\begin{longtable}{p{2.0cm} | p{7.0cm} | p{3.0cm}}
+\begin{longtable}{p{2.5cm} | p{6.5cm} | p{3.0cm}}
 Individuum & $l_{individuum}$ & $f_{individuum}$ \\
 \hline & & \\
 A & $1 + \sqrt{10} + \sqrt{10} + \sqrt{10} + 5 = 15.49$ & $\frac{19.34}{15.49} = 1.25$ \\
@@ -160,8 +160,8 @@ D & $5 + \sqrt{20} + \sqrt{10} + \sqrt{20} + 1 = 18.11$ & $\frac{19.34}{18.11} =
 \subsection{Selection}
 \label{subsec:selection}
 
-Während der \textit{Selection} Phase werden die Individuen (Parents) ausgewählt, aus denen die Individuen für die nächste Generation (Children) generiert werden. Die Auswahl geschieht anhand der Fitness der Individuen.Wichtig ist hierbei auch, dass ein einzelnes Individuum mehrfach ausgewählt werden kann.\\
-In diesem Projekt wurde zur Auswahl der Parents das \textit{Roulette-Wheel-Verfahren} verwendet. Hierbei werden die Individuen durch eine Zufallszahl ausgewählt, doch haben besonders fitte Individuen eine besonders hohe Chance ausgewählt zu werden. Hierbei wird die Fitness der Individuen auf das Intervall [0;1] normiert. Daraufhin wird eine Auswahlintervall für jedes Individuum berechnet, indem die Liste der Individuen angefangen beim fittesten Individuum durchlaufen wird und die Fitness aller vorangegangenen Individuen aufsummiert wird. Der sich daraus ergebende Wert ist die untere Grenze $g_{x unten}$ des Auswahlintervalls des Individuums $x$. Die obere Grenze $g_{x oben}$ wird durch die Summe aus unterer Grenze und der Fitness des aktuellen Individuums gebildet (vgl. \cite{rongqu14}). Die folgenden Gleichungen beschreiben den Rechenweg nochmals.
+Während der \textit{Selection} Phase werden die Individuen (Eltern) ausgewählt, aus denen die Individuen für die nächste Generation (Kinder) generiert werden. Die Auswahl geschieht anhand der Fitness der Individuen.Wichtig ist hierbei auch, dass ein einzelnes Individuum mehrfach ausgewählt werden kann.\\
+In diesem Projekt wurde zur Auswahl der Eltern das \textit{Roulette-Wheel-Verfahren} verwendet. Hierbei werden die Individuen durch eine Zufallszahl ausgewählt, doch haben besonders fitte Individuen eine besonders hohe Chance ausgewählt zu werden. Hierbei wird die Fitness der Individuen auf das Intervall [0;1] normiert. Daraufhin wird eine Auswahlintervall für jedes Individuum berechnet, indem die Liste der Individuen angefangen beim fittesten Individuum durchlaufen wird und die Fitness aller vorangegangenen Individuen aufsummiert wird. Der sich daraus ergebende Wert ist die untere Grenze $g_{x unten}$ des Auswahlintervalls des Individuums $x$. Die obere Grenze $g_{x oben}$ wird durch die Summe aus unterer Grenze und der Fitness des aktuellen Individuums gebildet (vgl. \cite{rongqu14}). Die folgenden Gleichungen beschreiben den Rechenweg nochmals.
 
 $$
 g_{x unten} = \sum_{i=1}^{i<x} f_i
@@ -179,14 +179,53 @@ $$
 	\label{fig:algo-sample-interval}
 \end{figure}
 
-Nun wird eine Zufallszahl im Intervall [0;1] gewürfelt und es wird dasjenige Individuum zum Parent erwählt in dessen Intervall die Zufallszahl fällt. Dabei werden immer paare von zwei Parents gebildet, aus denen ein neues Individuum generiert wird. Dies wird solange wiederholt bis genügend Individuen ausgewählt wurden um die aktuelle Population vollständig zu ersetzen.\absatz
-Zusätzlich zur Auswahl der Individuen verwendet der Algorithmus außerdem eine \textit{Elitism} Mechanik, durch die die besten Individuen der aktuellen Generation in die nächste Generation übernommen werden. So wird verhindert, dass bereits gefundene sehr gute Lösungen wieder verworfen werden. Alle anderen Individuen der aktuellen Generation werden jedoch durch neue Individuen, die Children, ersetzt.
+Nun wird eine Zufallszahl im Intervall [0;1] gewürfelt und es wird dasjenige Individuum zum Elternteil erwählt in dessen Intervall die Zufallszahl fällt. Dabei werden immer paare von zwei Eltern gebildet, aus denen ein neues Individuum generiert wird. Dies wird solange wiederholt bis genügend Individuen ausgewählt wurden um die aktuelle Population vollständig zu ersetzen.\absatz
+Zusätzlich zur Auswahl der Individuen verwendet der Algorithmus außerdem eine \textit{Elitism} Mechanik, durch die die besten Individuen der aktuellen Generation in die nächste Generation übernommen werden. So wird verhindert, dass bereits gefundene sehr gute Lösungen wieder verworfen werden. Alle anderen Individuen der aktuellen Generation werden jedoch durch neue Individuen, die Kinder, ersetzt.
 
 \subsection{Crossover}
 \label{subsec:crossover}
 
+In der \textit{Crossover} Phase werden die aus der \textit{Selection} Phase aus"-ge"-wähl"-ten Eltern kombiniert, um neue Individuen für die nächste Generation zu generieren.\\
+Hierbei wird ein zusammenhängender Teilweg des El"-tern"-indi"-vid"-uums A aus zu"-fä"-llig ausgewählt und genau so in das Kind E übernommen. Um die restlichen Knoten des Kindes zu füllen werden der Reihe nach Knoten aus Elternindividuum B Knoten entnommen, falls diese in dem Kind noch nicht vorhanden sind, und in das Kind eingefügt (vgl. \cite{jacobsen12B}). In \autoref{fig:algo-sample-crossover} wird dieser Prozess nochmal verdeutlicht.
+\pagebreak
+
+\begin{figure}[ht]
+	\centering
+	\begin{subfigure}[t]{400pt}
+    	\includegraphics[width=400pt]{images/algo_04_crossover_1.png}
+        \caption{}
+        \label{fig:algo-sample-crossover1}
+    \end{subfigure}
+
+    \begin{subfigure}[t]{400pt}
+    	\includegraphics[width=400pt]{images/algo_04_crossover_2.png}
+        \caption{}
+        \label{fig:algo-sample-crossover2}
+    \end{subfigure}
+
+	\caption{Beispiel: Crossover von zwei Individuen}
+	\label{fig:algo-sample-crossover}
+\end{figure}
+
+in \autoref{fig:algo-sample-crossover1} wurde der Teilweg [4,5] aus Individuum A ausgewählt und an der gleichen Stelle in das neue Kind E eingefügt. Im nächsten Schritt werden in \autoref{fig:algo-sample-crossover2} die Knoten in Individuum B der Reihe nach durchgegangen und ,falls sie in Individuum E noch nicht vorhanden sind, entsprechend eingefügt.\\
+Das neu entstandene Individuum E ist nun eine Kombination aus den Lösungen von A und B und umfasst ohne weitere Korrekturen immer direkt eine valide Lösung des TSP.\\
+Dieser Vorgang wird nun für alle im \textit{Selection} Schritt ausgewählten Elternpaare wiederholt.
+
 \subsection{Mutation}
 \label{subsec:mutation}
+
+Die \textit{Mutationsphase} dient dazu, um die Variation im Genpool der Population aufrecht zu erhalten. So kann es passieren, dass ein besonders fittes Individuum die Selection Phase dominiert und der Genpool gegen diese Lösung konvergiert. Durch die genetische Verarmung können potentiell bessere Lösungen nicht mehr gefunden werden (vgl. \cite{rongqu14}). Um diesem Effekt entgegenzuwirken wird ein sehr kleiner Anteil aller Kinder, die im \textit{Crossover} Schritt generiert wurden, zufällig mutiert.\\
+Im Rahmen dieses Projekts wurde die \textit{Swap Mutation} verwendet, um Individuen zu mutieren. Hierbei werden zwei zufällig ausgewählte Knoten aus einem Individuum miteinander vertauscht. Die hieraus entstandene Lösung ist ebenfalls wieder eine valide Lösung des TSP (vgl. \cite{jacobsen12B}). \autoref{fig:algo-sample-mutation} zeigt diesen Vorgang nochmals anhand des in \autoref{subsec:crossover} erzeugten Individuums E.
+
+
+\begin{figure}[ht]
+  	\centering
+	\includegraphics[width=400pt]{images/algo_05_mutation.png}
+	\caption{Beispiel: Mutation eines Individuums}
+	\label{fig:algo-sample-mutation}
+\end{figure}
+
+Hierbei werden per Zufall die beiden Knoten 3 und 5 ausgewählt. Deren Position in der Liste wird daraufhin einfach vertauscht, wodurch die Lösung unter Umständen völlig neue Möglichkeiten in die Population einbringt.
 
 \section{Parallelisierung}
 \label{sec:parallelisierung}
