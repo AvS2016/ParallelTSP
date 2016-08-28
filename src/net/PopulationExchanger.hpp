@@ -25,7 +25,7 @@ namespace tsp
         std::vector<Path> receivedIndividuals_;
         std::vector<Path> sentIndividuals_;
 
-        void sendIndividuals(Population &p);
+        void sendIndividuals();
         void recvIndividuals();
     public:
         PopulationExchanger(int argc, char **argv);

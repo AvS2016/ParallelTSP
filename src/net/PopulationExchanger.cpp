@@ -51,11 +51,11 @@ namespace tsp
         }
 
         if(rank_ % 2 == 0) {
-            sendIndividuals(p);
+            sendIndividuals();
             recvIndividuals();
         } else {
             recvIndividuals();
-            sendIndividuals(p);
+            sendIndividuals();
         }
 
         // Replace old with new individuals
@@ -63,7 +63,7 @@ namespace tsp
             p.getIndividuals()[sentIndividualsIdx_[i]].getPath() = receivedIndividuals_[i];
     }
 
-    void PopulationExchanger::sendIndividuals(Population &p)
+    void PopulationExchanger::sendIndividuals()
     {
         world_.send(dest_, TAG, sentIndividuals_);
     }
