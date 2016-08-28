@@ -227,10 +227,22 @@ Im Rahmen dieses Projekts wurde die \textit{Swap Mutation} verwendet, um Individ
 
 Hierbei werden per Zufall die beiden Knoten 3 und 5 ausgewählt. Deren Position in der Liste wird daraufhin einfach vertauscht, wodurch die Lösung unter Umständen völlig neue Möglichkeiten in die Population einbringt.
 
-\section{Parallelisierung}
-\label{sec:parallelisierung}
+\subsection{Exchange}
+\label{sec:exchange}
 
-prinzipielle parallelisierung; was ist die idee?; ohne auf MPI einzugehen!
+Die bisher vorgestellten Phasen beschreiben einen genetischen Algorithmus aus dem Lehrbuch, der rein single threaded funktioniert. Um diesen Algorithmus nun zu parallelisieren wird er um eine weitere Phase erweitert.\\
+Die Problematik beim TSP ist, dass die Komplexität des Lösungsraumes exponentiell mit der Größe des verwendeten Graphen steigt (siehe \autoref{chap:tsp}). Um das TSP für größere Graphen mit einem genetischen Algorithmus zu lösen muss die Größe der verwendeten Population vergrößert werden, damit die Population allein durch die schiere Anzahl an Lösungsmöglichkeiten nicht genetisch verhungert. Jedoch benötigen größere Populationen deutlich mehr Rechenleistung pro Generation und so können sehr große Graphen nur langsam gelöst werden.\\
+Um diese Problematik zu lösen wurde die Population auf mehrere Prozesse verteilt. Jeder dieser Prozesse ist single threaded und berechnet den genetischen Algorithmus gemäß den bereits vorgestellten Phasen vollständig unabhängig von den anderen Prozesse. Am Ende jeder Generation treten jedoch alle Prozesse in die \textit{Exchange} Phase ein. In dieser Phase senden alle Prozesse einen Anteil von 10\% ihrer Population an einen anderen Prozess. Der sendende Prozess löscht diese Individuen aus seiner Population und der empfangende Prozesse fügt die erhaltenen Individuen in seine Population ein. Hierzu müssen alle Prozesse die gleiche Populationsgröße besitzen, sodass nach dem Austausch die Population wieder gleich groß ist wie zuvor. Durch diesen Austausch von Individuen entsteht ein Austausch von Genmaterial, sodass die verschiedenen Populationen der Prozesse näherungsweise wie eine einzige große Population funktionieren. So agieren 10 Prozesse mit einer Population von 1000 Individuen so wie ein einziger Prozess mit 10000 Individuen. Darüber hinaus kann jeder Prozess die rechenintensiven Phasen auf einem separaten Kern mit einer Populationsgröße von 1000 statt 10000 ausführen, sodass die Prozessgemeinschaft abzüglich des Kommunikationsoverheads näherungsweise so schnell abläuft wie ein einzelner Prozess mit nur 1000 Individuen.\\
+In \autoref{fig:algo-sample-exchange} ist zu sehen, wie der Austausch der Individuen mit fünf Prozessen funktioniert.
+
+\begin{figure}[ht]
+  	\centering
+	\includegraphics[width=300pt]{images/algo_06_exchange.png}
+	\caption{Beispiel: Austausch der Individuen}
+	\label{fig:algo-sample-exchange}
+\end{figure}
+
+Hierbei wird ein Ringaustauschverfahren verwendet. Jeder Prozess hat eine eindeutige ID und gibt seine Individuen an den jeweils nächsten Prozess  weiter, also P1 senden an P2, P2 an P3, usw. So wird ein kompliziertes Kommunikationsverfahren zur Findung von Partnerprozessen vermieden, um den Netzwerkoverhead möglichst niedrig zu halten.
 
 \chapter{Technologie}
 \label{chap:technologie}
