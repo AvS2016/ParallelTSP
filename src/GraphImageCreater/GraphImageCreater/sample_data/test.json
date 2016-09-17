@@ -1,5 +1,9 @@
 {
-"ProcessDataLine":{
-	"finalDist" : "1701.5383451259836"
-	}
+    "ProcessDataLine" : {
+                 "finalDist" : "asdf",
+                 "teamname" : "b",
+                 "email" : "c",
+                 "players" : ["1",
+                              "2"]
+             }
 }

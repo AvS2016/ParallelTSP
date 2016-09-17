@@ -13,33 +13,12 @@ namespace GraphImageCreater
     class ProcessDataLine
     {
 
-
-        /*
-        [JsonProperty("distancePerGen")]
         public List<double> distancePerGen { get; set; }
-        */
-
-        [JsonProperty("finalDist")]
-        public string FinalDist { get; set; }
-
-
-        /*
-        [JsonProperty("genCount")]
+        public double finalDist { get; set; }
         public int genCount { get; set; }
-
-        [JsonProperty("nodeCount")]
         public int nodeCount { get; set; }
-
-        [JsonProperty("timePerGen")]
         public List<double> timePerGen { get; set; }
-
-        [JsonProperty("totalTime")]
         public DateTime totalTime { get; set; }
-        */
-
-        
-
-
-        
+       
     }
 }

@@ -10,6 +10,9 @@ using System.Windows.Forms.DataVisualization.Charting;
 using System.Drawing.Imaging;
 using System.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Json;
 
 namespace GraphImageCreater
 {
@@ -49,29 +52,40 @@ namespace GraphImageCreater
         private void GraphImage_Load(object sender, EventArgs e)
         {
             // Getting Data...
+
+            /* dynamic file access
             string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             string file = dir + @"\sample_data\01_Proc_Machines_0.json";
-            ProcessDataLine test = new ProcessDataLine();
+            */
 
-            using (StreamReader r = new StreamReader(@"C:\Users\User\Documents\visual studio 2015\Projects\GraphImageCreater\GraphImageCreater\sample_data\test.json"))
+            ProcessDataLine file = new ProcessDataLine();
+
+            using (StreamReader r = new StreamReader(@"C:\Users\User\Documents\visual studio 2015\Projects\GraphImageCreater\GraphImageCreater\sample_data\01_Proc_Machines_0.json"))
             {
                 string json = r.ReadToEnd();
-                //List<ProcessDataLine> items = JsonConvert.DeserializeObject<List<ProcessDataLine>>(json);
                 
-                test = JsonConvert.DeserializeObject<ProcessDataLine>(json);
-            
+                // using dynamic no proper mapping is working ... setting up manual mode :/
+                dynamic data = JObject.Parse(json);
 
-                // test
+                //file.distancePerGen = data["distancePerGen"].ToString(); // list double
+                file.finalDist = Convert.ToDouble(data["finalDist"]); ;
+                file.genCount = Convert.ToInt32(data["genCount"]);
+                file.nodeCount = Convert.ToInt32(data["genCount"]);
+                //file.timePerGen = liste
+                file.totalTime = Convert.ToDateTime(data["totalTime"]);
 
+                // Todo: proper mapping from sec.millisec to some datatyp
+                DateTime bla = new DateTime(0);
+                bla.AddSeconds(TimeSpan.FromSeconds(data["totalTime"]));
+                bla.AddMilliseconds(TimeSpan.FromSeconds(data["totalTime"]));
 
-            // Alle Json in list<obj>
-            // werte mitteln
-            // paramater on they fly beim konvertieren berechnen
+                TimeSpan t = TimeSpan.FromSeconds(data["totalTime"]);
+                
 
-
-            chart1.Series.Add(test.FinalDist);
-            // Bug some here Dezerializer into null
-            // prolly help http://stackoverflow.com/questions/15915503/net-newtonsoft-json-deserialize-map-to-a-different-property-name
+                // Alle Json in list<obj>
+                // werte mitteln
+                // paramater on they fly beim konvertieren berechnen
+            }
 
             // Drawing...
             chart1.Series.Add("Balken");
