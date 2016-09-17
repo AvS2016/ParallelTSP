@@ -12,3 +12,11 @@ c:\users\user\documents\visual studio 2015\Projects\GraphImageCreater\GraphImage
 C:\Users\User\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\bin\Debug\GraphImageCreater.exe.config
 C:\Users\User\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\obj\Debug\GraphImageCreater.exe
 C:\Users\User\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\obj\Debug\GraphImageCreater.pdb
+C:\Users\User\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\bin\Debug\GraphImageCreater.exe
+C:\Users\User\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\bin\Debug\GraphImageCreater.pdb
+C:\Users\User\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\bin\Debug\Newtonsoft.Json.dll
+C:\Users\User\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\bin\Debug\Newtonsoft.Json.pdb
+C:\Users\User\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\bin\Debug\Newtonsoft.Json.xml
+C:\Users\User\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\obj\Debug\GraphImageCreater.csprojResolveAssemblyReference.cache
+C:\Users\User\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\obj\Debug\GraphImageCreater.Properties.Resources.resources
+C:\Users\User\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\obj\Debug\GraphImageCreater.csproj.GenerateResource.Cache

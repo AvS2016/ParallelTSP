@@ -59,7 +59,15 @@ namespace GraphImageCreater
                 //List<ProcessDataLine> items = JsonConvert.DeserializeObject<List<ProcessDataLine>>(json);
                 
                 test = JsonConvert.DeserializeObject<ProcessDataLine>(json);
-            }
+            
+
+                // test
+
+
+            // Alle Json in list<obj>
+            // werte mitteln
+            // paramater on they fly beim konvertieren berechnen
+
 
             chart1.Series.Add(test.FinalDist);
             // Bug some here Dezerializer into null
