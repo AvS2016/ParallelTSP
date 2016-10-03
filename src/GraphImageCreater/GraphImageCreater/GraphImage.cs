@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Json;
+using System.Globalization;
 
 namespace GraphImageCreater
 {
@@ -67,23 +68,42 @@ namespace GraphImageCreater
                 // using dynamic no proper mapping is working ... setting up manual mode :/
                 dynamic data = JObject.Parse(json);
 
-                //file.distancePerGen = data["distancePerGen"].ToString(); // list double
+                //distancePerGen
+                string tmp = data["distancePerGen"].ToString();
+
+                    tmp = tmp.Replace('[', ' ');
+                    tmp = tmp.Replace(']', ' ');
+                    tmp = tmp.Replace("\r\n", String.Empty);
+
+                    foreach (string s in tmp.Split(','))
+                    {
+                        file.distancePerGen.Add(double.Parse(s, CultureInfo.InvariantCulture));
+                    }
+
                 file.finalDist = Convert.ToDouble(data["finalDist"]); ;
                 file.genCount = Convert.ToInt32(data["genCount"]);
-                file.nodeCount = Convert.ToInt32(data["genCount"]);
-                //file.timePerGen = liste
-                file.totalTime = Convert.ToDateTime(data["totalTime"]);
+                file.nodeCount = Convert.ToInt32(data["nodeCount"]);
 
-                // Todo: proper mapping from sec.millisec to some datatyp
-                DateTime bla = new DateTime(0);
-                bla.AddSeconds(TimeSpan.FromSeconds(data["totalTime"]));
-                bla.AddMilliseconds(TimeSpan.FromSeconds(data["totalTime"]));
+                // timePerGen
+                tmp = data["timePerGen"].ToString();
 
-                TimeSpan t = TimeSpan.FromSeconds(data["totalTime"]);
-                
+                    tmp = tmp.Replace('[', ' ');
+                    tmp = tmp.Replace(']', ' ');
+                    tmp = tmp.Replace('\"', ' ');
+                    tmp = tmp.Replace("\r\n", String.Empty);              
+
+                    foreach (string s in tmp.Split(','))
+                    { 
+                        file.timePerGen.Add(TimeSpan.Parse(s));
+                    }
+
+                tmp = data["totalTime"];
+
+                file.totalTime = TimeSpan.Parse(tmp);
+
 
                 // Alle Json in list<obj>
-                // werte mitteln
+                // Todo: werte mitteln
                 // paramater on they fly beim konvertieren berechnen
             }
 
