@@ -25,4 +25,10 @@ tsp.plt
 
 statistics.json
 data
-Debug/
+
+# visual studio
+
+src/GraphImageCreater/GraphImageCreater/bin
+src/GraphImageCreater/GraphImageCreater/obj
+src/GraphImageCreater/GraphImageCreater/Newtonsoft.Json.dll
+src/GraphImageCreater/packages
