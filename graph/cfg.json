@@ -8,5 +8,5 @@
     "mutationChance" : 0.1,
     "fitnessPower" : 10,
     "exchangeRate" : 0.1,
-    "duration" : "00:30:00"
+    "duration" : "00:00:30"
 }
