@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 namespace GraphImageCreater
 {
-
-    /// <summary>
-    /// Block contains many ProcessDataLines
-    /// </summary>
     class ProcessDataBlock
     {
+        public List<string> fileNames;
+        public List<ProcessDataLine> dataLines;
+        public ProcessDataLine finalLine;
 
-        public List<ProcessDataLine> data { get; set; }
-
-
+        public ProcessDataBlock()
+        {
+            fileNames = new List<string>();
+            dataLines = new List<ProcessDataLine>();
+            finalLine = new ProcessDataLine();
+        }
     }
 }

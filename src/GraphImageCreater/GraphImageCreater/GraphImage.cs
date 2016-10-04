@@ -24,19 +24,18 @@ namespace GraphImageCreater
     public partial class GraphImage : Form
     {
 
-        private List<string> fileNames;
-        private List<ProcessDataLine> dataLines;
+        private List<ProcessDataBlock> dataBlocks;
+        private string[] graphNames = { "1 Process", "8 Processes" };
 
         public GraphImage()
         {
             InitializeComponent();
+            dataBlocks = new List<ProcessDataBlock>();
         }
 
         // benötigt zum laufen, downnload!
         // System.Windows.Forms.DataVisualization.Charting;
         // https://www.microsoft.com/en-us/download/details.aspx?id=14422
-
-
 
         private ProcessDataLine ParseDataFile(string file)
         {
@@ -44,36 +43,119 @@ namespace GraphImageCreater
 
             using (StreamReader r = new StreamReader(file))
             {
-                string jsonStr = r.ReadToEnd();
-                dynamic dynStats = JsonConvert.DeserializeObject(jsonStr);
+                var jtr = new JsonTextReader(r);
+                var jsonSerializer = new JsonSerializer();
+                dynamic dynStats = jsonSerializer.Deserialize(jtr);
+
+                //string jsonStr = r.ReadToEnd();
+                //dynamic dynStats = JsonConvert.DeserializeObject(jsonStr);
 
                 statObj.finalDist = dynStats.finalDist;
                 statObj.genCount = dynStats.genCount;
                 statObj.nodeCount = dynStats.nodeCount;
-                statObj.totalTime = TimeSpan.Parse(dynStats.totalTime);
-                statObj.distancePerGen = dynStats.distancePerGen;
+                statObj.totalTime = TimeSpan.Parse(dynStats.totalTime.ToString());
+                statObj.distancePerGen = dynStats.distancePerGen.ToObject<List<double>>();
 
                 statObj.timePerGen.Capacity = dynStats.timePerGen.Count;
-                foreach (string i in dynStats.timePerGen)
-                    statObj.timePerGen.Add(TimeSpan.Parse(dynStats.timePerGen));
+                foreach (string timeStr in dynStats.timePerGen)
+                    statObj.timePerGen.Add(TimeSpan.Parse(timeStr.ToString()));
             }
 
             return statObj;
         }
 
+        private void CrunchData(ProcessDataBlock dataBlock)
+        {
+            int maxGen = 0;
+            foreach (ProcessDataLine data in dataBlock.dataLines)
+            {
+                if (data.genCount > maxGen)
+                    maxGen = data.genCount;
+            }
+
+            dataBlock.finalLine.finalDist = 0;
+            dataBlock.finalLine.timePerGen.Clear();
+            dataBlock.finalLine.distancePerGen.Clear();
+            dataBlock.finalLine.timePerGen.Capacity = maxGen;
+            dataBlock.finalLine.distancePerGen.Capacity = maxGen;
+            int[] genCount = new int[maxGen];
+
+            for (int i = 0; i < maxGen; ++i)
+            {
+                dataBlock.finalLine.timePerGen.Add(new TimeSpan(0));
+                dataBlock.finalLine.distancePerGen.Add(0);
+                genCount[i] = 0;
+            }
+
+            foreach (ProcessDataLine data in dataBlock.dataLines)
+            {
+                dataBlock.finalLine.finalDist += data.finalDist;
+                dataBlock.finalLine.genCount += data.genCount;
+                dataBlock.finalLine.nodeCount = data.nodeCount;
+                dataBlock.finalLine.totalTime += data.totalTime;
+
+                for (int i = 0; i < data.genCount; ++i)
+                {
+                    dataBlock.finalLine.timePerGen[i] += data.timePerGen[i];
+                    dataBlock.finalLine.distancePerGen[i] += data.distancePerGen[i];
+                    genCount[i]++;
+                }
+            }
+
+            dataBlock.finalLine.finalDist /= dataBlock.dataLines.Count;
+            dataBlock.finalLine.genCount /= dataBlock.dataLines.Count;
+            dataBlock.finalLine.totalTime = new TimeSpan(dataBlock.finalLine.totalTime.Ticks / dataBlock.dataLines.Count);
+
+            for (int i = 0; i < maxGen; ++i)
+            {
+                dataBlock.finalLine.timePerGen[i] = new TimeSpan(dataBlock.finalLine.timePerGen[i].Ticks / genCount[i]);
+                dataBlock.finalLine.distancePerGen[i] /= genCount[i];
+            }
+        }
+
+        private void LoadData(ProcessDataBlock dataBlock)
+        {
+            dataBlock.dataLines.Clear();
+            dataBlock.dataLines.Capacity = dataBlock.fileNames.Count;
+
+            foreach (string f in dataBlock.fileNames)
+                dataBlock.dataLines.Add(ParseDataFile(f));
+        }
+
+        private void DrawData(ProcessDataBlock dataBlock, int id)
+        {
+            string graphName = graphNames[id];
+            chart1.Series.Add(graphName);
+            chart1.Series[graphName].ChartType = SeriesChartType.Line;
+
+            foreach (double val in dataBlock.finalLine.distancePerGen)
+                chart1.Series[graphName].Points.AddY(val);
+        }
+
         private void CrunchButton_Click(object sender, EventArgs e)
         {
-            dataLines.Clear();
-            dataLines.Capacity = fileNames.Count;
-
-            foreach (string f in fileNames)
-                dataLines.Add(ParseDataFile(f));
-
+            int id = 0;
+            chart1.Series.Clear();
+            foreach (ProcessDataBlock dataBlock in dataBlocks)
+            {
+                LoadData(dataBlock);
+                CrunchData(dataBlock);
+                DrawData(dataBlock, id);
+                id++;
+            }
         }
 
         private void selectFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            OpenFileDialog dia = new OpenFileDialog();
+            dia.Filter = "Picture|*.json";
+            dia.CheckFileExists = false;
+            dia.Multiselect = true;
+            if (dia.ShowDialog() != DialogResult.OK)
+                return;
 
+            dataBlocks.Add(new GraphImageCreater.ProcessDataBlock());
+            dataBlocks.Last().fileNames = dia.FileNames.OfType<string>().ToList();
         }
 
         private void saveAsImageToolStripMenuItem_Click(object sender, EventArgs e)
@@ -94,58 +176,6 @@ namespace GraphImageCreater
 
         private void GraphImage_Load(object sender, EventArgs e)
         {
-            // Getting Data...
-
-            /* dynamic file access
-            string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            string file = dir + @"\sample_data\01_Proc_Machines_0.json";
-            */
-
-
-
-                // using dynamic no proper mapping is working ... setting up manual mode :/
-                /*dynamic data = JObject.Parse(json);
-
-                //distancePerGen
-                string tmp = data["distancePerGen"].ToString();
-
-                    tmp = tmp.Replace('[', ' ');
-                    tmp = tmp.Replace(']', ' ');
-                    tmp = tmp.Replace("\r\n", String.Empty);
-
-                    foreach (string s in tmp.Split(','))
-                    {
-                        file.distancePerGen.Add(double.Parse(s, CultureInfo.InvariantCulture));
-                    }
-
-                file.finalDist = Convert.ToDouble(data["finalDist"]); ;
-                file.genCount = Convert.ToInt32(data["genCount"]);
-                file.nodeCount = Convert.ToInt32(data["nodeCount"]);
-
-                // timePerGen
-                tmp = data["timePerGen"].ToString();
-
-                    tmp = tmp.Replace('[', ' ');
-                    tmp = tmp.Replace(']', ' ');
-                    tmp = tmp.Replace('\"', ' ');
-                    tmp = tmp.Replace("\r\n", String.Empty);              
-
-                    foreach (string s in tmp.Split(','))
-                    { 
-                        file.timePerGen.Add(TimeSpan.Parse(s));
-                    }
-
-                tmp = data["totalTime"];
-
-                file.totalTime = TimeSpan.Parse(tmp);
-
-
-                // Alle Json in list<obj>
-                // Todo: werte mitteln
-                // paramater on they fly beim konvertieren berechnen
-
-                */
-            }
             /*
             // Drawing...
             chart1.Series.Add("Balken");
@@ -175,10 +205,7 @@ namespace GraphImageCreater
             {
 
                 chart1.Series["Linien"].Points.AddY(random.Next(70, 100));
-            }
-
-
-        
-        }*/
+            }*/
+        }
     }
 }
