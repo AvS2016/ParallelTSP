@@ -1,11 +1,11 @@
 #!/bin/bash -e
 
-#TSPDIR="/Users/jmarkert/ParallelTSP"
-TSPDIR="/home/fabian/develop/ParallelTSP"
+TSPDIR="/Users/jmarkert/ParallelTSP"
+#TSPDIR="/home/fabian/develop/ParallelTSP"
 SINGLE_CMD="$TSPDIR/build/src/simplega/simplega -c graph/cfg.json -q"
 MULTI_CMD="/$TSPDIR/dep/openmpi/bin/mpiexec -np COUNT $TSPDIR/build/src/simplega/simplega -c graph/cfg.json -n -q"
 ALL_CMD="$TSPDIR/dep/openmpi/bin/mpiexec --hostfile $TSPDIR/hostfile.txt -map-by node -np COUNT $TSPDIR/build/src/simplega/simplega -c graph/cfg.json -n -q"
-RUNS=1
+RUNS=100
 DATADIR="$TSPDIR/data"
 
 runtsp()
