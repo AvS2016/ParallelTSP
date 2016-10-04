@@ -23,32 +23,74 @@ namespace GraphImageCreater
     /// </summary>
     public partial class GraphImage : Form
     {
+
+        private List<string> fileNames;
+        private List<ProcessDataLine> dataLines;
+
         public GraphImage()
         {
             InitializeComponent();
         }
-
-        private void chart1_Click(object sender, EventArgs e)
-        {
-
-            //screen on click
-            using (Bitmap bitmap = new Bitmap(this.Size.Width, this.Size.Height))
-            {
-                using (Graphics g = Graphics.FromImage(bitmap))
-                {
-                    g.CopyFromScreen(new Point(this.DesktopLocation.X, this.DesktopLocation.Y), new Point(0, 0), this.Size);
-                }
-
-                bitmap.Save(@"C:\test.png", ImageFormat.Png);
-            }
-        }
-
 
         // benötigt zum laufen, downnload!
         // System.Windows.Forms.DataVisualization.Charting;
         // https://www.microsoft.com/en-us/download/details.aspx?id=14422
 
 
+
+        private ProcessDataLine ParseDataFile(string file)
+        {
+            ProcessDataLine statObj = new ProcessDataLine();
+
+            using (StreamReader r = new StreamReader(file))
+            {
+                string jsonStr = r.ReadToEnd();
+                dynamic dynStats = JsonConvert.DeserializeObject(jsonStr);
+
+                statObj.finalDist = dynStats.finalDist;
+                statObj.genCount = dynStats.genCount;
+                statObj.nodeCount = dynStats.nodeCount;
+                statObj.totalTime = TimeSpan.Parse(dynStats.totalTime);
+                statObj.distancePerGen = dynStats.distancePerGen;
+
+                statObj.timePerGen.Capacity = dynStats.timePerGen.Count;
+                foreach (string i in dynStats.timePerGen)
+                    statObj.timePerGen.Add(TimeSpan.Parse(dynStats.timePerGen));
+            }
+
+            return statObj;
+        }
+
+        private void CrunchButton_Click(object sender, EventArgs e)
+        {
+            dataLines.Clear();
+            dataLines.Capacity = fileNames.Count;
+
+            foreach (string f in fileNames)
+                dataLines.Add(ParseDataFile(f));
+
+        }
+
+        private void selectFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void saveAsImageToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Bitmap bitmap = new Bitmap(this.Size.Width, this.Size.Height);
+            Graphics g = Graphics.FromImage(bitmap);
+            g.CopyFromScreen(new Point(this.DesktopLocation.X, this.DesktopLocation.Y), new Point(0, 0), this.Size);
+
+            OpenFileDialog dia = new OpenFileDialog();
+            dia.Filter = "Picture|*.png";
+            dia.CheckFileExists = false;
+            if (dia.ShowDialog() != DialogResult.OK)
+                return;
+            Console.WriteLine(dia.FileName);
+
+            bitmap.Save(dia.FileName, ImageFormat.Png);
+        }
 
         private void GraphImage_Load(object sender, EventArgs e)
         {
@@ -59,14 +101,10 @@ namespace GraphImageCreater
             string file = dir + @"\sample_data\01_Proc_Machines_0.json";
             */
 
-            ProcessDataLine file = new ProcessDataLine();
 
-            using (StreamReader r = new StreamReader(@"C:\Users\User\Documents\visual studio 2015\Projects\GraphImageCreater\GraphImageCreater\sample_data\01_Proc_Machines_0.json"))
-            {
-                string json = r.ReadToEnd();
-                
+
                 // using dynamic no proper mapping is working ... setting up manual mode :/
-                dynamic data = JObject.Parse(json);
+                /*dynamic data = JObject.Parse(json);
 
                 //distancePerGen
                 string tmp = data["distancePerGen"].ToString();
@@ -105,8 +143,10 @@ namespace GraphImageCreater
                 // Alle Json in list<obj>
                 // Todo: werte mitteln
                 // paramater on they fly beim konvertieren berechnen
-            }
 
+                */
+            }
+            /*
             // Drawing...
             chart1.Series.Add("Balken");
             chart1.Series.Add("Area");
@@ -138,7 +178,7 @@ namespace GraphImageCreater
             }
 
 
-
-        }
+        
+        }*/
     }
 }
