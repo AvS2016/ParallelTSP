@@ -11,12 +11,15 @@ namespace GraphImageCreater
         public List<string> fileNames;
         public List<ProcessDataLine> dataLines;
         public ProcessDataLine finalLine;
+        public ProcessDataLineStd finalLineStd;
+       
 
         public ProcessDataBlock()
         {
             fileNames = new List<string>();
             dataLines = new List<ProcessDataLine>();
             finalLine = new ProcessDataLine();
+            finalLineStd = new ProcessDataLineStd();
         }
     }
 }

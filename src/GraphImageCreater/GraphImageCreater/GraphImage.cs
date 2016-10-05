@@ -64,16 +64,13 @@ namespace GraphImageCreater
             return statObj;
         }
 
-        private void CrunchData(ProcessDataBlock dataBlock)
+        private void CalcMeanData(ProcessDataBlock dataBlock, int maxGen)
         {
-            int maxGen = 0;
-            foreach (ProcessDataLine data in dataBlock.dataLines)
-            {
-                if (data.genCount > maxGen)
-                    maxGen = data.genCount;
-            }
-
+            // initialize finalLine
             dataBlock.finalLine.finalDist = 0;
+            dataBlock.finalLine.totalTime = new TimeSpan(0);
+            dataBlock.finalLine.genCount = 0;
+            dataBlock.finalLine.nodeCount = 0;
             dataBlock.finalLine.timePerGen.Clear();
             dataBlock.finalLine.distancePerGen.Clear();
             dataBlock.finalLine.timePerGen.Capacity = maxGen;
@@ -89,6 +86,7 @@ namespace GraphImageCreater
 
             foreach (ProcessDataLine data in dataBlock.dataLines)
             {
+                // sum up data
                 dataBlock.finalLine.finalDist += data.finalDist;
                 dataBlock.finalLine.genCount += data.genCount;
                 dataBlock.finalLine.nodeCount = data.nodeCount;
@@ -111,6 +109,71 @@ namespace GraphImageCreater
                 dataBlock.finalLine.timePerGen[i] = new TimeSpan(dataBlock.finalLine.timePerGen[i].Ticks / genCount[i]);
                 dataBlock.finalLine.distancePerGen[i] /= genCount[i];
             }
+        }
+
+        private double Varianz(double val, double mean)
+        {
+            return Math.Pow(val - mean, 2);
+        }
+
+        private double Varianz(TimeSpan val, TimeSpan mean)
+        {
+            return Math.Pow(val.Ticks - mean.Ticks, 2);
+        }
+
+        private void CalcStdDeviation(ProcessDataBlock dataBlock, int maxGen)
+        {
+            // initialize finalLineStd
+            dataBlock.finalLineStd.finalDist = 0;
+            dataBlock.finalLineStd.totalTime = 0;
+            dataBlock.finalLineStd.genCount = 0;
+            dataBlock.finalLineStd.timePerGen.Clear();
+            dataBlock.finalLineStd.distancePerGen.Clear();
+            dataBlock.finalLineStd.timePerGen.Capacity = maxGen;
+            dataBlock.finalLineStd.distancePerGen.Capacity = maxGen;
+
+            for (int i = 0; i < maxGen; ++i)
+            {
+                dataBlock.finalLineStd.timePerGen.Add(0);
+                dataBlock.finalLineStd.distancePerGen.Add(0);
+            }
+
+            foreach (ProcessDataLine data in dataBlock.dataLines)
+            {
+                dataBlock.finalLineStd.finalDist += Varianz(data.finalDist, dataBlock.finalLine.finalDist);
+                dataBlock.finalLineStd.totalTime += Varianz(data.totalTime, dataBlock.finalLine.totalTime);
+                dataBlock.finalLineStd.genCount += Varianz(data.genCount, dataBlock.finalLine.genCount);
+
+                for(int i = 0; i < data.genCount; ++i)
+                {
+                    dataBlock.finalLineStd.distancePerGen[i] += Varianz(data.distancePerGen[i], dataBlock.finalLine.distancePerGen[i]);
+                    dataBlock.finalLineStd.timePerGen[i] += Varianz(data.timePerGen[i], dataBlock.finalLine.timePerGen[i]);
+                }
+            }
+
+            dataBlock.finalLineStd.finalDist = Math.Sqrt(dataBlock.finalLineStd.finalDist);
+            dataBlock.finalLineStd.totalTime = Math.Sqrt(dataBlock.finalLineStd.totalTime);
+            dataBlock.finalLineStd.genCount = Math.Sqrt(dataBlock.finalLineStd.genCount);
+
+            for (int i = 0; i < maxGen; ++i)
+            {
+                dataBlock.finalLineStd.distancePerGen[i] = Math.Sqrt(dataBlock.finalLineStd.distancePerGen[i]);
+                dataBlock.finalLineStd.timePerGen[i] = Math.Sqrt(dataBlock.finalLineStd.timePerGen[i]);
+            }
+        }
+
+        private void CrunchData(ProcessDataBlock dataBlock)
+        {
+            // find maximum count of generations
+            int maxGen = 0;
+            foreach (ProcessDataLine data in dataBlock.dataLines)
+            {
+                if (data.genCount > maxGen)
+                    maxGen = (int)data.genCount;
+            }
+
+            CalcMeanData(dataBlock, maxGen);
+            CalcStdDeviation(dataBlock, maxGen);
         }
 
         private void LoadData(ProcessDataBlock dataBlock)
@@ -148,7 +211,7 @@ namespace GraphImageCreater
         private void selectFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog dia = new OpenFileDialog();
-            dia.Filter = "Picture|*.json";
+            dia.Filter = "JSON|*.json";
             dia.CheckFileExists = false;
             dia.Multiselect = true;
             if (dia.ShowDialog() != DialogResult.OK)
@@ -165,7 +228,7 @@ namespace GraphImageCreater
             g.CopyFromScreen(new Point(this.DesktopLocation.X, this.DesktopLocation.Y), new Point(0, 0), this.Size);
 
             OpenFileDialog dia = new OpenFileDialog();
-            dia.Filter = "Picture|*.png";
+            dia.Filter = "Portable Network Graphics|*.png";
             dia.CheckFileExists = false;
             if (dia.ShowDialog() != DialogResult.OK)
                 return;
