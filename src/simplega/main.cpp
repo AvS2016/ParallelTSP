@@ -257,7 +257,8 @@ static void finalizeStats(tsp::GeneticAnalyser &analyser)
         }
     }
 
-    tsp::StatisticsSerializer::save(stats, "statistics.json");
+    if (IS_MASTER)
+        tsp::StatisticsSerializer::save(stats, "statistics.json");
 }
 
 static void runAlgorithm()
