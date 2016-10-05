@@ -75,6 +75,7 @@ namespace GraphImageCreater
             dataBlock.finalLine.distancePerGen.Clear();
             dataBlock.finalLine.timePerGen.Capacity = maxGen;
             dataBlock.finalLine.distancePerGen.Capacity = maxGen;
+            dataBlock.timePerGenMean = new TimeSpan(0);
             int[] genCount = new int[maxGen];
 
             for (int i = 0; i < maxGen; ++i)
@@ -92,9 +93,11 @@ namespace GraphImageCreater
                 dataBlock.finalLine.nodeCount = data.nodeCount;
                 dataBlock.finalLine.totalTime += data.totalTime;
 
+                TimeSpan prev = new TimeSpan(0);
                 for (int i = 0; i < data.genCount; ++i)
                 {
-                    dataBlock.finalLine.timePerGen[i] += data.timePerGen[i];
+                    dataBlock.finalLine.timePerGen[i] += (data.timePerGen[i] - prev);
+                    prev = data.timePerGen[i];
                     dataBlock.finalLine.distancePerGen[i] += data.distancePerGen[i];
                     genCount[i]++;
                 }
@@ -107,8 +110,11 @@ namespace GraphImageCreater
             for (int i = 0; i < maxGen; ++i)
             {
                 dataBlock.finalLine.timePerGen[i] = new TimeSpan(dataBlock.finalLine.timePerGen[i].Ticks / genCount[i]);
+                dataBlock.timePerGenMean += dataBlock.finalLine.timePerGen[i];
                 dataBlock.finalLine.distancePerGen[i] /= genCount[i];
             }
+
+            dataBlock.timePerGenMean = new TimeSpan(dataBlock.timePerGenMean.Ticks / maxGen);
         }
 
         private double Varianz(double val, double mean)
@@ -131,6 +137,7 @@ namespace GraphImageCreater
             dataBlock.finalLineStd.distancePerGen.Clear();
             dataBlock.finalLineStd.timePerGen.Capacity = maxGen;
             dataBlock.finalLineStd.distancePerGen.Capacity = maxGen;
+            dataBlock.timePerGenStd = 0;
 
             for (int i = 0; i < maxGen; ++i)
             {
@@ -159,7 +166,11 @@ namespace GraphImageCreater
             {
                 dataBlock.finalLineStd.distancePerGen[i] = Math.Sqrt(dataBlock.finalLineStd.distancePerGen[i]);
                 dataBlock.finalLineStd.timePerGen[i] = Math.Sqrt(dataBlock.finalLineStd.timePerGen[i]);
+
+                dataBlock.timePerGenStd += Varianz(dataBlock.finalLine.timePerGen[i], dataBlock.timePerGenMean);
             }
+
+            dataBlock.timePerGenStd = Math.Sqrt(dataBlock.timePerGenStd);
         }
 
         private void CrunchData(ProcessDataBlock dataBlock)
@@ -188,11 +199,24 @@ namespace GraphImageCreater
         private void DrawData(ProcessDataBlock dataBlock, int id)
         {
             string graphName = graphNames[id];
+            
             chart1.Series.Add(graphName);
-            chart1.Series[graphName].ChartType = SeriesChartType.Line;
+            chart1.Series[graphName].ChartType = SeriesChartType.Line;            
 
             foreach (double val in dataBlock.finalLine.distancePerGen)
                 chart1.Series[graphName].Points.AddY(val);
+
+            chart2.Series.Add(graphName);
+            chart2.Series[graphName].ChartType = SeriesChartType.Bar;
+            chart2.Series[graphName].Points.AddY(dataBlock.finalLine.finalDist);
+
+            chart3.Series.Add(graphName);
+            chart3.Series[graphName].ChartType = SeriesChartType.Bar;
+            chart3.Series[graphName].Points.AddY(dataBlock.finalLine.genCount);
+
+            chart4.Series.Add(graphName);
+            chart4.Series[graphName].ChartType = SeriesChartType.Bar;
+            chart4.Series[graphName].Points.AddY(dataBlock.timePerGenMean.Ticks);
         }
 
         private void CrunchButton_Click(object sender, EventArgs e)

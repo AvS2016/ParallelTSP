@@ -81,6 +81,9 @@
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
             this.chart1.Titles.Add(new System.Windows.Forms.DataVisualization.Charting.Title());
+            this.chart1.Titles[0].Text = "Mean Distance per Generation";
+            this.chart1.ChartAreas[0].AxisX.Title = "generation";
+            this.chart1.ChartAreas[0].AxisY.Title = "distance";
             // 
             // chart2
             // 
@@ -100,6 +103,8 @@
             this.chart2.TabIndex = 0;
             this.chart2.Text = "chart2";
             this.chart2.Titles.Add(new System.Windows.Forms.DataVisualization.Charting.Title());
+            this.chart2.Titles[0].Text = "Mean Final Distance";
+            this.chart2.ChartAreas[0].AxisY.Title = "distance";
             // 
             // chart3
             // 
@@ -119,6 +124,8 @@
             this.chart3.TabIndex = 0;
             this.chart3.Text = "chart3";
             this.chart3.Titles.Add(new System.Windows.Forms.DataVisualization.Charting.Title());
+            this.chart3.Titles[0].Text = "Mean Count of Generations";
+            this.chart3.ChartAreas[0].AxisY.Title = "distance";
             // 
             // chart4
             // 
@@ -138,6 +145,8 @@
             this.chart4.TabIndex = 0;
             this.chart4.Text = "chart4";
             this.chart4.Titles.Add(new System.Windows.Forms.DataVisualization.Charting.Title());
+            this.chart4.Titles[0].Text = ("Mean Time per Generation";
+            this.chart4.ChartAreas[0].AxisY.Title = "distance";
             // 
             // CrunchButton
             // 

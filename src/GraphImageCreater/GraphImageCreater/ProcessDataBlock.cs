@@ -12,7 +12,8 @@ namespace GraphImageCreater
         public List<ProcessDataLine> dataLines;
         public ProcessDataLine finalLine;
         public ProcessDataLineStd finalLineStd;
-       
+        public TimeSpan timePerGenMean;
+        public double timePerGenStd;
 
         public ProcessDataBlock()
         {
@@ -20,6 +21,7 @@ namespace GraphImageCreater
             dataLines = new List<ProcessDataLine>();
             finalLine = new ProcessDataLine();
             finalLineStd = new ProcessDataLineStd();
+            timePerGenMean = new TimeSpan(0);
         }
     }
 }

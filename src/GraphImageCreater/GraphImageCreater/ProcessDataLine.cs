@@ -25,9 +25,6 @@ namespace GraphImageCreater
             this.distancePerGen = new List<double>();
             this.timePerGen = new List<TimeSpan>();
         }
-
-
-
     }
 
     class ProcessDataLineStd
