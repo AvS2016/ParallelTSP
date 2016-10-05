@@ -174,38 +174,6 @@ namespace GraphImageCreater
             bitmap.Save(dia.FileName, ImageFormat.Png);
         }
 
-        private void GraphImage_Load(object sender, EventArgs e)
-        {
-            /*
-            // Drawing...
-            chart1.Series.Add("Balken");
-            chart1.Series.Add("Area");
 
-            //Ausssehen festlegen
-            chart1.Series["Balken"].ChartType = SeriesChartType.Column;
-            chart1.Series["Linien"].ChartType = SeriesChartType.Line;
-            chart1.Series["Area"].ChartType = SeriesChartType.Area;
-
-            //Zufällige Werte generieren
-            Random random = new Random();
-
-            for (int pointIndex = 0; pointIndex < 10; pointIndex++)
-            {
-
-                chart1.Series["Area"].Points.AddY(random.Next(20, 50));
-            }
-
-            for (int pointIndex = 0; pointIndex < 10; pointIndex++)
-            {
-
-                chart1.Series["Balken"].Points.AddY(random.Next(50, 100));
-            }
-
-            for (int pointIndex = 0; pointIndex < 10; pointIndex++)
-            {
-
-                chart1.Series["Linien"].Points.AddY(random.Next(70, 100));
-            }*/
-        }
     }
 }
