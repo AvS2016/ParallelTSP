@@ -25,7 +25,7 @@ namespace GraphImageCreater
     {
 
         private List<ProcessDataBlock> dataBlocks;
-        private string[] graphNames = { "1 Process", "8 Processes" };
+        private string[] graphNames = { "1 Process", "8 Processes", "40 Processes", "80 Processes" };
 
         public GraphImage()
         {
@@ -46,9 +46,6 @@ namespace GraphImageCreater
                 var jtr = new JsonTextReader(r);
                 var jsonSerializer = new JsonSerializer();
                 dynamic dynStats = jsonSerializer.Deserialize(jtr);
-
-                //string jsonStr = r.ReadToEnd();
-                //dynamic dynStats = JsonConvert.DeserializeObject(jsonStr);
 
                 statObj.finalDist = dynStats.finalDist;
                 statObj.genCount = dynStats.genCount;
@@ -209,15 +206,18 @@ namespace GraphImageCreater
             
             chart2.Series.Add(graphName);
             chart2.Series[graphName].ChartType = SeriesChartType.Bar;
-            chart2.Series[graphName].Points.AddY(dataBlock.finalLine.finalDist);
+            chart2.Series[graphName].Points.Add(dataBlock.finalLine.finalDist);
+            chart2.Series[graphName].Points.Last().AxisLabel = graphName;
 
             chart3.Series.Add(graphName);
             chart3.Series[graphName].ChartType = SeriesChartType.Bar;
-            chart3.Series[graphName].Points.AddY(dataBlock.finalLine.genCount);
+            chart3.Series[graphName].Points.Add(dataBlock.finalLine.finalDist);
+            chart3.Series[graphName].Points.Last().AxisLabel = graphName;
 
             chart4.Series.Add(graphName);
             chart4.Series[graphName].ChartType = SeriesChartType.Bar;
-            chart4.Series[graphName].Points.AddY(dataBlock.timePerGenMean.Ticks);
+            chart4.Series[graphName].Points.Add(dataBlock.finalLine.finalDist);
+            chart4.Series[graphName].Points.Last().AxisLabel = graphName;
         }
 
         private void CrunchButton_Click(object sender, EventArgs e)
