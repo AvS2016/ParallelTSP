@@ -31,6 +31,8 @@ namespace GraphImageCreater
         {
             InitializeComponent();
             dataBlocks = new List<ProcessDataBlock>();
+            for (int i = 0; i < graphNames.Length; ++i)
+                dataBlocks.Add(new ProcessDataBlock());
         }
 
         // benötigt zum laufen, downnload!
@@ -172,6 +174,8 @@ namespace GraphImageCreater
 
         private void CrunchData(ProcessDataBlock dataBlock)
         {
+            if (dataBlock.fileNames.Count == 0)
+                return;
             // find maximum count of generations
             int maxGen = 0;
             foreach (ProcessDataLine data in dataBlock.dataLines)
@@ -211,12 +215,12 @@ namespace GraphImageCreater
 
             chart3.Series.Add(graphName);
             chart3.Series[graphName].ChartType = SeriesChartType.Bar;
-            chart3.Series[graphName].Points.Add(dataBlock.finalLine.finalDist);
+            chart3.Series[graphName].Points.Add(dataBlock.finalLine.genCount);
             chart3.Series[graphName].Points.Last().AxisLabel = graphName;
 
             chart4.Series.Add(graphName);
             chart4.Series[graphName].ChartType = SeriesChartType.Bar;
-            chart4.Series[graphName].Points.Add(dataBlock.finalLine.finalDist);
+            chart4.Series[graphName].Points.Add(dataBlock.timePerGenMean.TotalSeconds);
             chart4.Series[graphName].Points.Last().AxisLabel = graphName;
         }
 
@@ -239,15 +243,24 @@ namespace GraphImageCreater
 
         private void selectFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dia = new OpenFileDialog();
-            dia.Filter = "JSON|*.json";
-            dia.CheckFileExists = false;
-            dia.Multiselect = true;
+            FolderBrowserDialog dia = new FolderBrowserDialog();
+
+            //OpenFileDialog dia = new OpenFileDialog();
+            //dia.Filter = "JSON|*.json";
+            //dia.CheckFileExists = false;
+            //dia.Multiselect = true;
             if (dia.ShowDialog() != DialogResult.OK)
                 return;
 
-            dataBlocks.Add(new GraphImageCreater.ProcessDataBlock());
-            dataBlocks.Last().fileNames = dia.FileNames.OfType<string>().ToList();
+            string[] files01 = Directory.GetFiles(dia.SelectedPath, "01_*.json", System.IO.SearchOption.AllDirectories);
+            string[] files08 = Directory.GetFiles(dia.SelectedPath, "08_*.json", System.IO.SearchOption.AllDirectories);
+            string[] files40 = Directory.GetFiles(dia.SelectedPath, "40_*.json", System.IO.SearchOption.AllDirectories);
+            string[] files80 = Directory.GetFiles(dia.SelectedPath, "80_*.json", System.IO.SearchOption.AllDirectories);
+
+            dataBlocks[0].fileNames = files01.OfType<string>().ToList();
+            dataBlocks[1].fileNames = files08.OfType<string>().ToList();
+            dataBlocks[2].fileNames = files40.OfType<string>().ToList();
+            dataBlocks[3].fileNames = files80.OfType<string>().ToList();
         }
 
         private void saveAsImageToolStripMenuItem_Click(object sender, EventArgs e)
