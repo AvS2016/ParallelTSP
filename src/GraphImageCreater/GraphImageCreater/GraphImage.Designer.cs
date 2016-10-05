@@ -29,25 +29,25 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title1 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title2 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title3 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-
+            System.Windows.Forms.DataVisualization.Charting.Title title4 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chart3 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.chart4 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-
             this.CrunchButton = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.filesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,8 +59,15 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart4)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // chart1
@@ -70,20 +77,19 @@
             this.chart1.Dock = System.Windows.Forms.DockStyle.Fill;
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(0, 24);
+            this.chart1.Location = new System.Drawing.Point(3, 3);
             this.chart1.Name = "chart1";
+            series1.BorderWidth = 3;
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series1.Legend = "Legend1";
             series1.Name = "Linien";
             this.chart1.Series.Add(series1);
-            this.chart1.Size = new System.Drawing.Size(628, 342);
+            this.chart1.Size = new System.Drawing.Size(590, 266);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
-            this.chart1.Titles.Add(new System.Windows.Forms.DataVisualization.Charting.Title());
-            this.chart1.Titles[0].Text = "Mean Distance per Generation";
-            this.chart1.ChartAreas[0].AxisX.Title = "generation";
-            this.chart1.ChartAreas[0].AxisY.Title = "distance";
+            title1.Name = "Title1";
+            this.chart1.Titles.Add(title1);
             // 
             // chart2
             // 
@@ -92,19 +98,18 @@
             this.chart2.Dock = System.Windows.Forms.DockStyle.Fill;
             legend2.Name = "Legend2";
             this.chart2.Legends.Add(legend2);
-            this.chart2.Location = new System.Drawing.Point(0, 24);
+            this.chart2.Location = new System.Drawing.Point(3, 3);
             this.chart2.Name = "chart2";
             series2.ChartArea = "ChartArea2";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bar;
             series2.Legend = "Legend2";
             series2.Name = "Linien";
             this.chart2.Series.Add(series2);
-            this.chart2.Size = new System.Drawing.Size(628, 342);
+            this.chart2.Size = new System.Drawing.Size(590, 266);
             this.chart2.TabIndex = 0;
             this.chart2.Text = "chart2";
-            this.chart2.Titles.Add(new System.Windows.Forms.DataVisualization.Charting.Title());
-            this.chart2.Titles[0].Text = "Mean Final Distance";
-            this.chart2.ChartAreas[0].AxisY.Title = "distance";
+            title2.Name = "Title1";
+            this.chart2.Titles.Add(title2);
             // 
             // chart3
             // 
@@ -113,19 +118,18 @@
             this.chart3.Dock = System.Windows.Forms.DockStyle.Fill;
             legend3.Name = "Legend3";
             this.chart3.Legends.Add(legend3);
-            this.chart3.Location = new System.Drawing.Point(0, 34);
+            this.chart3.Location = new System.Drawing.Point(0, 0);
             this.chart3.Name = "chart3";
             series3.ChartArea = "ChartArea3";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bar;
             series3.Legend = "Legend3";
             series3.Name = "Linien";
             this.chart3.Series.Add(series3);
-            this.chart3.Size = new System.Drawing.Size(638, 343);
+            this.chart3.Size = new System.Drawing.Size(596, 272);
             this.chart3.TabIndex = 0;
             this.chart3.Text = "chart3";
-            this.chart3.Titles.Add(new System.Windows.Forms.DataVisualization.Charting.Title());
-            this.chart3.Titles[0].Text = "Mean Count of Generations";
-            this.chart3.ChartAreas[0].AxisY.Title = "distance";
+            title3.Name = "Title1";
+            this.chart3.Titles.Add(title3);
             // 
             // chart4
             // 
@@ -134,19 +138,18 @@
             this.chart4.Dock = System.Windows.Forms.DockStyle.Fill;
             legend4.Name = "Legend4";
             this.chart4.Legends.Add(legend4);
-            this.chart4.Location = new System.Drawing.Point(0, 44);
+            this.chart4.Location = new System.Drawing.Point(0, 0);
             this.chart4.Name = "chart4";
             series4.ChartArea = "ChartArea4";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bar;
             series4.Legend = "Legend4";
             series4.Name = "Linien";
             this.chart4.Series.Add(series4);
-            this.chart4.Size = new System.Drawing.Size(648, 444);
+            this.chart4.Size = new System.Drawing.Size(596, 272);
             this.chart4.TabIndex = 0;
             this.chart4.Text = "chart4";
-            this.chart4.Titles.Add(new System.Windows.Forms.DataVisualization.Charting.Title());
-            this.chart4.Titles[0].Text = ("Mean Time per Generation";
-            this.chart4.ChartAreas[0].AxisY.Title = "distance";
+            title4.Name = "Title1";
+            this.chart4.Titles.Add(title4);
             // 
             // CrunchButton
             // 
@@ -209,6 +212,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.chart1);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
@@ -216,10 +220,10 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
-            this.tabPage1.Controls.Add(chart1);
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.chart2);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -227,27 +231,26 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
-            this.tabPage2.Controls.Add(chart2);
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.chart3);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(596, 272);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "tabPage3";
             this.tabPage3.UseVisualStyleBackColor = true;
-            this.tabPage3.Controls.Add(chart3);
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.chart4);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(596, 272);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "tabPage4";
             this.tabPage4.UseVisualStyleBackColor = true;
-            this.tabPage4.Controls.Add(chart4);
             // 
             // GraphImage
             // 
@@ -262,9 +265,16 @@
             this.Name = "GraphImage";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chart4)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.tabControl1.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

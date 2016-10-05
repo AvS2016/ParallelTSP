@@ -199,13 +199,14 @@ namespace GraphImageCreater
         private void DrawData(ProcessDataBlock dataBlock, int id)
         {
             string graphName = graphNames[id];
-            
+
             chart1.Series.Add(graphName);
             chart1.Series[graphName].ChartType = SeriesChartType.Line;            
 
             foreach (double val in dataBlock.finalLine.distancePerGen)
                 chart1.Series[graphName].Points.AddY(val);
 
+            
             chart2.Series.Add(graphName);
             chart2.Series[graphName].ChartType = SeriesChartType.Bar;
             chart2.Series[graphName].Points.AddY(dataBlock.finalLine.finalDist);
@@ -223,6 +224,10 @@ namespace GraphImageCreater
         {
             int id = 0;
             chart1.Series.Clear();
+            chart2.Series.Clear();
+            chart3.Series.Clear();
+            chart4.Series.Clear();
+
             foreach (ProcessDataBlock dataBlock in dataBlocks)
             {
                 LoadData(dataBlock);
