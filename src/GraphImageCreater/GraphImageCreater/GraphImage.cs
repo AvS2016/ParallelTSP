@@ -236,7 +236,5 @@ namespace GraphImageCreater
 
             bitmap.Save(dia.FileName, ImageFormat.Png);
         }
-
-
     }
 }

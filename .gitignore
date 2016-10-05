@@ -32,3 +32,4 @@ src/GraphImageCreater/GraphImageCreater/bin
 src/GraphImageCreater/GraphImageCreater/obj
 src/GraphImageCreater/GraphImageCreater/Newtonsoft.Json.dll
 src/GraphImageCreater/packages
+src/GraphImageCreater/.vs
