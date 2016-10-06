@@ -26,6 +26,8 @@ namespace GraphImageCreater
 
         private List<ProcessDataBlock> dataBlocks;
         private string[] graphNames = { "1 Process", "8 Processes", "40 Processes", "80 Processes" };
+        private const string MEAN_NAME = "Mean";
+        private const string STD_NAME = "Standard Deviation";
 
         public GraphImage()
         {
@@ -98,7 +100,7 @@ namespace GraphImageCreater
                     dataBlock.finalLine.timePerGen[i] += (data.timePerGen[i] - prev);
                     prev = data.timePerGen[i];
                     dataBlock.finalLine.distancePerGen[i] += data.distancePerGen[i];
-                    genCount[i]++;
+                    ++genCount[i];
                 }
             }
 
@@ -137,11 +139,17 @@ namespace GraphImageCreater
             dataBlock.finalLineStd.timePerGen.Capacity = maxGen;
             dataBlock.finalLineStd.distancePerGen.Capacity = maxGen;
             dataBlock.timePerGenStd = 0;
+            int[] genCount = new int[maxGen];
+
+            int div = dataBlock.dataLines.Count - 1;
+            if (div <= 0)
+                return;
 
             for (int i = 0; i < maxGen; ++i)
             {
                 dataBlock.finalLineStd.timePerGen.Add(0);
                 dataBlock.finalLineStd.distancePerGen.Add(0);
+                genCount[i] = 0;
             }
 
             foreach (ProcessDataLine data in dataBlock.dataLines)
@@ -150,26 +158,41 @@ namespace GraphImageCreater
                 dataBlock.finalLineStd.totalTime += Varianz(data.totalTime, dataBlock.finalLine.totalTime);
                 dataBlock.finalLineStd.genCount += Varianz(data.genCount, dataBlock.finalLine.genCount);
 
-                for(int i = 0; i < data.genCount; ++i)
+                TimeSpan prev = new TimeSpan(0);
+                for (int i = 0; i < data.genCount; ++i)
                 {
+                    dataBlock.finalLineStd.timePerGen[i] += Varianz(data.timePerGen[i] - prev, dataBlock.finalLine.timePerGen[i]);
+                    prev = data.timePerGen[i];
                     dataBlock.finalLineStd.distancePerGen[i] += Varianz(data.distancePerGen[i], dataBlock.finalLine.distancePerGen[i]);
-                    dataBlock.finalLineStd.timePerGen[i] += Varianz(data.timePerGen[i], dataBlock.finalLine.timePerGen[i]);
+                    ++genCount[i];
                 }
             }
 
-            dataBlock.finalLineStd.finalDist = Math.Sqrt(dataBlock.finalLineStd.finalDist);
-            dataBlock.finalLineStd.totalTime = Math.Sqrt(dataBlock.finalLineStd.totalTime);
-            dataBlock.finalLineStd.genCount = Math.Sqrt(dataBlock.finalLineStd.genCount);
-
+            dataBlock.finalLineStd.finalDist = Math.Sqrt(dataBlock.finalLineStd.finalDist / div);
+            dataBlock.finalLineStd.totalTime = Math.Sqrt(dataBlock.finalLineStd.totalTime / div);
+            dataBlock.finalLineStd.genCount = Math.Sqrt(dataBlock.finalLineStd.genCount / div);
+            
             for (int i = 0; i < maxGen; ++i)
             {
-                dataBlock.finalLineStd.distancePerGen[i] = Math.Sqrt(dataBlock.finalLineStd.distancePerGen[i]);
-                dataBlock.finalLineStd.timePerGen[i] = Math.Sqrt(dataBlock.finalLineStd.timePerGen[i]);
+                dataBlock.timePerGenStd += Varianz(dataBlock.finalLine.timePerGen[i].TotalSeconds, dataBlock.timePerGenMean.TotalSeconds);
 
-                dataBlock.timePerGenStd += Varianz(dataBlock.finalLine.timePerGen[i], dataBlock.timePerGenMean);
+                div = genCount[i] - 1;
+                if(div <= 0)
+                {
+                    dataBlock.finalLineStd.distancePerGen[i] = 0;
+                    dataBlock.finalLineStd.timePerGen[i] = 0;
+                    continue;
+                }
+
+                dataBlock.finalLineStd.distancePerGen[i] = Math.Sqrt(dataBlock.finalLineStd.distancePerGen[i] / div);
+                dataBlock.finalLineStd.timePerGen[i] = Math.Sqrt(dataBlock.finalLineStd.timePerGen[i] / div);
             }
 
-            dataBlock.timePerGenStd = Math.Sqrt(dataBlock.timePerGenStd);
+            div = maxGen - 1;
+            if (div <= 0)
+                dataBlock.timePerGenStd = 0;
+            else
+                dataBlock.timePerGenStd = Math.Sqrt(dataBlock.timePerGenStd / div);
         }
 
         private void CrunchData(ProcessDataBlock dataBlock)
@@ -200,28 +223,44 @@ namespace GraphImageCreater
         private void DrawData(ProcessDataBlock dataBlock, int id)
         {
             string graphName = graphNames[id];
+            double minErr, maxErr;
 
             chart1.Series.Add(graphName);
+            chart1.Series[graphName].BorderWidth = 3;
             chart1.Series[graphName].ChartType = SeriesChartType.Line;            
 
             foreach (double val in dataBlock.finalLine.distancePerGen)
                 chart1.Series[graphName].Points.AddY(val);
 
-            
-            chart2.Series.Add(graphName);
-            chart2.Series[graphName].ChartType = SeriesChartType.Bar;
-            chart2.Series[graphName].Points.Add(dataBlock.finalLine.finalDist);
-            chart2.Series[graphName].Points.Last().AxisLabel = graphName;
+            minErr = dataBlock.finalLine.finalDist - dataBlock.finalLineStd.finalDist;
+            maxErr = dataBlock.finalLine.finalDist + dataBlock.finalLineStd.finalDist;
+            chart2.Series[MEAN_NAME].Points.AddXY(id, dataBlock.finalLine.finalDist);
+            chart2.Series[STD_NAME].Points.AddXY(id, dataBlock.finalLine.finalDist, minErr, maxErr);
 
-            chart3.Series.Add(graphName);
-            chart3.Series[graphName].ChartType = SeriesChartType.Bar;
-            chart3.Series[graphName].Points.Add(dataBlock.finalLine.genCount);
-            chart3.Series[graphName].Points.Last().AxisLabel = graphName;
+            minErr = dataBlock.finalLine.genCount - dataBlock.finalLineStd.genCount;
+            maxErr = dataBlock.finalLine.genCount + dataBlock.finalLineStd.genCount;
+            chart3.Series[MEAN_NAME].Points.AddXY(id, dataBlock.finalLine.genCount);
+            chart3.Series[STD_NAME].Points.AddXY(id, dataBlock.finalLine.genCount, minErr, maxErr);
 
-            chart4.Series.Add(graphName);
-            chart4.Series[graphName].ChartType = SeriesChartType.Bar;
-            chart4.Series[graphName].Points.Add(dataBlock.timePerGenMean.TotalSeconds);
-            chart4.Series[graphName].Points.Last().AxisLabel = graphName;
+            minErr = dataBlock.timePerGenMean.TotalSeconds - dataBlock.timePerGenStd;
+            maxErr = dataBlock.timePerGenMean.TotalSeconds + dataBlock.timePerGenStd;
+            chart4.Series[MEAN_NAME].Points.AddXY(id, dataBlock.timePerGenMean.TotalSeconds);
+            chart4.Series[STD_NAME].Points.AddXY(id, dataBlock.timePerGenMean.TotalSeconds, minErr, maxErr);
+        }
+
+        private void InitBarChart(Chart chart)
+        {
+            chart.Series.Add(MEAN_NAME);
+            chart.Series.Add(STD_NAME);
+            chart.Series[MEAN_NAME].ChartType = SeriesChartType.Column;
+            chart.Series[STD_NAME].ChartType = SeriesChartType.ErrorBar;
+            //chart2.Series[MEAN_NAME].Color = Color.Blue;
+            chart.Series[STD_NAME].Color = Color.DarkOrange;
+            chart.ChartAreas["ChartArea"].AxisX.Interval = 0;
+            chart.ChartAreas["ChartArea"].AxisX.Maximum = 4;
+
+            for(int i = 0; i < graphNames.Length; ++i)
+                chart.ChartAreas["ChartArea"].AxisX.CustomLabels.Add(i + -0.5, i + 0.5, graphNames[i]);
         }
 
         private void CrunchButton_Click(object sender, EventArgs e)
@@ -231,6 +270,10 @@ namespace GraphImageCreater
             chart2.Series.Clear();
             chart3.Series.Clear();
             chart4.Series.Clear();
+
+            InitBarChart(chart2);
+            InitBarChart(chart3);
+            InitBarChart(chart4);
 
             foreach (ProcessDataBlock dataBlock in dataBlocks)
             {

@@ -26,14 +26,12 @@
         {
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Title title = new System.Windows.Forms.DataVisualization.Charting.Title();
 
             string chartName = "Chart" + id.ToString();
             string chartAreaName = "ChartArea";
             string legendName = "Legend";
             string titleName = "Title";
-            string seriesName = "Series";
 
             chartArea.Name = chartAreaName;
             chart.ChartAreas.Add(chartArea);
@@ -42,28 +40,19 @@
             chart.Legends.Add(legend);
             chart.Location = new System.Drawing.Point(3, 3);
             chart.Name = chartName;
-            series.BorderWidth = 3;
-            series.ChartArea = chartAreaName;
-            series.Legend = legendName;
-            series.Name = seriesName;
-            chart.Series.Add(series);
             chart.Size = new System.Drawing.Size(590, 266);
             chart.TabIndex = 0;
             chart.Text = chartName;
             title.Name = titleName;
             chart.Titles.Add(title);
-            chart.Titles[0].Text = "Mean Distance per Generation";
-            chart.ChartAreas[0].AxisX.Title = "generation";
-            chart.ChartAreas[0].AxisY.Title = "distance";
         }
 
         private void setupBarChart(System.Windows.Forms.DataVisualization.Charting.Chart chart, int id)
         {
             setupChart(chart, id);
-            this.chart2.ChartAreas[0].AxisX.IsLabelAutoFit = true;
-            this.chart2.ChartAreas[0].AxisX.LabelAutoFitStyle = System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.LabelsAngleStep30;
-            this.chart2.ChartAreas[0].AxisX.LabelStyle.Enabled = true;
-            this.chart2.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bar;
+            chart.ChartAreas[0].AxisX.IsLabelAutoFit = true;
+            chart.ChartAreas[0].AxisX.LabelAutoFitStyle = System.Windows.Forms.DataVisualization.Charting.LabelAutoFitStyles.LabelsAngleStep30;
+            chart.ChartAreas[0].AxisX.LabelStyle.Enabled = true;
         }
 
         /// <summary>
@@ -101,7 +90,6 @@
             // chart1
             // 
             setupChart(chart1, 1);
-            this.chart1.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             this.chart1.Titles[0].Text = "Mean Distance per Generation";
             this.chart1.ChartAreas[0].AxisX.Title = "generation";
             this.chart1.ChartAreas[0].AxisY.Title = "distance";
@@ -116,14 +104,13 @@
             // 
             setupBarChart(chart3, 3);
             this.chart3.Titles[0].Text = "Mean Count of Generations";
-            this.chart3.ChartAreas[0].AxisY.Title = "distance";
+            this.chart3.ChartAreas[0].AxisY.Title = "generations";
             // 
             // chart4
             // 
             setupBarChart(chart4, 4);
-            this.chart4.Series[0].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Bar;
             this.chart4.Titles[0].Text = "Mean Time per Generation";
-            this.chart4.ChartAreas[0].AxisY.Title = "distance";
+            this.chart4.ChartAreas[0].AxisY.Title = "seconds";
             // 
             // CrunchButton
             // 
