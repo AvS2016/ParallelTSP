@@ -25,7 +25,9 @@ namespace GraphImageCreater
     {
 
         private List<ProcessDataBlock> dataBlocks;
-        private string[] graphNames = { "1 Process", "8 Processes", "40 Processes", "80 Processes" };
+        private string[] scenarioNames = { "1 Process", "8 Processes", "40 Processes", "80 Processes" };
+        private string[] outFileNames = { "dist_per_gen.png" , "final_dist.png", "gen_count.png", "time_per_gen.png" };
+        private Chart[] charts;
         private const string MEAN_NAME = "Mean";
         private const string STD_NAME = "Standard Deviation";
 
@@ -33,8 +35,11 @@ namespace GraphImageCreater
         {
             InitializeComponent();
             dataBlocks = new List<ProcessDataBlock>();
-            for (int i = 0; i < graphNames.Length; ++i)
+            for (int i = 0; i < scenarioNames.Length; ++i)
                 dataBlocks.Add(new ProcessDataBlock());
+            charts = new Chart[] { chart1, chart2, chart3, chart4 };
+
+            this.WindowState = FormWindowState.Maximized;
         }
 
         // benötigt zum laufen, downnload!
@@ -222,7 +227,7 @@ namespace GraphImageCreater
 
         private void DrawData(ProcessDataBlock dataBlock, int id)
         {
-            string graphName = graphNames[id];
+            string graphName = scenarioNames[id];
             double minErr, maxErr;
 
             chart1.Series.Add(graphName);
@@ -259,8 +264,8 @@ namespace GraphImageCreater
             chart.ChartAreas["ChartArea"].AxisX.Interval = 0;
             chart.ChartAreas["ChartArea"].AxisX.Maximum = 4;
 
-            for(int i = 0; i < graphNames.Length; ++i)
-                chart.ChartAreas["ChartArea"].AxisX.CustomLabels.Add(i + -0.5, i + 0.5, graphNames[i]);
+            for(int i = 0; i < scenarioNames.Length; ++i)
+                chart.ChartAreas["ChartArea"].AxisX.CustomLabels.Add(i + -0.5, i + 0.5, scenarioNames[i]);
         }
 
         private void CrunchButton_Click(object sender, EventArgs e)
@@ -287,11 +292,6 @@ namespace GraphImageCreater
         private void selectFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog dia = new FolderBrowserDialog();
-
-            //OpenFileDialog dia = new OpenFileDialog();
-            //dia.Filter = "JSON|*.json";
-            //dia.CheckFileExists = false;
-            //dia.Multiselect = true;
             if (dia.ShowDialog() != DialogResult.OK)
                 return;
 
@@ -308,18 +308,15 @@ namespace GraphImageCreater
 
         private void saveAsImageToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Bitmap bitmap = new Bitmap(this.Size.Width, this.Size.Height);
-            Graphics g = Graphics.FromImage(bitmap);
-            g.CopyFromScreen(new Point(this.DesktopLocation.X, this.DesktopLocation.Y), new Point(0, 0), this.Size);
-
-            OpenFileDialog dia = new OpenFileDialog();
-            dia.Filter = "Portable Network Graphics|*.png";
-            dia.CheckFileExists = false;
+            FolderBrowserDialog dia = new FolderBrowserDialog();
             if (dia.ShowDialog() != DialogResult.OK)
                 return;
-            Console.WriteLine(dia.FileName);
-
-            bitmap.Save(dia.FileName, ImageFormat.Png);
+            
+            for(int i = 0; i < charts.Length; ++i)
+            {
+                string fileName = dia.SelectedPath + "\\" + outFileNames[i];
+                charts[i].SaveImage(fileName, ChartImageFormat.Png);
+            }
         }
     }
 }

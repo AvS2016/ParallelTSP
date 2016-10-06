@@ -29,7 +29,6 @@ namespace GraphImageCreater
 
     class ProcessDataLineStd
     {
-
         public List<double> distancePerGen { get; set; }
         public double finalDist { get; set; }
         public double genCount { get; set; }

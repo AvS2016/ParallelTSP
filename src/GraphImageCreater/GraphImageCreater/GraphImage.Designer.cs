@@ -179,7 +179,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(596, 272);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "Dist Per Gen";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
@@ -190,7 +190,7 @@
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(596, 272);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "Final Dist";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // tabPage3
@@ -200,7 +200,7 @@
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(596, 272);
             this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "tabPage3";
+            this.tabPage3.Text = "Gen Count";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // tabPage4
@@ -210,7 +210,7 @@
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(596, 272);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "tabPage4";
+            this.tabPage4.Text = "Time Per Gen";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
             // GraphImage
