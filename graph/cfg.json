@@ -1,5 +1,5 @@
 {
-    "graphFile" : "graph/SmallGraph.json",
+    "graphFile" : "graph/200nodes.json",
     "pathFile" : "solved.json",
     "generationCount" : 100,
     "populationSize" : 5000,
