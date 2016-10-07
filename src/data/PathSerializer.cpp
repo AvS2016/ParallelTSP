@@ -9,7 +9,7 @@ namespace tsp
         if(!root.isArray())
             return false;
 
-        for(const Json::Value & v : root) {
+        for(const Json::Value &v : root) {
             if(!v.isUInt())
                 return false;
         }

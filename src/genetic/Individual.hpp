@@ -13,41 +13,51 @@ namespace tsp
         double normalizedFitness_;
     public:
         Individual()
-            : path_(), fitness_(0), normalizedFitness_(0) {
+            : path_(), fitness_(0), normalizedFitness_(0)
+        {
         }
 
         Individual(const Path &path)
-            : path_(path), fitness_(0), normalizedFitness_(0) {
+            : path_(path), fitness_(0), normalizedFitness_(0)
+        {
         }
 
-        ~Individual() {
+        ~Individual()
+        {
         }
 
-        void setFitness(const double fitness) {
+        void setFitness(const double fitness)
+        {
             fitness_ = fitness;
         }
 
-        double getFitness() const {
+        double getFitness() const
+        {
             return fitness_;
         }
 
-        void setNormalizedFitness(const double fitness) {
+        void setNormalizedFitness(const double fitness)
+        {
             normalizedFitness_ = fitness;
         }
 
-        double getNormalizedFitness() const {
+        double getNormalizedFitness() const
+        {
             return normalizedFitness_;
         }
 
-        void setPath(const Path &path) {
+        void setPath(const Path &path)
+        {
             path_ = path;
         }
 
-        Path &getPath() {
+        Path &getPath()
+        {
             return path_;
         }
 
-        const Path &getPath() const {
+        const Path &getPath() const
+        {
             return path_;
         }
 

@@ -63,7 +63,7 @@ namespace tsp
             const unsigned int size)
     {
         population.getIndividuals().resize(size);
-        for(Individual & ind : population.getIndividuals())
+        for(Individual &ind : population.getIndividuals())
             generateIndividual(ind);
     }
 

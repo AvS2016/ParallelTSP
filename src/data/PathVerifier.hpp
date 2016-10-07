@@ -10,9 +10,11 @@ namespace tsp
     class PathVerifier
     {
     private:
-        PathVerifier() {
+        PathVerifier()
+        {
         }
-        ~PathVerifier() {
+        ~PathVerifier()
+        {
         }
 
     public:

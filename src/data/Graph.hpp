@@ -15,19 +15,23 @@ namespace tsp
         unsigned int height_;
 
     public:
-        void setWidth(int x) {
+        void setWidth(int x)
+        {
             width_ = x;
         }
 
-        void setHeight(int y) {
+        void setHeight(int y)
+        {
             height_ = y;
         }
 
-        unsigned int width() const {
+        unsigned int width() const
+        {
             return width_;
         }
 
-        unsigned int height() const {
+        unsigned int height() const
+        {
             return height_;
         }
     };

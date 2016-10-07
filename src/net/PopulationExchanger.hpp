@@ -35,7 +35,8 @@ namespace tsp
         void gatherPopulation(Population &p);
         void broadcastConfig(Config &cfg);
         bool broadcastTermCond(const bool cond);
-        void gatherDistPerGen(std::vector<double> &distPerGen, std::vector<std::vector<double>> &result);
+        void gatherDistPerGen(std::vector<double> &distPerGen,
+                              std::vector<std::vector<double>> &result);
         void setExchangeCount(unsigned int count);
         bool isMaster() const;
         int getRank() const;

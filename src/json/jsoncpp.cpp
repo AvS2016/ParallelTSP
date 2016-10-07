@@ -2189,13 +2189,15 @@ namespace Json
             bool collectComments,
             OurFeatures const &features)
             : collectComments_(collectComments)
-            , reader_(features) {
+            , reader_(features)
+        {
         }
         bool parse(
             char const *beginDoc, char const *endDoc,
             Value *root, JSONCPP_STRING *errs) JSONCPP_OVERRIDE {
             bool ok = reader_.parse(beginDoc, endDoc, *root, collectComments_);
-            if(errs) {
+            if(errs)
+            {
                 *errs = reader_.getFormattedErrorMessages();
             }
             return ok;
@@ -2814,7 +2816,7 @@ namespace Json
         storage_.policy_ = static_cast<unsigned>(other.cstr_
                            ? (static_cast<DuplicationPolicy>(other.storage_.policy_) == noDuplication
                               ? noDuplication : duplicate)
-                               : static_cast<DuplicationPolicy>(other.storage_.policy_)) & 3U;
+                           : static_cast<DuplicationPolicy>(other.storage_.policy_)) & 3U;
         storage_.length_ = other.storage_.length_;
     }
 
@@ -3011,7 +3013,7 @@ namespace Json
     Value::Value(Value const &other)
         : type_(other.type_), allocated_(false)
         ,
-        comments_(0), start_(other.start_), limit_(other.limit_)
+          comments_(0), start_(other.start_), limit_(other.limit_)
     {
         switch(type_) {
         case nullValue:
@@ -3054,7 +3056,7 @@ namespace Json
 
 #if JSON_HAS_RVALUE_REFERENCES
     // Move constructor
-    Value::Value(Value&& other)
+    Value::Value(Value &&other)
     {
         initBasic(nullValue);
         swap(other);
@@ -4550,14 +4552,14 @@ namespace Json
             case '\t':
                 result += "\\t";
                 break;
-                // case '/':
-                // Even though \/ is considered a legal escape in JSON, a bare
-                // slash is also legal, so I see no reason to escape it.
-                // (I hope I am not misunderstanding something.
-                // blep notes: actually escaping \/ may be useful in javascript to avoid </
-                // sequence.
-                // Should add a flag to allow this compatibility mode and prevent this
-                // sequence from occurring.
+            // case '/':
+            // Even though \/ is considered a legal escape in JSON, a bare
+            // slash is also legal, so I see no reason to escape it.
+            // (I hope I am not misunderstanding something.
+            // blep notes: actually escaping \/ may be useful in javascript to avoid </
+            // sequence.
+            // Should add a flag to allow this compatibility mode and prevent this
+            // sequence from occurring.
             default:
                 if(isControlCharacter(*c)) {
                     JSONCPP_OSTRINGSTREAM oss;
@@ -4630,14 +4632,14 @@ namespace Json
             case '\t':
                 result += "\\t";
                 break;
-                // case '/':
-                // Even though \/ is considered a legal escape in JSON, a bare
-                // slash is also legal, so I see no reason to escape it.
-                // (I hope I am not misunderstanding something.)
-                // blep notes: actually escaping \/ may be useful in javascript to avoid </
-                // sequence.
-                // Should add a flag to allow this compatibility mode and prevent this
-                // sequence from occurring.
+            // case '/':
+            // Even though \/ is considered a legal escape in JSON, a bare
+            // slash is also legal, so I see no reason to escape it.
+            // (I hope I am not misunderstanding something.)
+            // blep notes: actually escaping \/ may be useful in javascript to avoid </
+            // sequence.
+            // Should add a flag to allow this compatibility mode and prevent this
+            // sequence from occurring.
             default:
                 if((isControlCharacter(*c)) || (*c == 0)) {
                     JSONCPP_OSTRINGSTREAM oss;

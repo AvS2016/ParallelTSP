@@ -65,7 +65,7 @@ namespace tsp
         os << "set style line 1 lc rgb '#0060ad' lt 1 lw " << lineWidth << " pt 7 ps "
            << pointSize << "   # --- blue" << std::endl;
         os << "plot '" << dataFile_ << "' with linespoints ls 1" << std::endl;
-	os << "quit" << std::endl;
+        os << "quit" << std::endl;
         os.close();
 
         return 0;

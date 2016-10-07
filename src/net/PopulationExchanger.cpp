@@ -103,10 +103,10 @@ namespace tsp
         return result;
     }
 
-    void PopulationExchanger::gatherDistPerGen(std::vector<double> &distPerGen, std::vector<std::vector<double>> &result)
+    void PopulationExchanger::gatherDistPerGen(std::vector<double> &distPerGen,
+            std::vector<std::vector<double>> &result)
     {
-        if(isMaster())
-        {
+        if(isMaster()) {
             boost::mpi::gather(world_, distPerGen, result, MASTER_RANK);
         } else {
             boost::mpi::gather(world_, distPerGen, MASTER_RANK);

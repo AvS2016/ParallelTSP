@@ -73,7 +73,7 @@ namespace tsp
     double GeneticAnalyser::getMeanFitness(const Population &pop)
     {
         double sum = 0;
-        for(const Individual & ind : pop.getIndividuals())
+        for(const Individual &ind : pop.getIndividuals())
             sum += ind.getFitness();
         return sum / pop.getIndividuals().size();
     }
@@ -81,7 +81,7 @@ namespace tsp
     double GeneticAnalyser::getMeanNormalizedFitness(const Population &pop)
     {
         double sum = 0;
-        for(const Individual & ind : pop.getIndividuals())
+        for(const Individual &ind : pop.getIndividuals())
             sum += ind.getNormalizedFitness();
         return sum / pop.getIndividuals().size();
     }

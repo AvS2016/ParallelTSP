@@ -36,8 +36,8 @@ namespace tsp
         std::stringstream ss;
 
         ss << std::setfill('0') << std::setw(2) << duration.hours() << ":"
-                << std::setfill('0') << std::setw(2) << duration.minutes() << ":"
-                << std::setfill('0') << std::setw(2) << duration.seconds();
+           << std::setfill('0') << std::setw(2) << duration.minutes() << ":"
+           << std::setfill('0') << std::setw(2) << duration.seconds();
         return ss.str();
     }
 

@@ -8,24 +8,22 @@ namespace tsp
     static bool validateStatistics(const Json::Value &root)
     {
         bool tmp =  root.isObject() &&
-               root["genCount"].isUInt() &&
-               root["finalDist"].isDouble() &&
-               root["nodeCount"].isUInt() &&
-               root["totalTime"].isString() &&
-               root["distancePerGen"].isArray() &&
-               root["timePerGen"].isArray() &&
-               root["distancePerGen"].size() == root["timePerGen"].size();
+                    root["genCount"].isUInt() &&
+                    root["finalDist"].isDouble() &&
+                    root["nodeCount"].isUInt() &&
+                    root["totalTime"].isString() &&
+                    root["distancePerGen"].isArray() &&
+                    root["timePerGen"].isArray() &&
+                    root["distancePerGen"].size() == root["timePerGen"].size();
         if(!tmp)
             return false;
 
-        for(unsigned int i = 0; i < root["distancePerGen"].size(); ++i)
-        {
+        for(unsigned int i = 0; i < root["distancePerGen"].size(); ++i) {
             if(!root["distancePerGen"][i].isDouble())
                 return false;
         }
 
-        for(unsigned int i = 0; i < root["timePerGen"].size(); ++i)
-        {
+        for(unsigned int i = 0; i < root["timePerGen"].size(); ++i) {
             if(!root["timePerGen"][i].isString())
                 return false;
         }
@@ -55,7 +53,7 @@ namespace tsp
             stats.distancePerGen[i] = root["distancePerGen"].asDouble();
 
         for(unsigned int i = 0; i < root["timePerGen"].size(); ++i)
-            stats.timePerGen[i] =durationFromStr(root["timePerGen"].asString());
+            stats.timePerGen[i] = durationFromStr(root["timePerGen"].asString());
 
         return true;
 
@@ -81,7 +79,8 @@ namespace tsp
             root["distancePerGen"][i] = stats.distancePerGen[i];
 
         for(unsigned int i = 0; i < stats.timePerGen.size(); ++i)
-            root["timePerGen"][i] = boost::posix_time::to_simple_string(stats.timePerGen[i]);
+            root["timePerGen"][i] = boost::posix_time::to_simple_string(
+                                        stats.timePerGen[i]);
 
         writer.write(os, root);
 
@@ -94,7 +93,8 @@ namespace tsp
         return deserialize(stats, is);
     }
 
-    bool StatisticsSerializer::save(const Statistics &stats, const std::string &file)
+    bool StatisticsSerializer::save(const Statistics &stats,
+                                    const std::string &file)
     {
         std::ofstream os(file);
         return serialize(stats, os);

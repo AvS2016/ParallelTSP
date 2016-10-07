@@ -10,20 +10,25 @@ namespace tsp
     private:
         std::vector<Individual> individuals_;
     public:
-        Population() {
+        Population()
+        {
         }
-        ~Population() {
+        ~Population()
+        {
         }
 
-        std::vector<Individual> &getIndividuals() {
+        std::vector<Individual> &getIndividuals()
+        {
             return individuals_;
         }
 
-        const std::vector<Individual> &getIndividuals() const {
+        const std::vector<Individual> &getIndividuals() const
+        {
             return individuals_;
         }
 
-        const Individual &getBestIndividual() const {
+        const Individual &getBestIndividual() const
+        {
             return individuals_.back();
         }
     };

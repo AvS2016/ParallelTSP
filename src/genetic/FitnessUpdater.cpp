@@ -39,7 +39,7 @@ namespace tsp
     {
         // calculate distance and find maximum
         double maxDistance = 0;
-        for(Individual & ind : population.getIndividuals()) {
+        for(Individual &ind : population.getIndividuals()) {
             assert(PathVerifier::verify(graph_, ind.getPath()));
 
             double accumDistance = 0;
@@ -55,7 +55,7 @@ namespace tsp
 
         // calc fitness relative to maximum distance (shorter = greater fitness)
         double fitnessSum = 0;
-        for(Individual & ind : population.getIndividuals()) {
+        for(Individual &ind : population.getIndividuals()) {
             double fitness = maxDistance / ind.getFitness();
             fitness = std::pow(fitness, fitnessPow_);
             ind.setFitness(fitness);
@@ -63,7 +63,7 @@ namespace tsp
         }
 
         // calc normalized fitness
-        for(Individual & ind : population.getIndividuals())
+        for(Individual &ind : population.getIndividuals())
             ind.setNormalizedFitness(ind.getFitness() / fitnessSum);
 
         // sort descending to fitness

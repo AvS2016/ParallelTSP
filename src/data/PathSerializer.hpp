@@ -9,9 +9,11 @@ namespace tsp
     class PathSerializer
     {
     private:
-        PathSerializer() {
+        PathSerializer()
+        {
         }
-        ~PathSerializer() {
+        ~PathSerializer()
+        {
         }
 
     public:

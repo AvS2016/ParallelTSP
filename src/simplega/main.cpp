@@ -227,7 +227,8 @@ static void catchStats(tsp::GeneticAnalyser &analyser)
     }
 
     stats.timePerGen[currentGen] = watch.interim();
-    stats.distancePerGen[currentGen] = analyser.getBestDistance(solver.getPopulation());
+    stats.distancePerGen[currentGen] = analyser.getBestDistance(
+                                           solver.getPopulation());
 }
 
 static void finalizeStats(tsp::GeneticAnalyser &analyser)
@@ -239,17 +240,14 @@ static void finalizeStats(tsp::GeneticAnalyser &analyser)
     stats.totalTime = duration;
 
     //exchange stats
-    if (ex != NULL)
-    {
+    if(ex != NULL) {
         std::vector<std::vector<double>> distlist;
         ex->gatherDistPerGen(stats.distancePerGen, distlist);
 
         // find the minimal distance for each generation
-        for(unsigned i = 0; i < stats.genCount; ++i)
-        {
+        for(unsigned i = 0; i < stats.genCount; ++i) {
             double min = -1;
-            for(unsigned int j = 0; j < distlist.size(); ++j)
-            {
+            for(unsigned int j = 0; j < distlist.size(); ++j) {
                 if(min < 0 || distlist[j][i] < min)
                     min = distlist[j][i];
             }
@@ -257,7 +255,7 @@ static void finalizeStats(tsp::GeneticAnalyser &analyser)
         }
     }
 
-    if (IS_MASTER)
+    if(IS_MASTER)
         tsp::StatisticsSerializer::save(stats, "statistics.json");
 }
 
@@ -339,7 +337,7 @@ static int savePath()
     return 0;
 }
 
-int main(int argc, char **argv)
+int run(int argc, char **argv)
 {
     tsp::Random::shakeRNG();
 
@@ -363,6 +361,21 @@ int main(int argc, char **argv)
 
     if(ex != NULL)
         delete ex;
+
+    return 0;
+}
+
+int main(int argc, char **argv)
+{
+    try {
+        return run(argc, argv);
+    } catch(std::exception &e) {
+        LOG_ERR << "Uncaught exception: " << e.what() << "\n";
+        return -1;
+    } catch(...) {
+        LOG_ERR << "Uncaught unknown object\n";
+        return -1;
+    }
 
     return 0;
 }

@@ -18,7 +18,8 @@ namespace tsp
         boost::posix_time::time_duration totalTime;
 
         Statistics()
-        :genCount(0), nodeCount(0), distancePerGen(), timePerGen(), finalDistance(0), totalTime()
+            : genCount(0), nodeCount(0), distancePerGen(), timePerGen(), finalDistance(0),
+              totalTime()
         { }
         virtual ~Statistics()
         { }
