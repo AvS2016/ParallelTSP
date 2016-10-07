@@ -28,8 +28,8 @@ data
 
 # visual studio
 
-src/GraphImageCreater/GraphImageCreater/bin
-src/GraphImageCreater/GraphImageCreater/obj
-src/GraphImageCreater/GraphImageCreater/Newtonsoft.Json.dll
-src/GraphImageCreater/packages
-src/GraphImageCreater/.vs
+src/GraphImageCreator/GraphImageCreator/bin
+src/GraphImageCreator/GraphImageCreator/obj
+src/GraphImageCreator/GraphImageCreator/Newtonsoft.Json.dll
+src/GraphImageCreator/packages
+src/GraphImageCreator/.vs

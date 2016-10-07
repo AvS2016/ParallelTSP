@@ -225,6 +225,16 @@ namespace GraphImageCreator
                 dataBlock.dataLines.Add(ParseDataFile(f));
         }
 
+        private void AddBarChartPoint(Chart chart, int id, double mean, double stddev)
+        {
+            double minErr = mean - stddev;
+            double maxErr = mean + stddev;
+            int idx = chart.Series[MEAN_NAME].Points.AddXY(id, mean);
+            chart.Series[STD_NAME].Points.AddXY(id, mean, minErr, maxErr);
+            chart.Series[MEAN_NAME].Points[idx].IsValueShownAsLabel = true;
+            chart.Series[MEAN_NAME].Points[idx].LabelFormat = "{0:0.00}";
+        }
+
         private void DrawData(ProcessDataBlock dataBlock, int id)
         {
             string graphName = scenarioNames[id];
@@ -237,20 +247,9 @@ namespace GraphImageCreator
             foreach (double val in dataBlock.finalLine.distancePerGen)
                 chart1.Series[graphName].Points.AddY(val);
 
-            minErr = dataBlock.finalLine.finalDist - dataBlock.finalLineStd.finalDist;
-            maxErr = dataBlock.finalLine.finalDist + dataBlock.finalLineStd.finalDist;
-            chart2.Series[MEAN_NAME].Points.AddXY(id, dataBlock.finalLine.finalDist);
-            chart2.Series[STD_NAME].Points.AddXY(id, dataBlock.finalLine.finalDist, minErr, maxErr);
-
-            minErr = dataBlock.finalLine.genCount - dataBlock.finalLineStd.genCount;
-            maxErr = dataBlock.finalLine.genCount + dataBlock.finalLineStd.genCount;
-            chart3.Series[MEAN_NAME].Points.AddXY(id, dataBlock.finalLine.genCount);
-            chart3.Series[STD_NAME].Points.AddXY(id, dataBlock.finalLine.genCount, minErr, maxErr);
-
-            minErr = dataBlock.timePerGenMean.TotalSeconds - dataBlock.timePerGenStd;
-            maxErr = dataBlock.timePerGenMean.TotalSeconds + dataBlock.timePerGenStd;
-            chart4.Series[MEAN_NAME].Points.AddXY(id, dataBlock.timePerGenMean.TotalSeconds);
-            chart4.Series[STD_NAME].Points.AddXY(id, dataBlock.timePerGenMean.TotalSeconds, minErr, maxErr);
+            AddBarChartPoint(chart2, id, dataBlock.finalLine.finalDist, dataBlock.finalLineStd.finalDist);
+            AddBarChartPoint(chart3, id, dataBlock.finalLine.genCount, dataBlock.finalLineStd.genCount);
+            AddBarChartPoint(chart4, id, dataBlock.timePerGenMean.TotalSeconds, dataBlock.timePerGenStd);
         }
 
         private void InitBarChart(Chart chart)
@@ -264,7 +263,7 @@ namespace GraphImageCreator
             chart.ChartAreas["ChartArea"].AxisX.Interval = 0;
             chart.ChartAreas["ChartArea"].AxisX.Maximum = 4;
 
-            for(int i = 0; i < scenarioNames.Length; ++i)
+            for (int i = 0; i < scenarioNames.Length; ++i)
                 chart.ChartAreas["ChartArea"].AxisX.CustomLabels.Add(i + -0.5, i + 0.5, scenarioNames[i]);
         }
 
