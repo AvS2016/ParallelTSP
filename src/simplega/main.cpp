@@ -96,7 +96,7 @@ static int parseArguments(int argc, char **argv)
         LOG_INFO << "Loading Config from '" << vm["config"].as<std::string>() <<
                  "' ...\n";
         if(!tsp::ConfigSerializer::load(cfg, vm["config"].as<std::string>())) {
-            LOG_ERR << " Failed\n";
+            LOG_ERR << " Failed to load config\n";
             return 1;
         }
     }
@@ -177,7 +177,7 @@ static int loadGraph()
 {
     LOG_INFO << "Loading Graph ...\n";
     if(!tsp::GraphSerializer::load(graph, cfg.graphFile)) {
-        LOG_ERR << " Failed\n";
+        LOG_ERR << " Failed to load graph\n";
         return 1;
     }
 
@@ -331,7 +331,7 @@ static int savePath()
     if(!tsp::PathSerializer::save(
                 solver.getPopulation().getBestIndividual().getPath(),
                 cfg.pathFile)) {
-        LOG_ERR << " Failed\n";
+        LOG_ERR << " Failed to save path.\n";
         return 1;
     }
 
