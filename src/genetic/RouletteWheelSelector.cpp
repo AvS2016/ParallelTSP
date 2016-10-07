@@ -5,8 +5,7 @@
 namespace tsp
 {
 
-    RouletteWheelSelector::RouletteWheelSelector(const Graph &graph)
-        : graph_(graph)
+    RouletteWheelSelector::RouletteWheelSelector()
     {
     }
 

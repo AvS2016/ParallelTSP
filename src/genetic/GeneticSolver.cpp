@@ -9,7 +9,7 @@ namespace tsp
     GeneticSolver::GeneticSolver(const Graph &graph)
         : graph_(graph), settings_(), currPopulation_(new Population()),
           nextPopulation_(new Population()),
-          fitnessUpdater_(graph), selector_(graph), crossover_(), populationGen_(graph),
+          fitnessUpdater_(graph), selector_(), crossover_(), populationGen_(graph),
           mutator_(), eliteCount_(0)
     {
 

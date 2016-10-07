@@ -8,10 +8,8 @@ namespace tsp
 {
     class RouletteWheelSelector
     {
-    private:
-        const Graph &graph_;
     public:
-        RouletteWheelSelector(const Graph &graph);
+        RouletteWheelSelector();
         ~RouletteWheelSelector();
 
         void select(const Population &population, std::vector<int> &parents);
