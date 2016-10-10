@@ -5,10 +5,10 @@ TSPDIR="/Users/jmarkert/ParallelTSP"
 SINGLE_CMD="$TSPDIR/build/src/simplega/simplega -c graph/cfg.json -q -p POP"
 MULTI_CMD="/$TSPDIR/dep/openmpi/bin/mpiexec -np COUNT $TSPDIR/build/src/simplega/simplega -c graph/cfg.json -n -q -p POP"
 ALL_CMD="$TSPDIR/dep/openmpi/bin/mpiexec --hostfile $TSPDIR/hostfile.txt -map-by node -np COUNT $TSPDIR/build/src/simplega/simplega -c graph/cfg.json -n -q -p POP"
-RUNS=10
+RUNS=1
 DATADIR="$TSPDIR/data"
 
-POP_TOTAL=10000
+POP_TOTAL=50000
 POP_01=$POP_TOTAL
 POP_08=$(($POP_TOTAL / 8))
 POP_40=$(($POP_TOTAL / 40))

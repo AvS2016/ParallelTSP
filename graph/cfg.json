@@ -1,5 +1,5 @@
 {
-    "graphFile" : "graph/200nodes.json",
+    "graphFile" : "graph/500nodes.json",
     "pathFile" : "solved.json",
     "generationCount" : 100,
     "populationSize" : 5000,
@@ -8,5 +8,5 @@
     "mutationChance" : 0.1,
     "fitnessPower" : 10,
     "exchangeRate" : 0.1,
-    "duration" : "00:00:30"
+    "duration" : "00:02:30"
 }
