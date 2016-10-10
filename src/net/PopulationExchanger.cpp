@@ -8,12 +8,13 @@
 
 #define TAG 0
 #define MASTER_RANK 0
+#define IS_EVEN(n) ((n) % 2 == 0)
 
 namespace tsp
 {
 
     PopulationExchanger::PopulationExchanger(int argc, char **argv)
-        : env_(argc, argv), world_(), exchangeCount_(0), rank_(0), src_(0), dest_(0)
+        : env_(argc, argv), world_(), exchangeCount_(0), rank_(0), src_(0), dest_(0), sendCount_(0)
     {
     }
 
@@ -25,9 +26,13 @@ namespace tsp
     {
         assert(world_.size() % 2 == 0);
 
+        sendCount_ = (sendCount_ + 1) % world_.size();
+        if(sendCount_ == 0)
+            sendCount_ = 1;
+
         rank_ = world_.rank();
-        dest_ = (rank_ + 1) % world_.size();
-        src_ = (rank_ - 1) % world_.size();
+        dest_ = (rank_ + sendCount_) % world_.size();
+        src_ = (rank_ + world_.size() - sendCount_) % world_.size();
 
         sentIndividualsIdx_.resize(exchangeCount_);
         sentIndividuals_.resize(exchangeCount_);
@@ -50,7 +55,9 @@ namespace tsp
             used_[index] = true;
         }
 
-        if(rank_ % 2 == 0) {
+        bool sendFirst = (!IS_EVEN(sendCount_) && IS_EVEN(rank_)) || (IS_EVEN(sendCount_) && IS_EVEN(rank_ / sendCount_));
+
+        if(sendFirst) {
             sendIndividuals();
             recvIndividuals();
         } else {

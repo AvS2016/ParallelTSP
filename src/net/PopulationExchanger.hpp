@@ -20,6 +20,7 @@ namespace tsp
         int rank_;
         int src_;
         int dest_;
+        int sendCount_;
         std::vector<unsigned int> sentIndividualsIdx_;
         std::vector<bool> used_;
         std::vector<Path> receivedIndividuals_;
