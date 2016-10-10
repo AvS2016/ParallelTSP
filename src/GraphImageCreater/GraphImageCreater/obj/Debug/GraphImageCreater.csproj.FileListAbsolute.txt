@@ -1,0 +1,11 @@
+C:\Users\Timo\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\bin\Debug\GraphImageCreater.exe.config
+C:\Users\Timo\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\bin\Debug\GraphImageCreater.exe
+C:\Users\Timo\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\bin\Debug\GraphImageCreater.pdb
+C:\Users\Timo\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Timo\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Timo\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\obj\Debug\GraphImageCreater.csprojResolveAssemblyReference.cache
+C:\Users\Timo\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\obj\Debug\GraphImageCreater.GraphImage.resources
+C:\Users\Timo\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\obj\Debug\GraphImageCreater.Properties.Resources.resources
+C:\Users\Timo\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\obj\Debug\GraphImageCreater.csproj.GenerateResource.Cache
+C:\Users\Timo\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\obj\Debug\GraphImageCreater.exe
+C:\Users\Timo\Source\Repos\ParallelTSP\src\GraphImageCreater\GraphImageCreater\obj\Debug\GraphImageCreater.pdb
