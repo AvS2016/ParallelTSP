@@ -2,6 +2,7 @@
 #define GENERATOR_GRAPHCONVERTER_HPP_
 
 #include "data/Graph.hpp"
+#include "data/Path.hpp"
 
 namespace tsp
 {
@@ -9,18 +10,17 @@ namespace tsp
     class GraphConverter
     {
     private:
-        std::string pathFile_;
+        bool drawPath_;
         std::string dataFile_;
         std::string plotFile_;
         std::string resultFile_;
 
     public:
-        GraphConverter();
+        GraphConverter(const bool drawPath);
         ~GraphConverter();
 
-        int createPlot(Graph &graph, const std::string &pathFile,
-                       const std::string &dataFile);
-        bool drawGraph();
+        bool savePlot(const Graph &graph, const Path& path,
+                       const std::string &fileName);
     };
 
 }

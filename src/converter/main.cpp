@@ -2,12 +2,14 @@
 #include <iostream>
 #include "GraphConverter.hpp"
 #include "data/GraphSerializer.hpp"
+#include "data/PathSerializer.hpp"
 
 // gnuplot: http://downloads.sourceforge.net/project/gnuplot/gnuplot/5.0.3/gnuplot-5.0.3.tar.gz?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fgnuplot%2Ffiles%2Fgnuplot%2F5.0.3%2F&ts=1462465110&use_mirror=pilotfiber
 
 namespace po = boost::program_options;
 
 tsp::Graph graph;
+tsp::Path path;
 po::variables_map vm;
 
 int parseArguments(int argc, char **argv)
@@ -30,7 +32,6 @@ int parseArguments(int argc, char **argv)
 
     if(vm.count("help") ||
             !vm.count("graph") ||
-            !vm.count("path") ||
             !vm.count("image")) {
         std::cout << desc << "\n";
         return 1;
@@ -41,44 +42,32 @@ int parseArguments(int argc, char **argv)
 
 int convertGraph()
 {
-    tsp::GraphConverter conv;
+    tsp::GraphConverter conv(vm.count("path") > 0);
 
     std::cout << "Graph Converter" << std::endl;
     std::cout << "===============" << std::endl;
     std::cout << "Parameters:" << std::endl;
     std::cout << "-- graph: " << vm["graph"].as<std::string>() << std::endl;
-    std::cout << "-- path:  " << vm["path"].as<std::string>() << std::endl;
     std::cout << "-- image:  " << vm["image"].as<std::string>() << std::endl;
+    if(vm.count("path") > 0)
+        std::cout << "-- path:  " << vm["path"].as<std::string>() << std::endl;
 
     std::cout << "Loading graph ..." << std::endl;
     if(!tsp::GraphSerializer::load(graph, vm["graph"].as<std::string>())) {
-        std::cout << "File not found!" << std::endl;
+        std::cout << "Graph file not found!" << std::endl;
         return 1;
-    } else {
-        std::cout << "Creating plot script ..." << std::endl;
-        int res = conv.createPlot(graph, vm["path"].as<std::string>(),
-                                  vm["image"].as<std::string>());
-        switch(res) {
-        case 0:
-            std::cout << "Script created." << std::endl;
-            break;
-        case 1:
-            std::cout << "Can´t parse path." << std::endl;
-            return 1;
-        case 2:
-            std::cout << "Parsed path is not valid." << std::endl;
-            return 1;
-        }
+    }
 
-        // create image
-        std::cout << "Drawing graph ..." << std::endl;
-        if(conv.drawGraph()) {
-            std::cout << "Graph saved to file." << std::endl;
-            return 0;
-        } else {
-            std::cout << "Error while drawing the graph." << std::endl;
-            return 1;
-        }
+    if(vm.count("path") && !tsp::PathSerializer::load(path, vm["path"].as<std::string>())) {
+        std::cout << "Path file not found!" << std::endl;
+        return 1;
+    }
+
+    std::cout << "Creating plot script ..." << std::endl;
+    if(!conv.savePlot(graph, path, vm["image"].as<std::string>()))
+    {
+        std::cout << "Failed to save plot." << std::endl;
+        return 1;
     }
     return 0;
 }
