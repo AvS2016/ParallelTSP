@@ -27,6 +27,7 @@ namespace GraphImageCreator
         private List<ProcessDataBlock> dataBlocks;
         private string[] scenarioNames = { "1 Process", "8 Processes", "40 Processes", "80 Processes" };
         private string[] outFileNames = { "dist_per_gen.png" , "final_dist.png", "gen_count.png", "time_per_gen.png" };
+        private Color[] graphColors = { Color.Red, Color.Blue, Color.Green, Color.Magenta };
         private Chart[] charts;
         private const string MEAN_NAME = "Mean";
         private const string STD_NAME = "Standard Deviation";
@@ -238,11 +239,12 @@ namespace GraphImageCreator
         private void DrawData(ProcessDataBlock dataBlock, int id)
         {
             string graphName = scenarioNames[id];
-            double minErr, maxErr;
 
             chart1.Series.Add(graphName);
-            chart1.Series[graphName].BorderWidth = 3;
-            chart1.Series[graphName].ChartType = SeriesChartType.Line;            
+            //chart1.Series[graphName].BorderWidth = 3;
+            chart1.ChartAreas[0].AxisY.Minimum = 18000;
+            chart1.Series[graphName].ChartType = SeriesChartType.Line;
+            chart1.Series[graphName].Color = graphColors[id];
 
             foreach (double val in dataBlock.finalLine.distancePerGen)
                 chart1.Series[graphName].Points.AddY(val);
