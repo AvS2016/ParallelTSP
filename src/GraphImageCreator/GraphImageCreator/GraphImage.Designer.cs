@@ -2,6 +2,13 @@
 {
     partial class GraphImage
     {
+
+
+        System.Single titlefontsize = new System.Single();
+        System.Single xyfontsize = new System.Single();
+        System.Single xycaptionsize = new System.Single();
+        System.Single legendsize = new System.Single();
+
         /// <summary>
         /// Erforderliche Designervariable.
         /// </summary>
@@ -37,6 +44,7 @@
             chart.ChartAreas.Add(chartArea);
             chart.Dock = System.Windows.Forms.DockStyle.Fill;
             legend.Name = legendName;
+            legend.Font = new System.Drawing.Font("Trebuchet MS", legendsize);
             chart.Legends.Add(legend);
             chart.Location = new System.Drawing.Point(3, 3);
             chart.Name = chartName;
@@ -44,6 +52,7 @@
             chart.TabIndex = 0;
             chart.Text = chartName;
             title.Name = titleName;
+            title.Font = new System.Drawing.Font("Trebuchet MS", titlefontsize);
             chart.Titles.Add(title);
         }
 
@@ -61,6 +70,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            // setting font size
+            titlefontsize = 18F;
+            xyfontsize = 18F;
+            xycaptionsize = 18F;
+            legendsize = 16F;
+
             this.CrunchButton = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.filesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -97,24 +112,40 @@
             this.chart1.Titles[0].Text = "Mean Distance per Generation";
             this.chart1.ChartAreas[0].AxisX.Title = "generation";
             this.chart1.ChartAreas[0].AxisY.Title = "distance";
+            this.chart1.ChartAreas[0].AxisX.LabelStyle.Font = new System.Drawing.Font("Trebuchet MS", xyfontsize);
+            this.chart1.ChartAreas[0].AxisY.LabelStyle.Font = new System.Drawing.Font("Trebuchet MS", xyfontsize);
+            this.chart1.ChartAreas[0].AxisX.TitleFont = new System.Drawing.Font("Trebuchet MS", xycaptionsize);
+            this.chart1.ChartAreas[0].AxisY.TitleFont = new System.Drawing.Font("Trebuchet MS", xycaptionsize);
             // 
             // chart2
             // 
             setupBarChart(chart2, 2);
             this.chart2.Titles[0].Text = "Mean Final Distance";
             this.chart2.ChartAreas[0].AxisY.Title = "distance";
+            this.chart2.ChartAreas[0].AxisX.LabelStyle.Font = new System.Drawing.Font("Trebuchet MS", xyfontsize);
+            this.chart2.ChartAreas[0].AxisY.LabelStyle.Font = new System.Drawing.Font("Trebuchet MS", xyfontsize);
+            this.chart2.ChartAreas[0].AxisX.TitleFont = new System.Drawing.Font("Trebuchet MS", xycaptionsize);
+            this.chart2.ChartAreas[0].AxisY.TitleFont = new System.Drawing.Font("Trebuchet MS", xycaptionsize);
             // 
             // chart3
             // 
             setupBarChart(chart3, 3);
             this.chart3.Titles[0].Text = "Mean Count of Generations";
             this.chart3.ChartAreas[0].AxisY.Title = "generations";
+            this.chart3.ChartAreas[0].AxisX.LabelStyle.Font = new System.Drawing.Font("Trebuchet MS", xyfontsize);
+            this.chart3.ChartAreas[0].AxisY.LabelStyle.Font = new System.Drawing.Font("Trebuchet MS", xyfontsize);
+            this.chart3.ChartAreas[0].AxisX.TitleFont = new System.Drawing.Font("Trebuchet MS", xycaptionsize);
+            this.chart3.ChartAreas[0].AxisY.TitleFont = new System.Drawing.Font("Trebuchet MS", xycaptionsize);
             // 
             // chart4
             // 
             setupBarChart(chart4, 4);
             this.chart4.Titles[0].Text = "Mean Time per Generation";
             this.chart4.ChartAreas[0].AxisY.Title = "seconds";
+            this.chart4.ChartAreas[0].AxisX.LabelStyle.Font = new System.Drawing.Font("Trebuchet MS", xyfontsize);
+            this.chart4.ChartAreas[0].AxisY.LabelStyle.Font = new System.Drawing.Font("Trebuchet MS", xyfontsize);
+            this.chart4.ChartAreas[0].AxisX.TitleFont = new System.Drawing.Font("Trebuchet MS", xycaptionsize);
+            this.chart4.ChartAreas[0].AxisY.TitleFont = new System.Drawing.Font("Trebuchet MS", xycaptionsize);
             // 
             // chart5
             // 

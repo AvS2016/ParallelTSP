@@ -40,6 +40,8 @@ namespace GraphImageCreator
                 dataBlocks.Add(new ProcessDataBlock());
             charts = new Chart[] { chart1, chart2, chart3, chart4 };
 
+
+
             this.WindowState = FormWindowState.Maximized;
         }
 
@@ -245,6 +247,7 @@ namespace GraphImageCreator
             chart1.ChartAreas[0].AxisY.Minimum = 18000;
             chart1.Series[graphName].ChartType = SeriesChartType.Line;
             chart1.Series[graphName].Color = graphColors[id];
+            
 
             foreach (double val in dataBlock.finalLine.distancePerGen)
                 chart1.Series[graphName].Points.AddY(val);
@@ -262,11 +265,15 @@ namespace GraphImageCreator
             chart.Series[STD_NAME].ChartType = SeriesChartType.ErrorBar;
             //chart2.Series[MEAN_NAME].Color = Color.Blue;
             chart.Series[STD_NAME].Color = Color.DarkOrange;
+            chart.Series[MEAN_NAME].Font = new System.Drawing.Font("Trebuchet MS", xyfontsize);
+
             chart.ChartAreas["ChartArea"].AxisX.Interval = 0;
             chart.ChartAreas["ChartArea"].AxisX.Maximum = 4;
 
             for (int i = 0; i < scenarioNames.Length; ++i)
                 chart.ChartAreas["ChartArea"].AxisX.CustomLabels.Add(i + -0.5, i + 0.5, scenarioNames[i]);
+
+
         }
 
         private void CrunchButton_Click(object sender, EventArgs e)
