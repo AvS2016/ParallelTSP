@@ -1,0 +1,7 @@
+List nodes = //...
+List indivduum
+
+while(not nodes.empty())
+    int index = randomInt()
+    individuum.add(nodes[index])
+    nodes.remove(index)
